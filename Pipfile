@@ -8,6 +8,11 @@ verify_ssl = true
 [packages]
 django = "*"
 mkdocs = "*"
+django-environ = "*"
+django-hosts = "*"
+graphene-django = "*"
+django-graphiql-debug-toolbar = "*"
+django-extensions = "*"
 
 [requires]
 python_version = "3.8"
