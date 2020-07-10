@@ -1,13 +1,17 @@
 from .base import *
+
+
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = env(
     "SECRET_KEY", default='6)+^@y58b68$1k^7x&(wnwcbt^x595j*%0g2^f5yfpf3@mqg09')
+
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = env.bool("DEV_DEBUG", default=True)
 
 
 ALLOWED_HOSTS = env.list("DEV_ALLOWED_HOSTS", default=['127.0.0.1, localhost'])
+
 
 INSTALLED_APPS += [
     'debug_toolbar',
