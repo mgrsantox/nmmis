@@ -17,7 +17,7 @@ Including another URLconf
 from django.urls import include, path
 from django.conf import settings
 from django.conf.urls.static import static
-from nmis.core.views.client_views import Index
+from nmmis.core.views.client_views import Index
 
 
 app_name = 'client'
