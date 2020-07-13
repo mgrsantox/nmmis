@@ -9,7 +9,7 @@ django-graphiql-debug-toolbar==0.1.4
 django-hosts==4.0
 future==0.18.2
 graphene==2.1.8
-graphene-django==2.11.0
+graphene-django==2.12.0
 graphql-core==2.3.2
 graphql-relay==2.0.1
 Jinja2==2.11.2
@@ -21,6 +21,7 @@ MarkupSafe==1.1.1
 mkdocs==1.1.2
 nltk==3.5
 promise==2.3
+psycopg2-binary==2.8.5
 pytz==2020.1
 PyYAML==5.3.1
 regex==2020.6.8
