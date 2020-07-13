@@ -13,6 +13,7 @@ django-hosts = "*"
 graphene-django = "*"
 django-graphiql-debug-toolbar = "*"
 django-extensions = "*"
+psycopg2-binary = "*"
 
 [requires]
 python_version = "3.8"

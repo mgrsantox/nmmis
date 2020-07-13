@@ -17,6 +17,7 @@ DJANGO_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.gis',
 ]
 
 
@@ -29,7 +30,7 @@ AGENT_APPS = [
 
 # Local Application
 LOCAL_APPS = [
-    # 'nmis.contrib.user',
+    'nmmis.contrib.country',
 ]
 
 
