@@ -5,7 +5,7 @@ from nmmis.contrib.country.models import Country
 class Index(TemplateView):
     d = Country.objects.get(id="VaPSk")
     # print(d.geom)
-    template_name = 'index.html'
+    template_name = 'client/index.html'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
