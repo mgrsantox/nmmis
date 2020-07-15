@@ -57,7 +57,7 @@ MIDDLEWARE = [
 ROOT_URLCONF = 'nmmis.core.urls.client_urls'
 
 # WSGI Pointer for Runnig Application
-WSGI_APPLICATION = 'nmmis.wsgi.application'
+WSGI_APPLICATION = 'nmmis.core.wsgi.application'
 
 
 # Template settings
@@ -111,11 +111,11 @@ MEDIA_ROOT = str(BASE_DIR('media'))
 MEDIA_URL = '/media/'
 
 # Django Host Configs
-ROOT_HOSTCONF = 'nmmis.hosts'
+ROOT_HOSTCONF = 'nmmis.core.hosts'
 DEFAULT_HOST = 'www'
 
 
 # Graphene Schema Pointer
 GRAPHENE = {
-    'SCHEMA': 'nmmis.schema.schema'
+    'SCHEMA': 'nmmis.core.schema.schema'
 }
