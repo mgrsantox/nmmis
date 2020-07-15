@@ -1,8 +1,9 @@
 
 import graphene
+from nmmis.contrib.country.schema import Query as CQuery
 
 
-class Query(graphene.ObjectType):
+class Query(CQuery, graphene.ObjectType):
     pass
 
 
