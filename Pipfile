@@ -15,6 +15,7 @@ django-graphiql-debug-toolbar = "*"
 django-extensions = "*"
 psycopg2-binary = "*"
 django-graphql-geojson = "*"
+django-cors-headers = "*"
 
 [requires]
 python_version = "3.8"
