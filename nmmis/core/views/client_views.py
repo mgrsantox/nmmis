@@ -16,6 +16,7 @@ from django.contrib.gis.gdal import OGRGeometry
 
 
 class Index(TemplateView):
+    """
     d = Country.objects.get(name="Nepal")
     # # print(d.geom)
     df = DataSource(
@@ -43,11 +44,12 @@ class Index(TemplateView):
     # # d.geom.srid = 4326
     # # print(d.geom.srid)
     # # d.save()
+    """
     template_name = 'client/index.html'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['data'] = self.d
+        # context['data'] = self.d
         return context
 
 
