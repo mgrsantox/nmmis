@@ -32,6 +32,9 @@ AGENT_APPS = [
 # Local Application
 LOCAL_APPS = [
     'nmmis.contrib.country',
+    'nmmis.contrib.province',
+    'nmmis.contrib.district',
+    'nmmis.contrib.municipal',
 ]
 
 
