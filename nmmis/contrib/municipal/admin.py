@@ -1,3 +1,4 @@
 from django.contrib import admin
+from nmmis.contrib.municipal.models import Municipal
 
-# Register your models here.
+admin.site.register(Municipal)
