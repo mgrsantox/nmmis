@@ -8,8 +8,8 @@ class District(Population, TimeStamped):
     Class that describe the District
     """
     id = models.CharField(
-        primary_key=True, default=get_random_string(length=5),
-        max_length=5, editable=False)
+        primary_key=True, default=get_random_string(length=12),
+        max_length=12, editable=False)
     province = models.ForeignKey(Province, on_delete=models.SET_NULL, null=True)
     name = models.CharField(max_length=80)
     headquarter = models.CharField(max_length=50)

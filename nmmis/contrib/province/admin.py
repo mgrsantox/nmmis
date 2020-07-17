@@ -1,3 +1,4 @@
 from django.contrib import admin
+from nmmis.contrib.province.models import Province
 
-# Register your models here.
+admin.site.register(Province)

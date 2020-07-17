@@ -8,8 +8,8 @@ class Province(Population, TimeStamped):
     Class that describe the Province
     """
     id = models.CharField(
-        primary_key=True, default=get_random_string(length=5),
-        max_length=5, editable=False)
+        primary_key=True, default=get_random_string(length=11),
+        max_length=11, editable=False)
     country = models.ForeignKey(Country, on_delete=models.SET_NULL, null=True)
     name = models.CharField(max_length=80)
     headquarter = models.CharField(max_length=50)
@@ -17,8 +17,8 @@ class Province(Population, TimeStamped):
     geom = models.PolygonField(srid=4326)
 
     class Meta:
-        verbose_name = "District"
-        verbose_name_plural = "Districts"
+        verbose_name = "Province"
+        verbose_name_plural = "Provinces"
 
     def __str__(self):
         return self.name

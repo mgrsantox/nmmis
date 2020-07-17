@@ -1,3 +1,4 @@
 from django.contrib import admin
+from nmmis.contrib.district.models import District
 
-# Register your models here.
+admin.site.register(District)

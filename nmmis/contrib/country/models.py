@@ -8,8 +8,8 @@ class Country(Population, TimeStamped):
     Class that describe the Country
     """
     id = models.CharField(
-        primary_key=True, default=get_random_string(length=5),
-        max_length=5, editable=False)
+        primary_key=True, default=get_random_string(length=10),
+        max_length=10, editable=False)
     name = models.CharField(max_length=80)
     area = models.IntegerField()
     geom = models.PolygonField(srid=4326)
