@@ -3,6 +3,7 @@ from nmmis.contrib.country.models import Country
 from django.contrib.gis.geos import Polygon, GEOSGeometry
 import geopandas as gpd
 from django.contrib.gis.gdal import DataSource
+from nmmis.contrib.province.models import Province
 
 # a = Polygon(((0.0, 0.0), (0.0, 50.0), (50.0, 50.0), (50.0, 0.0), (0.0, 0.0)))
 
@@ -16,35 +17,16 @@ from django.contrib.gis.gdal import OGRGeometry
 
 
 class Index(TemplateView):
-    """
-    d = Country.objects.get(name="Nepal")
-    # # print(d.geom)
+    d = Province.objects.get(id="BoZksP1VL8D")
+    
     df = DataSource(
         '/home/mgrsantox/Desktop/projects/nmmis/nmmis/core/views/Province_Boundary.shp')
-    # # print(df['geometry'][0])
     layer = df[0]
-    new_layer = layer[0].geom.clone()
+    new_layer = layer[4].geom.clone()
     new_layer.coord_dim = 2
-    # # print(layer.get_geoms())
-    # # print(OGRGeometry(layer))
     n = GEOSGeometry(str(new_layer), srid=4326).transform(3857, clone=True).ewkt
     d.geom = n
     d.save()
-    # for i in layer.get_geoms():
-        # n = GEOSGeometry(str(i), srid=4326).transform(3857, clone=True).ewkt
-        # d.geom = n
-    #     # d.geom = GEOSGeometry(str(i), srid=4326)
-        # d.save()
-    #     print("SAVED !!!!!!!!")
-    # # print(df['geometry'][0])
-    # # print(df[0].get_geoms())
-    # # print(Polygon([pt.tuple for pt in layer.get_geoms()]))
-    # # print(layer.extent.tuple)
-    # # d.geom = a
-    # # d.geom.srid = 4326
-    # # print(d.geom.srid)
-    # # d.save()
-    """
     template_name = 'client/index.html'
 
     def get_context_data(self, **kwargs):
