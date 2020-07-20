@@ -99,8 +99,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _apollo_client__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @apollo/client */ "./node_modules/@apollo/client/index.js");
 /* harmony import */ var react_leaflet__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react-leaflet */ "./node_modules/react-leaflet/es/index.js");
-/* harmony import */ var _queries_province_query__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./queries/province-query */ "./frontend/client_src/queries/province-query.js");
-/* harmony import */ var _queries_muncipal_query__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./queries/muncipal-query */ "./frontend/client_src/queries/muncipal-query.js");
+/* harmony import */ var _queries_muncipal_query__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./queries/muncipal-query */ "./frontend/client_src/queries/muncipal-query.js");
+/* harmony import */ var leaflet__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! leaflet */ "./node_modules/leaflet/dist/leaflet-src.js");
+/* harmony import */ var leaflet__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(leaflet__WEBPACK_IMPORTED_MODULE_4__);
 function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
 
 function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
@@ -123,6 +124,20 @@ var BaseLayer = react_leaflet__WEBPACK_IMPORTED_MODULE_2__["LayersControl"].Base
 var mid = 'D8Fm14aoxSKZU';
 
 var App = function App() {
+  Object(react__WEBPACK_IMPORTED_MODULE_0__["useEffect"])(function () {
+    // Initialize the map
+    var map = leaflet__WEBPACK_IMPORTED_MODULE_4___default.a.map('map', {
+      scrollWheelZoom: true
+    }); // Set the position and zoom level of the map
+
+    map.setView([47.20, 13.35], 8);
+    /* Base Layers */
+
+    var osm = leaflet__WEBPACK_IMPORTED_MODULE_4___default.a.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
+    }).addTo(map);
+  }, []);
+
   var _useState = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(7),
       _useState2 = _slicedToArray(_useState, 2),
       zoom = _useState2[0],
@@ -144,7 +159,7 @@ var App = function App() {
     console.log(dt.municipal.properties);
   };
 
-  var _useQuery = Object(_apollo_client__WEBPACK_IMPORTED_MODULE_1__["useQuery"])(_queries_muncipal_query__WEBPACK_IMPORTED_MODULE_4__["MUNICIPAL_QUERY"], {
+  var _useQuery = Object(_apollo_client__WEBPACK_IMPORTED_MODULE_1__["useQuery"])(_queries_muncipal_query__WEBPACK_IMPORTED_MODULE_3__["MUNICIPAL_QUERY"], {
     variables: {
       mid: mid
     }
@@ -158,24 +173,9 @@ var App = function App() {
       setGd(data.municipal.geometry.coordinates);
     }
   });
-  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_leaflet__WEBPACK_IMPORTED_MODULE_2__["Map"], {
-    center: center,
-    zoom: zoom
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_leaflet__WEBPACK_IMPORTED_MODULE_2__["LayersControl"], {
-    position: "topright"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(BaseLayer, {
-    checked: true,
-    name: "OpenStreetMap.Mapnik"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_leaflet__WEBPACK_IMPORTED_MODULE_2__["TileLayer"], {
-    attribution: "&copy <a href=\"http://osm.org/copyright\">OpenStreetMap</a> contributors",
-    url: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-  })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_leaflet__WEBPACK_IMPORTED_MODULE_2__["Polygon"], {
-    color: "purple",
-    onClick: function onClick(e) {
-      return handleClick(e, data);
-    },
-    positions: gd
-  }))));
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+    id: "map"
+  });
 };
 
 /* harmony default export */ __webpack_exports__["default"] = (App);
@@ -236,46 +236,6 @@ function _taggedTemplateLiteral(strings, raw) { if (!raw) { raw = strings.slice(
 
 
 var MUNICIPAL_QUERY = Object(_apollo_client__WEBPACK_IMPORTED_MODULE_0__["gql"])(_templateObject());
-
-/***/ }),
-
-/***/ "./frontend/client_src/queries/province-query.js":
-/*!*******************************************************!*\
-  !*** ./frontend/client_src/queries/province-query.js ***!
-  \*******************************************************/
-/*! exports provided: PROVINCES_QUERY, PROVINCE_QUERY */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "PROVINCES_QUERY", function() { return PROVINCES_QUERY; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "PROVINCE_QUERY", function() { return PROVINCE_QUERY; });
-/* harmony import */ var _apollo_client__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @apollo/client */ "./node_modules/@apollo/client/index.js");
-function _templateObject2() {
-  var data = _taggedTemplateLiteral(["\nquery Province($pid: String){\n  province(pid: $pid){\n    properties{\n      name\n      districtSet{\n        properties{\n          name\n        }\n        geometry {\n          type\n          coordinates\n        }\n      }\n      area\n    }\n    geometry{\n      type\n      coordinates\n    }\n  }\n}\n"]);
-
-  _templateObject2 = function _templateObject2() {
-    return data;
-  };
-
-  return data;
-}
-
-function _templateObject() {
-  var data = _taggedTemplateLiteral(["\n{\n    provinces{\n        id\n      geometry{\n        type\n        coordinates\n      }\n      properties{\n        name\n      }\n    }\n  }\n"]);
-
-  _templateObject = function _templateObject() {
-    return data;
-  };
-
-  return data;
-}
-
-function _taggedTemplateLiteral(strings, raw) { if (!raw) { raw = strings.slice(0); } return Object.freeze(Object.defineProperties(strings, { raw: { value: Object.freeze(raw) } })); }
-
-
-var PROVINCES_QUERY = Object(_apollo_client__WEBPACK_IMPORTED_MODULE_0__["gql"])(_templateObject());
-var PROVINCE_QUERY = Object(_apollo_client__WEBPACK_IMPORTED_MODULE_0__["gql"])(_templateObject2());
 
 /***/ }),
 
