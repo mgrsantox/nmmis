@@ -98,11 +98,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _apollo_client__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @apollo/client */ "./node_modules/@apollo/client/index.js");
-/* harmony import */ var _queries_country_query__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./queries/country-query */ "./frontend/client_src/queries/country-query.js");
+/* harmony import */ var react_leaflet__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react-leaflet */ "./node_modules/react-leaflet/es/index.js");
 /* harmony import */ var _queries_province_query__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./queries/province-query */ "./frontend/client_src/queries/province-query.js");
-/* harmony import */ var react_leaflet__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! react-leaflet */ "./node_modules/react-leaflet/es/index.js");
-/* harmony import */ var leaflet__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! leaflet */ "./node_modules/leaflet/dist/leaflet-src.js");
-/* harmony import */ var leaflet__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(leaflet__WEBPACK_IMPORTED_MODULE_5__);
+/* harmony import */ var _queries_muncipal_query__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./queries/muncipal-query */ "./frontend/client_src/queries/muncipal-query.js");
 function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
 
 function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
@@ -120,57 +118,63 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 
 
-
-var center = [31.391157522824702, 78.53027343749999];
-var BaseLayer = react_leaflet__WEBPACK_IMPORTED_MODULE_4__["LayersControl"].BaseLayer,
-    Overlay = react_leaflet__WEBPACK_IMPORTED_MODULE_4__["LayersControl"].Overlay;
+var BaseLayer = react_leaflet__WEBPACK_IMPORTED_MODULE_2__["LayersControl"].BaseLayer,
+    Overlay = react_leaflet__WEBPACK_IMPORTED_MODULE_2__["LayersControl"].Overlay;
+var mid = 'D8Fm14aoxSKZU';
 
 var App = function App() {
-  var handleClick = function handleClick(e) {
-    alert(e.properties.name);
+  var _useState = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(7),
+      _useState2 = _slicedToArray(_useState, 2),
+      zoom = _useState2[0],
+      setZoom = _useState2[1];
+
+  var _useState3 = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])([28.188244, 84.309082]),
+      _useState4 = _slicedToArray(_useState3, 2),
+      center = _useState4[0],
+      SeCenter = _useState4[1];
+
+  var _useState5 = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])([]),
+      _useState6 = _slicedToArray(_useState5, 2),
+      gd = _useState6[0],
+      setGd = _useState6[1];
+
+  var handleClick = function handleClick(e, dt) {
+    setZoom(9);
+    SeCenter(e.latlng);
+    console.log(dt.municipal.properties);
   };
 
-  var mapClick = function mapClick(e) {
-    console.log(e.latlng);
-  }; // const { loading, error, data } = useQuery(COUNTRY_QUERY);
-
-
-  var _useQuery = Object(_apollo_client__WEBPACK_IMPORTED_MODULE_1__["useQuery"])(_queries_province_query__WEBPACK_IMPORTED_MODULE_3__["PROVINCES_QUERY"]),
+  var _useQuery = Object(_apollo_client__WEBPACK_IMPORTED_MODULE_1__["useQuery"])(_queries_muncipal_query__WEBPACK_IMPORTED_MODULE_4__["MUNICIPAL_QUERY"], {
+    variables: {
+      mid: mid
+    }
+  }),
       loading = _useQuery.loading,
       error = _useQuery.error,
       data = _useQuery.data;
 
-  var _useState = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])([]),
-      _useState2 = _slicedToArray(_useState, 2),
-      gd = _useState2[0],
-      setGd = _useState2[1];
-
   Object(react__WEBPACK_IMPORTED_MODULE_0__["useEffect"])(function () {
     if (!loading) {
-      setGd(data.provinces); // setGd(data.provinces[0].geometry.coordinates)
+      setGd(data.municipal.geometry.coordinates);
     }
   });
-  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, "Hello Santosh"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_leaflet__WEBPACK_IMPORTED_MODULE_4__["Map"], {
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_leaflet__WEBPACK_IMPORTED_MODULE_2__["Map"], {
     center: center,
-    onClick: mapClick,
-    zoom: 6
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_leaflet__WEBPACK_IMPORTED_MODULE_4__["LayersControl"], {
+    zoom: zoom
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_leaflet__WEBPACK_IMPORTED_MODULE_2__["LayersControl"], {
     position: "topright"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(BaseLayer, {
     checked: true,
     name: "OpenStreetMap.Mapnik"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_leaflet__WEBPACK_IMPORTED_MODULE_4__["TileLayer"], {
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_leaflet__WEBPACK_IMPORTED_MODULE_2__["TileLayer"], {
     attribution: "&copy <a href=\"http://osm.org/copyright\">OpenStreetMap</a> contributors",
     url: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-  })), gd.map(function (poly) {
-    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_leaflet__WEBPACK_IMPORTED_MODULE_4__["Polygon"], {
-      key: poly.id,
-      color: "purple",
-      onClick: function onClick() {
-        return handleClick(poly);
-      },
-      positions: poly.geometry.coordinates
-    });
+  })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_leaflet__WEBPACK_IMPORTED_MODULE_2__["Polygon"], {
+    color: "purple",
+    onClick: function onClick(e) {
+      return handleClick(e, data);
+    },
+    positions: gd
   }))));
 };
 
@@ -207,19 +211,19 @@ react_dom__WEBPACK_IMPORTED_MODULE_1___default.a.render( /*#__PURE__*/react__WEB
 
 /***/ }),
 
-/***/ "./frontend/client_src/queries/country-query.js":
-/*!******************************************************!*\
-  !*** ./frontend/client_src/queries/country-query.js ***!
-  \******************************************************/
-/*! exports provided: COUNTRY_QUERY */
+/***/ "./frontend/client_src/queries/muncipal-query.js":
+/*!*******************************************************!*\
+  !*** ./frontend/client_src/queries/muncipal-query.js ***!
+  \*******************************************************/
+/*! exports provided: MUNICIPAL_QUERY */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "COUNTRY_QUERY", function() { return COUNTRY_QUERY; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "MUNICIPAL_QUERY", function() { return MUNICIPAL_QUERY; });
 /* harmony import */ var _apollo_client__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @apollo/client */ "./node_modules/@apollo/client/index.js");
 function _templateObject() {
-  var data = _taggedTemplateLiteral(["\n\t{\n\t\tcountry{\n\t\t\ttype\n\t\t\tgeometry{\n\t\t\t\ttype\n\t\t\t\tcoordinates\n\t\t\t}\n\t\t\tproperties{\n\t\t\t\tname\n\t\t\t}\n\t\t}\n\t}\n"]);
+  var data = _taggedTemplateLiteral(["\nquery Municipal($mid: String){\n    municipal(mid: $mid){\n      properties{\n        name\n        area\n      }\n      geometry{\n        type\n        coordinates\n      }\n    }\n  }\n"]);
 
   _templateObject = function _templateObject() {
     return data;
@@ -231,7 +235,7 @@ function _templateObject() {
 function _taggedTemplateLiteral(strings, raw) { if (!raw) { raw = strings.slice(0); } return Object.freeze(Object.defineProperties(strings, { raw: { value: Object.freeze(raw) } })); }
 
 
-var COUNTRY_QUERY = Object(_apollo_client__WEBPACK_IMPORTED_MODULE_0__["gql"])(_templateObject());
+var MUNICIPAL_QUERY = Object(_apollo_client__WEBPACK_IMPORTED_MODULE_0__["gql"])(_templateObject());
 
 /***/ }),
 
@@ -239,13 +243,24 @@ var COUNTRY_QUERY = Object(_apollo_client__WEBPACK_IMPORTED_MODULE_0__["gql"])(_
 /*!*******************************************************!*\
   !*** ./frontend/client_src/queries/province-query.js ***!
   \*******************************************************/
-/*! exports provided: PROVINCES_QUERY */
+/*! exports provided: PROVINCES_QUERY, PROVINCE_QUERY */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "PROVINCES_QUERY", function() { return PROVINCES_QUERY; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "PROVINCE_QUERY", function() { return PROVINCE_QUERY; });
 /* harmony import */ var _apollo_client__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @apollo/client */ "./node_modules/@apollo/client/index.js");
+function _templateObject2() {
+  var data = _taggedTemplateLiteral(["\nquery Province($pid: String){\n  province(pid: $pid){\n    properties{\n      name\n      districtSet{\n        properties{\n          name\n        }\n        geometry {\n          type\n          coordinates\n        }\n      }\n      area\n    }\n    geometry{\n      type\n      coordinates\n    }\n  }\n}\n"]);
+
+  _templateObject2 = function _templateObject2() {
+    return data;
+  };
+
+  return data;
+}
+
 function _templateObject() {
   var data = _taggedTemplateLiteral(["\n{\n    provinces{\n        id\n      geometry{\n        type\n        coordinates\n      }\n      properties{\n        name\n      }\n    }\n  }\n"]);
 
@@ -260,6 +275,7 @@ function _taggedTemplateLiteral(strings, raw) { if (!raw) { raw = strings.slice(
 
 
 var PROVINCES_QUERY = Object(_apollo_client__WEBPACK_IMPORTED_MODULE_0__["gql"])(_templateObject());
+var PROVINCE_QUERY = Object(_apollo_client__WEBPACK_IMPORTED_MODULE_0__["gql"])(_templateObject2());
 
 /***/ }),
 

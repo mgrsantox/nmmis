@@ -10,7 +10,7 @@
     "dev:client": "webpack --mode development ./frontend/client_src/index.js --output ./nmmis/static/client/app.js",
     "build:client": "webpack --mode production ./frontend/client_src/index.js --output ./nmmis/static/client/app.js",
     "watchd:client": "webpack --mode development --watch ./frontend/client_src/index.js --output ./nmmis/static/client/app.js",
-    "watchp:client": "webpack --mode production --watch ../frontend/client_src/index.js --output ./nmmis/static/client/app.js"
+    "watchp:client": "webpack --mode production --watch ./frontend/client_src/index.js --output ./nmmis/static/client/app.js"
   },
   "repository": {
     "type": "git",
