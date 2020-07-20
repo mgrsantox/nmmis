@@ -10,7 +10,7 @@ SECRET_KEY = env(
 DEBUG = env.bool("DEV_DEBUG", default=True)
 
 
-ALLOWED_HOSTS = env.list("DEV_ALLOWED_HOSTS", default=['127.0.0.1, localhost'])
+ALLOWED_HOSTS = ['*']
 
 
 INSTALLED_APPS += [
