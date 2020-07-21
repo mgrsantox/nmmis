@@ -1,15 +1,15 @@
 import React, { useState, useEffect } from 'react'
 import { useQuery } from '@apollo/client'
 import { MUNICIPAL_QUERY } from '../queries/muncipal-query'
-import { Map, TileLayer, Polygon, LayersControl, Popup } from 'react-leaflet';
+import { Map, TileLayer, Polygon, LayersControl, Tooltip } from 'react-leaflet';
 const { BaseLayer, Overlay } = LayersControl
 
 const Municipal = ({ mid, center, zoom, setZoom, setCenter }) => {
     const { loading, error, data } = useQuery(MUNICIPAL_QUERY, {
         variables: { mid },
     })
-    const [munCrd, SetMunCrd] = useState([]);
-    const [munProp, SetMunProp] = useState({});
+    const [munCrd, setMunCrd] = useState([]);
+    const [munProp, setMunProp] = useState({});
     const handleClick = (e, dt) => {
         setZoom(12);
         setCenter(e.latlng)
@@ -17,8 +17,8 @@ const Municipal = ({ mid, center, zoom, setZoom, setCenter }) => {
     }
     useEffect(() => {
         if (!loading) {
-            SetMunCrd(data.municipal.geometry.coordinates)
-            SetMunProp(data.municipal.properties);
+            setMunCrd(data.municipal.geometry.coordinates)
+            setMunProp(data.municipal.properties);
         }
     }, [data]);
     return (
@@ -30,10 +30,11 @@ const Municipal = ({ mid, center, zoom, setZoom, setCenter }) => {
                         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                     />
                 </BaseLayer>
-                <Polygon color="purple" ondblclick={(e) => handleClick(e, data)} positions={munCrd} >
-                    <Popup>
-                        <h1>{munProp.name}</h1>
-                    </Popup>
+                <Polygon color="purple" onClick={(e) => handleClick(e, data)} positions={munCrd} >
+                    <Tooltip>
+                        <h1>Name: {munProp.name}</h1>
+                        <h1>Area: {munProp.area} Sqm.</h1>
+                    </Tooltip>
                 </Polygon>
             </LayersControl>
         </Map>

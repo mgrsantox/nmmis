@@ -198,12 +198,12 @@ var Municipal = function Municipal(_ref) {
   var _useState = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])([]),
       _useState2 = _slicedToArray(_useState, 2),
       munCrd = _useState2[0],
-      SetMunCrd = _useState2[1];
+      setMunCrd = _useState2[1];
 
   var _useState3 = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])({}),
       _useState4 = _slicedToArray(_useState3, 2),
       munProp = _useState4[0],
-      SetMunProp = _useState4[1];
+      setMunProp = _useState4[1];
 
   var handleClick = function handleClick(e, dt) {
     setZoom(12);
@@ -213,8 +213,8 @@ var Municipal = function Municipal(_ref) {
 
   Object(react__WEBPACK_IMPORTED_MODULE_0__["useEffect"])(function () {
     if (!loading) {
-      SetMunCrd(data.municipal.geometry.coordinates);
-      SetMunProp(data.municipal.properties);
+      setMunCrd(data.municipal.geometry.coordinates);
+      setMunProp(data.municipal.properties);
     }
   }, [data]);
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_leaflet__WEBPACK_IMPORTED_MODULE_3__["Map"], {
@@ -230,11 +230,11 @@ var Municipal = function Municipal(_ref) {
     url: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
   })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_leaflet__WEBPACK_IMPORTED_MODULE_3__["Polygon"], {
     color: "purple",
-    ondblclick: function ondblclick(e) {
+    onClick: function onClick(e) {
       return handleClick(e, data);
     },
     positions: munCrd
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_leaflet__WEBPACK_IMPORTED_MODULE_3__["Popup"], null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, munProp.name)))));
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_leaflet__WEBPACK_IMPORTED_MODULE_3__["Tooltip"], null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, "Name: ", munProp.name), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, "Area: ", munProp.area, " Sqm.")))));
 };
 
 /* harmony default export */ __webpack_exports__["default"] = (Municipal);
@@ -300,13 +300,9 @@ var Ward = function Ward(_ref) {
     setCenter(e.latlng);
   };
 
-  var handleHover = function handleHover(dt) {
-    console.log(dt.properties.name);
-  };
-
   Object(react__WEBPACK_IMPORTED_MODULE_0__["useEffect"])(function () {
     if (!loading) {
-      setWardsCrd(data.wards);
+      setWardsCrd(data.wards); // setWardsProp(data.ward.properties);
     }
   }, [data]);
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_leaflet__WEBPACK_IMPORTED_MODULE_3__["Map"], {
@@ -324,14 +320,11 @@ var Ward = function Ward(_ref) {
     return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_leaflet__WEBPACK_IMPORTED_MODULE_3__["Polygon"], {
       key: ward.id,
       color: "purple",
-      onmouseover: function onmouseover() {
-        return handleHover(ward);
-      },
       onClick: function onClick(e) {
         return handleClick(e, ward);
       },
       positions: ward.geometry.coordinates
-    });
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_leaflet__WEBPACK_IMPORTED_MODULE_3__["Tooltip"], null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, "Name: ", ward.properties.name), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, "Area: ", ward.properties.area, " Sqm.")));
   })));
 };
 

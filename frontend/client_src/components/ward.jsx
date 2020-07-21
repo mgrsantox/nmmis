@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { useQuery } from '@apollo/client'
 import { WARDS_QUERY } from '../queries/muncipal-query'
-import { Map, TileLayer, Polygon, LayersControl } from 'react-leaflet';
+import { Map, TileLayer, Polygon, LayersControl, Tooltip } from 'react-leaflet';
 const { BaseLayer, Overlay } = LayersControl
 
 const Ward = ({ mid, center, zoom, setZoom, setCenter }) => {
@@ -9,16 +9,15 @@ const Ward = ({ mid, center, zoom, setZoom, setCenter }) => {
         variables: { mid },
     })
     const [wardsCrd, setWardsCrd] = useState([]);
+
     const handleClick = (e, dt) => {
         setZoom(12);
         setCenter(e.latlng)
     }
-    const handleHover=(dt) =>{
-        console.log(dt.properties.name)
-    }
     useEffect(() => {
         if (!loading) {
             setWardsCrd(data.wards);
+            // setWardsProp(data.ward.properties);
         }
     }, [data]);
     return (
@@ -33,7 +32,12 @@ const Ward = ({ mid, center, zoom, setZoom, setCenter }) => {
                 {
                     wardsCrd.map(ward => {
                         return (
-                            <Polygon key={ward.id} color="purple" onmouseover={()=>handleHover(ward)} onClick={(e) => handleClick(e, ward)} positions={ward.geometry.coordinates} />
+                            <Polygon key={ward.id} color="purple" onClick={(e) => handleClick(e, ward)} positions={ward.geometry.coordinates} >
+                                <Tooltip>
+                                    <h1>Name: {ward.properties.name}</h1>
+                                    <h1>Area: {ward.properties.area} Sqm.</h1>
+                                </Tooltip>
+                            </Polygon>
                         )
                     })
                 }
