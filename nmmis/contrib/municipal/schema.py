@@ -30,10 +30,12 @@ class Query(graphene.ObjectType):
         return Municipal.objects.filter(district__id=did)
     
     def resolve_municipal(self, info, mid, *args, **kwargs):
+        print("Municipal callled")
         return Municipal.objects.get(id=mid)
 
     def resolve_wards(self, info, mid, *args, **kwargs):
-        return Municipal.objects.filter(municipal__id=mid)
+        print("Ward called");
+        return Ward.objects.filter(municipal__id=mid)
     
     def resolve_ward(self, info, wid, *args, **kwargs):
-        return Municipal.objects.get(id=wid)
+        return Ward.objects.get(id=wid)

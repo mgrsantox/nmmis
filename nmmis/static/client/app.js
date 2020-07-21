@@ -97,11 +97,69 @@
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _components_ward_jsx__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./components/ward.jsx */ "./frontend/client_src/components/ward.jsx");
+/* harmony import */ var _components_munipal_jsx__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./components/munipal.jsx */ "./frontend/client_src/components/munipal.jsx");
+function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
+
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
+function _iterableToArrayLimit(arr, i) { if (typeof Symbol === "undefined" || !(Symbol.iterator in Object(arr))) return; var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
+
+function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+
+
+
+
+var mid = 'D8Fm14aoxSKZU';
+
+var App = function App() {
+  var _useState = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(7),
+      _useState2 = _slicedToArray(_useState, 2),
+      zoom = _useState2[0],
+      setZoom = _useState2[1];
+
+  var _useState3 = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])([28.188244, 84.309082]),
+      _useState4 = _slicedToArray(_useState3, 2),
+      center = _useState4[0],
+      setCenter = _useState4[1];
+
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, zoom > 8 ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_components_ward_jsx__WEBPACK_IMPORTED_MODULE_1__["default"], {
+    mid: mid,
+    setCenter: setCenter,
+    setZoom: setZoom,
+    center: center,
+    zoom: zoom
+  }) : /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_components_munipal_jsx__WEBPACK_IMPORTED_MODULE_2__["default"], {
+    mid: mid,
+    setCenter: setCenter,
+    setZoom: setZoom,
+    center: center,
+    zoom: zoom
+  }));
+};
+
+/* harmony default export */ __webpack_exports__["default"] = (App);
+
+/***/ }),
+
+/***/ "./frontend/client_src/components/munipal.jsx":
+/*!****************************************************!*\
+  !*** ./frontend/client_src/components/munipal.jsx ***!
+  \****************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _apollo_client__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @apollo/client */ "./node_modules/@apollo/client/index.js");
-/* harmony import */ var react_leaflet__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react-leaflet */ "./node_modules/react-leaflet/es/index.js");
-/* harmony import */ var _queries_muncipal_query__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./queries/muncipal-query */ "./frontend/client_src/queries/muncipal-query.js");
-/* harmony import */ var leaflet__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! leaflet */ "./node_modules/leaflet/dist/leaflet-src.js");
-/* harmony import */ var leaflet__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(leaflet__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var _queries_muncipal_query__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../queries/muncipal-query */ "./frontend/client_src/queries/muncipal-query.js");
+/* harmony import */ var react_leaflet__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! react-leaflet */ "./node_modules/react-leaflet/es/index.js");
 function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
 
 function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
@@ -118,48 +176,17 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 
 
+var BaseLayer = react_leaflet__WEBPACK_IMPORTED_MODULE_3__["LayersControl"].BaseLayer,
+    Overlay = react_leaflet__WEBPACK_IMPORTED_MODULE_3__["LayersControl"].Overlay;
 
-var BaseLayer = react_leaflet__WEBPACK_IMPORTED_MODULE_2__["LayersControl"].BaseLayer,
-    Overlay = react_leaflet__WEBPACK_IMPORTED_MODULE_2__["LayersControl"].Overlay;
-var mid = 'D8Fm14aoxSKZU';
+var Municipal = function Municipal(_ref) {
+  var mid = _ref.mid,
+      center = _ref.center,
+      zoom = _ref.zoom,
+      setZoom = _ref.setZoom,
+      setCenter = _ref.setCenter;
 
-var App = function App() {
-  Object(react__WEBPACK_IMPORTED_MODULE_0__["useEffect"])(function () {
-    // Initialize the map
-    var map = leaflet__WEBPACK_IMPORTED_MODULE_4___default.a.map('map', {
-      scrollWheelZoom: true
-    }); // Set the position and zoom level of the map
-
-    map.setView([47.20, 13.35], 8);
-    /* Base Layers */
-
-    var osm = leaflet__WEBPACK_IMPORTED_MODULE_4___default.a.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
-    }).addTo(map);
-  }, []);
-
-  var _useState = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(7),
-      _useState2 = _slicedToArray(_useState, 2),
-      zoom = _useState2[0],
-      setZoom = _useState2[1];
-
-  var _useState3 = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])([28.188244, 84.309082]),
-      _useState4 = _slicedToArray(_useState3, 2),
-      center = _useState4[0],
-      SeCenter = _useState4[1];
-
-  var _useState5 = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])([]),
-      _useState6 = _slicedToArray(_useState5, 2),
-      gd = _useState6[0],
-      setGd = _useState6[1];
-
-  var handleClick = function handleClick(e, dt) {
-    setZoom(9);
-    SeCenter(e.latlng);
-    console.log(dt.municipal.properties);
-  };
-
-  var _useQuery = Object(_apollo_client__WEBPACK_IMPORTED_MODULE_1__["useQuery"])(_queries_muncipal_query__WEBPACK_IMPORTED_MODULE_3__["MUNICIPAL_QUERY"], {
+  var _useQuery = Object(_apollo_client__WEBPACK_IMPORTED_MODULE_1__["useQuery"])(_queries_muncipal_query__WEBPACK_IMPORTED_MODULE_2__["MUNICIPAL_QUERY"], {
     variables: {
       mid: mid
     }
@@ -168,17 +195,134 @@ var App = function App() {
       error = _useQuery.error,
       data = _useQuery.data;
 
+  var _useState = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])([]),
+      _useState2 = _slicedToArray(_useState, 2),
+      munCrd = _useState2[0],
+      SetMunCrd = _useState2[1];
+
+  var handleClick = function handleClick(e, dt) {
+    setZoom(9);
+    setCenter(e.latlng);
+  };
+
   Object(react__WEBPACK_IMPORTED_MODULE_0__["useEffect"])(function () {
     if (!loading) {
-      setGd(data.municipal.geometry.coordinates);
+      SetMunCrd(data.municipal.geometry.coordinates);
     }
-  });
-  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    id: "map"
-  });
+  }, [data]);
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_leaflet__WEBPACK_IMPORTED_MODULE_3__["Map"], {
+    center: center,
+    zoom: zoom
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_leaflet__WEBPACK_IMPORTED_MODULE_3__["LayersControl"], {
+    position: "topright"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(BaseLayer, {
+    checked: true,
+    name: "OpenStreetMap.Mapnik"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_leaflet__WEBPACK_IMPORTED_MODULE_3__["TileLayer"], {
+    attribution: "&copy <a href=\"http://osm.org/copyright\">OpenStreetMap</a> contributors",
+    url: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+  })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_leaflet__WEBPACK_IMPORTED_MODULE_3__["Polygon"], {
+    color: "purple",
+    onClick: function onClick(e) {
+      return handleClick(e, data);
+    },
+    positions: munCrd
+  })));
 };
 
-/* harmony default export */ __webpack_exports__["default"] = (App);
+/* harmony default export */ __webpack_exports__["default"] = (Municipal);
+
+/***/ }),
+
+/***/ "./frontend/client_src/components/ward.jsx":
+/*!*************************************************!*\
+  !*** ./frontend/client_src/components/ward.jsx ***!
+  \*************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _apollo_client__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @apollo/client */ "./node_modules/@apollo/client/index.js");
+/* harmony import */ var _queries_muncipal_query__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../queries/muncipal-query */ "./frontend/client_src/queries/muncipal-query.js");
+/* harmony import */ var react_leaflet__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! react-leaflet */ "./node_modules/react-leaflet/es/index.js");
+function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
+
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
+function _iterableToArrayLimit(arr, i) { if (typeof Symbol === "undefined" || !(Symbol.iterator in Object(arr))) return; var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
+
+function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+
+
+
+
+
+var BaseLayer = react_leaflet__WEBPACK_IMPORTED_MODULE_3__["LayersControl"].BaseLayer,
+    Overlay = react_leaflet__WEBPACK_IMPORTED_MODULE_3__["LayersControl"].Overlay;
+
+var Ward = function Ward(_ref) {
+  var mid = _ref.mid,
+      center = _ref.center,
+      zoom = _ref.zoom,
+      setZoom = _ref.setZoom,
+      setCenter = _ref.setCenter;
+
+  var _useQuery = Object(_apollo_client__WEBPACK_IMPORTED_MODULE_1__["useQuery"])(_queries_muncipal_query__WEBPACK_IMPORTED_MODULE_2__["WARDS_QUERY"], {
+    variables: {
+      mid: mid
+    }
+  }),
+      loading = _useQuery.loading,
+      error = _useQuery.error,
+      data = _useQuery.data;
+
+  var _useState = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])([]),
+      _useState2 = _slicedToArray(_useState, 2),
+      wardsCrd = _useState2[0],
+      setWardsCrd = _useState2[1];
+
+  var handleClick = function handleClick(e, dt) {
+    setZoom(9);
+    setCenter(e.latlng);
+  };
+
+  Object(react__WEBPACK_IMPORTED_MODULE_0__["useEffect"])(function () {
+    if (!loading) {
+      setWardsCrd(data.wards);
+      console.log(data.wards);
+    }
+  }, [data]);
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_leaflet__WEBPACK_IMPORTED_MODULE_3__["Map"], {
+    center: center,
+    zoom: zoom
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_leaflet__WEBPACK_IMPORTED_MODULE_3__["LayersControl"], {
+    position: "topright"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(BaseLayer, {
+    checked: true,
+    name: "OpenStreetMap.Mapnik"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_leaflet__WEBPACK_IMPORTED_MODULE_3__["TileLayer"], {
+    attribution: "&copy <a href=\"http://osm.org/copyright\">OpenStreetMap</a> contributors",
+    url: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+  })), wardsCrd.map(function (ward) {
+    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_leaflet__WEBPACK_IMPORTED_MODULE_3__["Polygon"], {
+      key: ward.id,
+      color: "purple",
+      onClick: function onClick(e) {
+        return handleClick(e, data);
+      },
+      positions: ward.geometry.coordinates
+    });
+  })));
+};
+
+/* harmony default export */ __webpack_exports__["default"] = (Ward);
 
 /***/ }),
 
@@ -215,13 +359,24 @@ react_dom__WEBPACK_IMPORTED_MODULE_1___default.a.render( /*#__PURE__*/react__WEB
 /*!*******************************************************!*\
   !*** ./frontend/client_src/queries/muncipal-query.js ***!
   \*******************************************************/
-/*! exports provided: MUNICIPAL_QUERY */
+/*! exports provided: MUNICIPAL_QUERY, WARDS_QUERY */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "MUNICIPAL_QUERY", function() { return MUNICIPAL_QUERY; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "WARDS_QUERY", function() { return WARDS_QUERY; });
 /* harmony import */ var _apollo_client__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @apollo/client */ "./node_modules/@apollo/client/index.js");
+function _templateObject2() {
+  var data = _taggedTemplateLiteral(["\nquery Wards($mid: String){\n  wards(mid: $mid){\n    id\n    properties{\n      name\n      area\n    }\n    geometry{\n      type\n      coordinates\n    }\n  }\n}\n"]);
+
+  _templateObject2 = function _templateObject2() {
+    return data;
+  };
+
+  return data;
+}
+
 function _templateObject() {
   var data = _taggedTemplateLiteral(["\nquery Municipal($mid: String){\n    municipal(mid: $mid){\n      properties{\n        name\n        area\n      }\n      geometry{\n        type\n        coordinates\n      }\n    }\n  }\n"]);
 
@@ -236,6 +391,7 @@ function _taggedTemplateLiteral(strings, raw) { if (!raw) { raw = strings.slice(
 
 
 var MUNICIPAL_QUERY = Object(_apollo_client__WEBPACK_IMPORTED_MODULE_0__["gql"])(_templateObject());
+var WARDS_QUERY = Object(_apollo_client__WEBPACK_IMPORTED_MODULE_0__["gql"])(_templateObject2());
 
 /***/ }),
 

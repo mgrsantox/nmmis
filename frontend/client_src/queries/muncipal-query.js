@@ -15,3 +15,20 @@ query Municipal($mid: String){
     }
   }
 `;
+
+
+export const WARDS_QUERY = gql`
+query Wards($mid: String){
+  wards(mid: $mid){
+    id
+    properties{
+      name
+      area
+    }
+    geometry{
+      type
+      coordinates
+    }
+  }
+}
+`;
