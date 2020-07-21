@@ -10,7 +10,7 @@ const Municipal = ({ mid, center, zoom, setZoom, setCenter }) => {
     })
     const [munCrd, SetMunCrd] = useState([]);
     const handleClick = (e, dt) => {
-        setZoom(9);
+        setZoom(12);
         setCenter(e.latlng)
     }
     useEffect(() => {

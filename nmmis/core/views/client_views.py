@@ -4,29 +4,47 @@ from django.contrib.gis.geos import Polygon, GEOSGeometry
 import geopandas as gpd
 from django.contrib.gis.gdal import DataSource
 from nmmis.contrib.province.models import Province
-
-# a = Polygon(((0.0, 0.0), (0.0, 50.0), (50.0, 50.0), (50.0, 0.0), (0.0, 0.0)))
-
-# a = GEOSGeometry('POLYGON((81.474609375 27.21555620902969,84.990234375 27.21555620902969,84.990234375 29.611670115197377,81.474609375 29.611670115197377,81.474609375 27.21555620902969))')
-# a = GEOSGeometry('POLYGON(( 10 10, 10 20, 20 20, 20 15, 10 10))')
-# a = GEOSGeometry('POLYGON ((28.02271961597122 83.1198879971125, 28.02274854875333 83.11982100583475, 28.02278098134609 83.11960497186691, 28.02271961597122 83.1198879971125))')
-# a = GEOSGeometry('POLYGON((84.4189453125 27.605670826465445, 85.6494140625 27.605670826465445, 85.6494140625 28.362401735238237, 84.4189453125 28.362401735238237, 84.4189453125 27.605670826465445))')
-# print(a)
+from nmmis.contrib.municipal.models import Municipal, Ward
 
 from django.contrib.gis.gdal import OGRGeometry
 
 
 class Index(TemplateView):
-    d = Province.objects.get(id="BoZksP1VL8D")
-    
-    df = DataSource(
-        '/home/mgrsantox/Desktop/projects/nmmis/nmmis/core/views/Province_Boundary.shp')
-    layer = df[0]
-    new_layer = layer[4].geom.clone()
-    new_layer.coord_dim = 2
-    n = GEOSGeometry(str(new_layer), srid=4326).transform(3857, clone=True).ewkt
-    d.geom = n
-    d.save()
+    # d = Ward.objects.get(id="p4I7MQ5cSY")
+    # n = GEOSGeometry('{"type":"Polygon","coordinates":[[[81.024169921875,28.45178873232809],[81.01730346679688,28.427637523347407],[81.03378295898438,28.414352008722247],[81.06399536132812,28.431260556158897],[81.09146118164062,28.456618312416825],[81.10931396484374,28.4795558045049],[81.068115234375,28.504901974894562],[81.03790283203125,28.498867724459092],[81.024169921875,28.45178873232809]]]}', srid=4326)
+    # n= n.transform(3857, clone=True).ewkt
+    # d.geom = n
+    # d.save()
+
+    # df = DataSource(
+    #     '/home/mgrsantox/Desktop/projects/nmmis/nmmis/core/views/data/Tikapur_Municipal_Boundary.shp')
+    # layer = df[0]
+    # for i in layer.get_geoms():
+    #     n = GEOSGeometry(str(i), srid=4326).transform(3857, clone=True).ewkt
+    #     d.geom = n
+    #     d.save()
+    # print(layer)
+    # new_layer = layer[4].geom.clone()
+    # new_layer.coord_dim = 2
+    # n = GEOSGeometry(str(new_layer), srid=4326).transform(3857, clone=True).ewkt
+    # d.geom = n
+    # d.save()
+
+    # Load Ward
+    # d = Ward.objects.get(id="p4I7MQ5cSY")
+    # df = DataSource(
+    #     '/home/mgrsantox/Desktop/projects/nmmis/nmmis/core/views/data/Tikapur_Ward_Boundary.shp')
+    # print(df.layer_count)
+    # for layer in df:
+    #     print(type(layer))
+    # layer = df[0]
+    # for i in layer.get_geoms():
+    #     print(i[1])
+    #     n = GEOSGeometry(str(i), srid=4326).transform(3857, clone=True).ewkt
+    #     # d.geom = n
+    #     # print(i[1])
+    #     # d.save()
+
     template_name = 'client/index.html'
 
     def get_context_data(self, **kwargs):

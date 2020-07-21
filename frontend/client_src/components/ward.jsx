@@ -10,13 +10,12 @@ const Ward = ({ mid, center, zoom, setZoom, setCenter }) => {
     })
     const [wardsCrd, setWardsCrd] = useState([]);
     const handleClick = (e, dt) => {
-        setZoom(9);
+        setZoom(12);
         setCenter(e.latlng)
     }
     useEffect(() => {
         if (!loading) {
             setWardsCrd(data.wards)
-            console.log(data.wards)
         }
     }, [data]);
     return (

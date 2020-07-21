@@ -114,20 +114,20 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 
 
-var mid = 'D8Fm14aoxSKZU';
+var mid = 'iaEL7GVAzOtRL';
 
 var App = function App() {
-  var _useState = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(7),
+  var _useState = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(11),
       _useState2 = _slicedToArray(_useState, 2),
       zoom = _useState2[0],
       setZoom = _useState2[1];
 
-  var _useState3 = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])([28.188244, 84.309082]),
+  var _useState3 = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])([28.5205894108141, 81.09798431396484]),
       _useState4 = _slicedToArray(_useState3, 2),
       center = _useState4[0],
       setCenter = _useState4[1];
 
-  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, zoom > 8 ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_components_ward_jsx__WEBPACK_IMPORTED_MODULE_1__["default"], {
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, zoom > 11 ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_components_ward_jsx__WEBPACK_IMPORTED_MODULE_1__["default"], {
     mid: mid,
     setCenter: setCenter,
     setZoom: setZoom,
@@ -201,7 +201,7 @@ var Municipal = function Municipal(_ref) {
       SetMunCrd = _useState2[1];
 
   var handleClick = function handleClick(e, dt) {
-    setZoom(9);
+    setZoom(12);
     setCenter(e.latlng);
   };
 
@@ -289,14 +289,13 @@ var Ward = function Ward(_ref) {
       setWardsCrd = _useState2[1];
 
   var handleClick = function handleClick(e, dt) {
-    setZoom(9);
+    setZoom(12);
     setCenter(e.latlng);
   };
 
   Object(react__WEBPACK_IMPORTED_MODULE_0__["useEffect"])(function () {
     if (!loading) {
       setWardsCrd(data.wards);
-      console.log(data.wards);
     }
   }, [data]);
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_leaflet__WEBPACK_IMPORTED_MODULE_3__["Map"], {
