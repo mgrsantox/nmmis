@@ -203,6 +203,7 @@ var Municipal = function Municipal(_ref) {
   var handleClick = function handleClick(e, dt) {
     setZoom(12);
     setCenter(e.latlng);
+    console.log(dt.municipal.properties.name);
   };
 
   Object(react__WEBPACK_IMPORTED_MODULE_0__["useEffect"])(function () {
@@ -291,6 +292,7 @@ var Ward = function Ward(_ref) {
   var handleClick = function handleClick(e, dt) {
     setZoom(12);
     setCenter(e.latlng);
+    console.log(dt.properties.name);
   };
 
   Object(react__WEBPACK_IMPORTED_MODULE_0__["useEffect"])(function () {
@@ -314,7 +316,7 @@ var Ward = function Ward(_ref) {
       key: ward.id,
       color: "purple",
       onClick: function onClick(e) {
-        return handleClick(e, data);
+        return handleClick(e, ward);
       },
       positions: ward.geometry.coordinates
     });

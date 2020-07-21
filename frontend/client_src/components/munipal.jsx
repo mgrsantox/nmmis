@@ -12,6 +12,7 @@ const Municipal = ({ mid, center, zoom, setZoom, setCenter }) => {
     const handleClick = (e, dt) => {
         setZoom(12);
         setCenter(e.latlng)
+        console.log(dt.municipal.properties.name)
     }
     useEffect(() => {
         if (!loading) {

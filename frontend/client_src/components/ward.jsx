@@ -12,10 +12,11 @@ const Ward = ({ mid, center, zoom, setZoom, setCenter }) => {
     const handleClick = (e, dt) => {
         setZoom(12);
         setCenter(e.latlng)
+        console.log(dt.properties.name)
     }
     useEffect(() => {
         if (!loading) {
-            setWardsCrd(data.wards)
+            setWardsCrd(data.wards);
         }
     }, [data]);
     return (
@@ -30,7 +31,7 @@ const Ward = ({ mid, center, zoom, setZoom, setCenter }) => {
                 {
                     wardsCrd.map(ward => {
                         return (
-                            <Polygon key={ward.id} color="purple" onClick={(e) => handleClick(e, data)} positions={ward.geometry.coordinates} />
+                            <Polygon key={ward.id} color="purple" onClick={(e) => handleClick(e, ward)} positions={ward.geometry.coordinates} />
                         )
                     })
                 }
