@@ -97,14 +97,16 @@
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _components_map_jsx__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./components/map.jsx */ "./frontend/client_src/components/map.jsx");
-/* harmony import */ var _components_navigation_header_jsx__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./components/navigation/header.jsx */ "./frontend/client_src/components/navigation/header.jsx");
+/* harmony import */ var _components_map__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./components/map */ "./frontend/client_src/components/map.jsx");
+/* harmony import */ var _components_navigation_navbar__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./components/navigation/navbar */ "./frontend/client_src/components/navigation/navbar.jsx");
+/* harmony import */ var _components_navigation_sidebar__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./components/navigation/sidebar */ "./frontend/client_src/components/navigation/sidebar.jsx");
+
 
 
 
 
 var App = function App() {
-  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_components_navigation_header_jsx__WEBPACK_IMPORTED_MODULE_2__["default"], null), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_components_map_jsx__WEBPACK_IMPORTED_MODULE_1__["default"], null));
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_components_navigation_navbar__WEBPACK_IMPORTED_MODULE_2__["default"], null), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_components_navigation_sidebar__WEBPACK_IMPORTED_MODULE_3__["default"], null), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_components_map__WEBPACK_IMPORTED_MODULE_1__["default"], null));
 };
 
 /* harmony default export */ __webpack_exports__["default"] = (App);
@@ -314,9 +316,9 @@ var Munciple = function Munciple(_ref) {
 
 /***/ }),
 
-/***/ "./frontend/client_src/components/navigation/header.jsx":
+/***/ "./frontend/client_src/components/navigation/navbar.jsx":
 /*!**************************************************************!*\
-  !*** ./frontend/client_src/components/navigation/header.jsx ***!
+  !*** ./frontend/client_src/components/navigation/navbar.jsx ***!
   \**************************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
@@ -332,6 +334,43 @@ var Navbar = function Navbar() {
 };
 
 /* harmony default export */ __webpack_exports__["default"] = (Navbar);
+
+/***/ }),
+
+/***/ "./frontend/client_src/components/navigation/sidebar.jsx":
+/*!***************************************************************!*\
+  !*** ./frontend/client_src/components/navigation/sidebar.jsx ***!
+  \***************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _contexts__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../contexts */ "./frontend/client_src/contexts/index.js");
+
+
+
+var SideBar = function SideBar() {
+  var togglecontext = Object(react__WEBPACK_IMPORTED_MODULE_0__["useContext"])(_contexts__WEBPACK_IMPORTED_MODULE_1__["ToggleContext"]);
+  console.log('dsa' + togglecontext);
+
+  var handleChange = function handleChange(e) {
+    console.log(e);
+  };
+
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+    type: "checkbox",
+    onChange: handleChange,
+    name: "scales",
+    checked: true
+  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", {
+    htmlFor: "scales"
+  }, "Places"));
+};
+
+/* harmony default export */ __webpack_exports__["default"] = (SideBar);
 
 /***/ }),
 
@@ -533,18 +572,20 @@ var CenterContextProvider = function CenterContextProvider(props) {
 /*!***********************************************!*\
   !*** ./frontend/client_src/contexts/index.js ***!
   \***********************************************/
-/*! exports provided: ZoomContext, CenterContext */
+/*! exports provided: ZoomContext, CenterContext, ToggleContext */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ZoomContext", function() { return ZoomContext; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "CenterContext", function() { return CenterContext; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ToggleContext", function() { return ToggleContext; });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 
 var ZoomContext = /*#__PURE__*/Object(react__WEBPACK_IMPORTED_MODULE_0__["createContext"])('');
 var CenterContext = /*#__PURE__*/Object(react__WEBPACK_IMPORTED_MODULE_0__["createContext"])([]);
+var ToggleContext = /*#__PURE__*/Object(react__WEBPACK_IMPORTED_MODULE_0__["createContext"])('');
 
 /***/ }),
 
@@ -712,15 +753,17 @@ var PLACES_QUERY = Object(_apollo_client__WEBPACK_IMPORTED_MODULE_0__["gql"])(_t
 /*!******************************************************!*\
   !*** ./frontend/client_src/reducers/action-types.js ***!
   \******************************************************/
-/*! exports provided: ON_ZOOMED, SET_CENTER */
+/*! exports provided: ON_ZOOMED, SET_CENTER, TOGGLE_PLACE */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ON_ZOOMED", function() { return ON_ZOOMED; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SET_CENTER", function() { return SET_CENTER; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "TOGGLE_PLACE", function() { return TOGGLE_PLACE; });
 var ON_ZOOMED = 'ON_ZOOMED';
 var SET_CENTER = 'SET_CENTER';
+var TOGGLE_PLACE = 'TOGGLE_PLACE';
 
 /***/ }),
 

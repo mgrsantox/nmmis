@@ -1,11 +1,13 @@
 import React from 'react'
-import MainMap from './components/map.jsx';
-import Navbar from './components/navigation/header.jsx';
+import MainMap from './components/map';
+import Navbar from './components/navigation/navbar';
+import Sidebar from './components/navigation/sidebar';
 
 const App = () => {
   return (
     <div>
       <Navbar />
+      <Sidebar></Sidebar>
       <MainMap />
     </div>
   )
