@@ -11,11 +11,11 @@ class PlaceType(graphql_geojson.GeoJSONType):
 
 
 class Query(graphene.ObjectType):
-    places = graphene.List(PlaceType, wid=graphene.String())
+    places = graphene.List(PlaceType, mid=graphene.String())
     place = graphene.Field(PlaceType, plid=graphene.String())
 
-    def resolve_places(self, info, wid, *args, **kwargs):
-        return Place.objects.filter(ward__id=wid)
+    def resolve_places(self, info, mid, *args, **kwargs):
+        return Place.objects.filter(ward__municipal__id=mid)
     
     def resolve_place(self, info, plid, *args, **kwargs):
         return Place.objects.get(id=plid)
