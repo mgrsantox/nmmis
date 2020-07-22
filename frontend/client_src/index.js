@@ -4,6 +4,7 @@ import { ApolloProvider, ApolloClient, InMemoryCache } from '@apollo/client'
 import App from './App.jsx';
 import ZoomContextProvider from './contexts/zoom-context.js';
 import CenterContextProvider from './contexts/center-context.js';
+import ToggleContextProvider from './contexts/toggle-context.js';
 
 const client = new ApolloClient({
 	uri: "http://api.localhost:8000/",
@@ -15,7 +16,9 @@ ReactDOM.render(
 		<ApolloProvider client={client}>
 			<ZoomContextProvider>
 				<CenterContextProvider>
-					<App />
+					<ToggleContextProvider>
+						<App />
+					</ToggleContextProvider>
 				</CenterContextProvider>
 			</ZoomContextProvider>
 		</ApolloProvider>

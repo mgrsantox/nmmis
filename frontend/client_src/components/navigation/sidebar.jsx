@@ -3,13 +3,12 @@ import { ToggleContext } from '../../contexts';
 
 const SideBar = () => {
     const togglecontext = useContext(ToggleContext);
-    console.log('dsa'+togglecontext);
     const handleChange = (e)=>{
-        console.log(e)
+        togglecontext.togglePlace()
     }
     return (
         <div>
-            <input type="checkbox" onChange={handleChange} name="scales" checked />
+            <input type="checkbox" onChange={handleChange} checked={togglecontext.state.toggle_place} />
             <label htmlFor="scales">Places</label>
         </div>
     )
