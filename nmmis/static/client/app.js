@@ -97,59 +97,22 @@
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _components_ward_jsx__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./components/ward.jsx */ "./frontend/client_src/components/ward.jsx");
-/* harmony import */ var _components_munipal_jsx__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./components/munipal.jsx */ "./frontend/client_src/components/munipal.jsx");
-function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
-
-function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
-
-function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
-
-function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
-
-function _iterableToArrayLimit(arr, i) { if (typeof Symbol === "undefined" || !(Symbol.iterator in Object(arr))) return; var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
-
-function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+/* harmony import */ var _components_map_jsx__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./components/map.jsx */ "./frontend/client_src/components/map.jsx");
 
 
-
-
-var mid = 'iaEL7GVAzOtRL';
 
 var App = function App() {
-  var _useState = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(11),
-      _useState2 = _slicedToArray(_useState, 2),
-      zoom = _useState2[0],
-      setZoom = _useState2[1];
-
-  var _useState3 = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])([28.5205894108141, 81.09798431396484]),
-      _useState4 = _slicedToArray(_useState3, 2),
-      center = _useState4[0],
-      setCenter = _useState4[1];
-
-  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, zoom > 11 ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_components_ward_jsx__WEBPACK_IMPORTED_MODULE_1__["default"], {
-    mid: mid,
-    setCenter: setCenter,
-    setZoom: setZoom,
-    center: center,
-    zoom: zoom
-  }) : /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_components_munipal_jsx__WEBPACK_IMPORTED_MODULE_2__["default"], {
-    mid: mid,
-    setCenter: setCenter,
-    setZoom: setZoom,
-    center: center,
-    zoom: zoom
-  }));
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_components_map_jsx__WEBPACK_IMPORTED_MODULE_1__["default"], null));
 };
 
 /* harmony default export */ __webpack_exports__["default"] = (App);
 
 /***/ }),
 
-/***/ "./frontend/client_src/components/munipal.jsx":
-/*!****************************************************!*\
-  !*** ./frontend/client_src/components/munipal.jsx ***!
-  \****************************************************/
+/***/ "./frontend/client_src/components/map.jsx":
+/*!************************************************!*\
+  !*** ./frontend/client_src/components/map.jsx ***!
+  \************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -157,9 +120,66 @@ var App = function App() {
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _apollo_client__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @apollo/client */ "./node_modules/@apollo/client/index.js");
-/* harmony import */ var _queries_muncipal_query__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../queries/muncipal-query */ "./frontend/client_src/queries/muncipal-query.js");
-/* harmony import */ var react_leaflet__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! react-leaflet */ "./node_modules/react-leaflet/es/index.js");
+/* harmony import */ var react_leaflet__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-leaflet */ "./node_modules/react-leaflet/es/index.js");
+/* harmony import */ var _contexts__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../contexts */ "./frontend/client_src/contexts/index.js");
+/* harmony import */ var _municiple__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./municiple */ "./frontend/client_src/components/municiple.jsx");
+/* harmony import */ var _ward__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./ward */ "./frontend/client_src/components/ward.jsx");
+
+
+
+
+
+var BaseLayer = react_leaflet__WEBPACK_IMPORTED_MODULE_1__["LayersControl"].BaseLayer,
+    Overlay = react_leaflet__WEBPACK_IMPORTED_MODULE_1__["LayersControl"].Overlay;
+var mid = 'iaEL7GVAzOtRL';
+
+var MainMap = function MainMap() {
+  var zoomcontext = Object(react__WEBPACK_IMPORTED_MODULE_0__["useContext"])(_contexts__WEBPACK_IMPORTED_MODULE_2__["ZoomContext"]);
+  var centercontext = Object(react__WEBPACK_IMPORTED_MODULE_0__["useContext"])(_contexts__WEBPACK_IMPORTED_MODULE_2__["CenterContext"]);
+
+  var handleViewPort = function handleViewPort(e) {
+    zoomcontext.onZoom(e.zoom);
+    centercontext.setCenter(e.center);
+  };
+
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_leaflet__WEBPACK_IMPORTED_MODULE_1__["Map"], {
+    center: centercontext.state.center,
+    zoom: zoomcontext.state.zoom,
+    onViewportChanged: handleViewPort
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_leaflet__WEBPACK_IMPORTED_MODULE_1__["LayersControl"], {
+    position: "topright"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(BaseLayer, {
+    checked: true,
+    name: "OpenStreetMap.Mapnik"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_leaflet__WEBPACK_IMPORTED_MODULE_1__["TileLayer"], {
+    maxZoom: 20,
+    attribution: "&copy <a href=\"http://osm.org/copyright\">OpenStreetMap</a> contributors",
+    url: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+  })), zoomcontext.state.zoom < 12 ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_municiple__WEBPACK_IMPORTED_MODULE_3__["default"], {
+    mid: mid
+  }) : /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_ward__WEBPACK_IMPORTED_MODULE_4__["default"], {
+    mid: mid
+  })));
+};
+
+/* harmony default export */ __webpack_exports__["default"] = (MainMap);
+
+/***/ }),
+
+/***/ "./frontend/client_src/components/municiple.jsx":
+/*!******************************************************!*\
+  !*** ./frontend/client_src/components/municiple.jsx ***!
+  \******************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var react_leaflet__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-leaflet */ "./node_modules/react-leaflet/es/index.js");
+/* harmony import */ var _apollo_client__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @apollo/client */ "./node_modules/@apollo/client/index.js");
+/* harmony import */ var _queries_muncipal_query__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../queries/muncipal-query */ "./frontend/client_src/queries/muncipal-query.js");
 function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
 
 function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
@@ -176,24 +196,9 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 
 
-var BaseLayer = react_leaflet__WEBPACK_IMPORTED_MODULE_3__["LayersControl"].BaseLayer,
-    Overlay = react_leaflet__WEBPACK_IMPORTED_MODULE_3__["LayersControl"].Overlay;
 
-var Municipal = function Municipal(_ref) {
-  var mid = _ref.mid,
-      center = _ref.center,
-      zoom = _ref.zoom,
-      setZoom = _ref.setZoom,
-      setCenter = _ref.setCenter;
-
-  var _useQuery = Object(_apollo_client__WEBPACK_IMPORTED_MODULE_1__["useQuery"])(_queries_muncipal_query__WEBPACK_IMPORTED_MODULE_2__["MUNICIPAL_QUERY"], {
-    variables: {
-      mid: mid
-    }
-  }),
-      loading = _useQuery.loading,
-      error = _useQuery.error,
-      data = _useQuery.data;
+var Mun = function Mun(_ref) {
+  var mid = _ref.mid;
 
   var _useState = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])([]),
       _useState2 = _slicedToArray(_useState, 2),
@@ -205,39 +210,31 @@ var Municipal = function Municipal(_ref) {
       munProp = _useState4[0],
       setMunProp = _useState4[1];
 
-  var handleClick = function handleClick(e, dt) {
-    setZoom(12);
-    setCenter(e.latlng);
-    console.log(dt.municipal.properties.name);
-  };
+  var _useQuery = Object(_apollo_client__WEBPACK_IMPORTED_MODULE_2__["useQuery"])(_queries_muncipal_query__WEBPACK_IMPORTED_MODULE_3__["MUNICIPAL_QUERY"], {
+    variables: {
+      mid: mid
+    }
+  }),
+      loading = _useQuery.loading,
+      error = _useQuery.error,
+      data = _useQuery.data;
 
   Object(react__WEBPACK_IMPORTED_MODULE_0__["useEffect"])(function () {
     if (!loading) {
       setMunCrd(data.municipal.geometry.coordinates);
       setMunProp(data.municipal.properties);
     }
-  }, [data]);
-  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_leaflet__WEBPACK_IMPORTED_MODULE_3__["Map"], {
-    center: center,
-    zoom: zoom
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_leaflet__WEBPACK_IMPORTED_MODULE_3__["LayersControl"], {
-    position: "topright"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(BaseLayer, {
-    checked: true,
-    name: "OpenStreetMap.Mapnik"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_leaflet__WEBPACK_IMPORTED_MODULE_3__["TileLayer"], {
-    attribution: "&copy <a href=\"http://osm.org/copyright\">OpenStreetMap</a> contributors",
-    url: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-  })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_leaflet__WEBPACK_IMPORTED_MODULE_3__["Polygon"], {
+  });
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_leaflet__WEBPACK_IMPORTED_MODULE_1__["Marker"], {
+    position: [51.5, -0.1]
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_leaflet__WEBPACK_IMPORTED_MODULE_1__["Popup"], null, "Hello")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_leaflet__WEBPACK_IMPORTED_MODULE_1__["Polygon"], {
+    maxZoom: 20,
     color: "purple",
-    onClick: function onClick(e) {
-      return handleClick(e, data);
-    },
     positions: munCrd
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_leaflet__WEBPACK_IMPORTED_MODULE_3__["Tooltip"], null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, "Name: ", munProp.name), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, "Area: ", munProp.area, " Sqm.")))));
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_leaflet__WEBPACK_IMPORTED_MODULE_1__["Popup"], null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, "Name: ", munProp.name), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, "Area: ", munProp.area, " Sqm."))));
 };
 
-/* harmony default export */ __webpack_exports__["default"] = (Municipal);
+/* harmony default export */ __webpack_exports__["default"] = (Mun);
 
 /***/ }),
 
@@ -252,9 +249,9 @@ var Municipal = function Municipal(_ref) {
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _apollo_client__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @apollo/client */ "./node_modules/@apollo/client/index.js");
-/* harmony import */ var _queries_muncipal_query__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../queries/muncipal-query */ "./frontend/client_src/queries/muncipal-query.js");
-/* harmony import */ var react_leaflet__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! react-leaflet */ "./node_modules/react-leaflet/es/index.js");
+/* harmony import */ var react_leaflet__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-leaflet */ "./node_modules/react-leaflet/es/index.js");
+/* harmony import */ var _apollo_client__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @apollo/client */ "./node_modules/@apollo/client/index.js");
+/* harmony import */ var _queries_muncipal_query__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../queries/muncipal-query */ "./frontend/client_src/queries/muncipal-query.js");
 function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
 
 function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
@@ -271,17 +268,16 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 
 
-var BaseLayer = react_leaflet__WEBPACK_IMPORTED_MODULE_3__["LayersControl"].BaseLayer,
-    Overlay = react_leaflet__WEBPACK_IMPORTED_MODULE_3__["LayersControl"].Overlay;
 
 var Ward = function Ward(_ref) {
-  var mid = _ref.mid,
-      center = _ref.center,
-      zoom = _ref.zoom,
-      setZoom = _ref.setZoom,
-      setCenter = _ref.setCenter;
+  var mid = _ref.mid;
 
-  var _useQuery = Object(_apollo_client__WEBPACK_IMPORTED_MODULE_1__["useQuery"])(_queries_muncipal_query__WEBPACK_IMPORTED_MODULE_2__["WARDS_QUERY"], {
+  var _useState = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])([]),
+      _useState2 = _slicedToArray(_useState, 2),
+      wardsCrd = _useState2[0],
+      setWardsCrd = _useState2[1];
+
+  var _useQuery = Object(_apollo_client__WEBPACK_IMPORTED_MODULE_2__["useQuery"])(_queries_muncipal_query__WEBPACK_IMPORTED_MODULE_3__["WARDS_QUERY"], {
     variables: {
       mid: mid
     }
@@ -290,45 +286,159 @@ var Ward = function Ward(_ref) {
       error = _useQuery.error,
       data = _useQuery.data;
 
-  var _useState = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])([]),
-      _useState2 = _slicedToArray(_useState, 2),
-      wardsCrd = _useState2[0],
-      setWardsCrd = _useState2[1];
-
-  var handleClick = function handleClick(e, dt) {
-    setZoom(12);
-    setCenter(e.latlng);
-  };
-
   Object(react__WEBPACK_IMPORTED_MODULE_0__["useEffect"])(function () {
     if (!loading) {
-      setWardsCrd(data.wards); // setWardsProp(data.ward.properties);
+      setWardsCrd(data.wards);
     }
-  }, [data]);
-  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_leaflet__WEBPACK_IMPORTED_MODULE_3__["Map"], {
-    center: center,
-    zoom: zoom
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_leaflet__WEBPACK_IMPORTED_MODULE_3__["LayersControl"], {
-    position: "topright"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(BaseLayer, {
-    checked: true,
-    name: "OpenStreetMap.Mapnik"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_leaflet__WEBPACK_IMPORTED_MODULE_3__["TileLayer"], {
-    attribution: "&copy <a href=\"http://osm.org/copyright\">OpenStreetMap</a> contributors",
-    url: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-  })), wardsCrd.map(function (ward) {
-    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_leaflet__WEBPACK_IMPORTED_MODULE_3__["Polygon"], {
+  });
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, wardsCrd.map(function (ward) {
+    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_leaflet__WEBPACK_IMPORTED_MODULE_1__["Polygon"], {
+      maxZoom: 20,
       key: ward.id,
       color: "purple",
-      onClick: function onClick(e) {
-        return handleClick(e, ward);
-      },
       positions: ward.geometry.coordinates
-    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_leaflet__WEBPACK_IMPORTED_MODULE_3__["Tooltip"], null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, "Name: ", ward.properties.name), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, "Area: ", ward.properties.area, " Sqm.")));
-  })));
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_leaflet__WEBPACK_IMPORTED_MODULE_1__["Popup"], null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, "Name: ", ward.properties.name), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, "Area: ", ward.properties.area, " Sqm.")));
+  }));
 };
 
 /* harmony default export */ __webpack_exports__["default"] = (Ward);
+
+/***/ }),
+
+/***/ "./frontend/client_src/contexts/center-context.js":
+/*!********************************************************!*\
+  !*** ./frontend/client_src/contexts/center-context.js ***!
+  \********************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _reducers_action_types__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../reducers/action-types */ "./frontend/client_src/reducers/action-types.js");
+/* harmony import */ var ___WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! . */ "./frontend/client_src/contexts/index.js");
+/* harmony import */ var _reducers_center_reducer__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../reducers/center-reducer */ "./frontend/client_src/reducers/center-reducer.js");
+function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
+
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
+function _iterableToArrayLimit(arr, i) { if (typeof Symbol === "undefined" || !(Symbol.iterator in Object(arr))) return; var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
+
+function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+
+
+
+
+
+var initialState = {
+  center: [28.5205894108141, 81.09798431396484]
+};
+
+var CenterContextProvider = function CenterContextProvider(props) {
+  var _useReducer = Object(react__WEBPACK_IMPORTED_MODULE_0__["useReducer"])(_reducers_center_reducer__WEBPACK_IMPORTED_MODULE_3__["default"], initialState),
+      _useReducer2 = _slicedToArray(_useReducer, 2),
+      state = _useReducer2[0],
+      dispatch = _useReducer2[1];
+
+  var setCenter = function setCenter(center) {
+    dispatch({
+      type: _reducers_action_types__WEBPACK_IMPORTED_MODULE_1__["SET_CENTER"],
+      payload: center
+    });
+  };
+
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(___WEBPACK_IMPORTED_MODULE_2__["CenterContext"].Provider, {
+    value: {
+      state: state,
+      setCenter: setCenter
+    }
+  }, props.children);
+};
+
+/* harmony default export */ __webpack_exports__["default"] = (CenterContextProvider);
+
+/***/ }),
+
+/***/ "./frontend/client_src/contexts/index.js":
+/*!***********************************************!*\
+  !*** ./frontend/client_src/contexts/index.js ***!
+  \***********************************************/
+/*! exports provided: ZoomContext, CenterContext */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ZoomContext", function() { return ZoomContext; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "CenterContext", function() { return CenterContext; });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+
+var ZoomContext = /*#__PURE__*/Object(react__WEBPACK_IMPORTED_MODULE_0__["createContext"])('');
+var CenterContext = /*#__PURE__*/Object(react__WEBPACK_IMPORTED_MODULE_0__["createContext"])([]);
+
+/***/ }),
+
+/***/ "./frontend/client_src/contexts/zoom-context.js":
+/*!******************************************************!*\
+  !*** ./frontend/client_src/contexts/zoom-context.js ***!
+  \******************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var ___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! . */ "./frontend/client_src/contexts/index.js");
+/* harmony import */ var _reducers_zoom_reducer__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../reducers/zoom-reducer */ "./frontend/client_src/reducers/zoom-reducer.js");
+/* harmony import */ var _reducers_action_types__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../reducers/action-types */ "./frontend/client_src/reducers/action-types.js");
+function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
+
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
+function _iterableToArrayLimit(arr, i) { if (typeof Symbol === "undefined" || !(Symbol.iterator in Object(arr))) return; var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
+
+function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+
+
+
+
+
+var initialState = {
+  zoom: 11
+};
+
+var ZoomContextProvider = function ZoomContextProvider(props) {
+  var _useReducer = Object(react__WEBPACK_IMPORTED_MODULE_0__["useReducer"])(_reducers_zoom_reducer__WEBPACK_IMPORTED_MODULE_2__["default"], initialState),
+      _useReducer2 = _slicedToArray(_useReducer, 2),
+      state = _useReducer2[0],
+      dispatch = _useReducer2[1];
+
+  var onZoom = function onZoom(zoom) {
+    dispatch({
+      type: _reducers_action_types__WEBPACK_IMPORTED_MODULE_3__["ON_ZOOMED"],
+      payload: zoom
+    });
+  };
+
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(___WEBPACK_IMPORTED_MODULE_1__["ZoomContext"].Provider, {
+    value: {
+      state: state,
+      onZoom: onZoom
+    }
+  }, props.children);
+};
+
+/* harmony default export */ __webpack_exports__["default"] = (ZoomContextProvider);
 
 /***/ }),
 
@@ -347,6 +457,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react_dom__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react_dom__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var _apollo_client__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @apollo/client */ "./node_modules/@apollo/client/index.js");
 /* harmony import */ var _App_jsx__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./App.jsx */ "./frontend/client_src/App.jsx");
+/* harmony import */ var _contexts_zoom_context_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./contexts/zoom-context.js */ "./frontend/client_src/contexts/zoom-context.js");
+/* harmony import */ var _contexts_center_context_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./contexts/center-context.js */ "./frontend/client_src/contexts/center-context.js");
+
+
 
 
 
@@ -357,7 +471,7 @@ var client = new _apollo_client__WEBPACK_IMPORTED_MODULE_2__["ApolloClient"]({
 });
 react_dom__WEBPACK_IMPORTED_MODULE_1___default.a.render( /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0__["StrictMode"], null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_apollo_client__WEBPACK_IMPORTED_MODULE_2__["ApolloProvider"], {
   client: client
-}, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_App_jsx__WEBPACK_IMPORTED_MODULE_3__["default"], null))), document.getElementById('wrapper'));
+}, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_contexts_zoom_context_js__WEBPACK_IMPORTED_MODULE_4__["default"], null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_contexts_center_context_js__WEBPACK_IMPORTED_MODULE_5__["default"], null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_App_jsx__WEBPACK_IMPORTED_MODULE_3__["default"], null))))), document.getElementById('wrapper'));
 
 /***/ }),
 
@@ -398,6 +512,90 @@ function _taggedTemplateLiteral(strings, raw) { if (!raw) { raw = strings.slice(
 
 var MUNICIPAL_QUERY = Object(_apollo_client__WEBPACK_IMPORTED_MODULE_0__["gql"])(_templateObject());
 var WARDS_QUERY = Object(_apollo_client__WEBPACK_IMPORTED_MODULE_0__["gql"])(_templateObject2());
+
+/***/ }),
+
+/***/ "./frontend/client_src/reducers/action-types.js":
+/*!******************************************************!*\
+  !*** ./frontend/client_src/reducers/action-types.js ***!
+  \******************************************************/
+/*! exports provided: ON_ZOOMED, SET_CENTER */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ON_ZOOMED", function() { return ON_ZOOMED; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SET_CENTER", function() { return SET_CENTER; });
+var ON_ZOOMED = 'ON_ZOOMED';
+var SET_CENTER = 'SET_CENTER';
+
+/***/ }),
+
+/***/ "./frontend/client_src/reducers/center-reducer.js":
+/*!********************************************************!*\
+  !*** ./frontend/client_src/reducers/center-reducer.js ***!
+  \********************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _action_types__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./action-types */ "./frontend/client_src/reducers/action-types.js");
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+
+
+var centerReducer = function centerReducer(state, action) {
+  switch (action.type) {
+    case _action_types__WEBPACK_IMPORTED_MODULE_0__["SET_CENTER"]:
+      return _objectSpread(_objectSpread({}, state), {}, {
+        center: action.payload
+      });
+
+    default:
+      return state;
+  }
+};
+
+/* harmony default export */ __webpack_exports__["default"] = (centerReducer);
+
+/***/ }),
+
+/***/ "./frontend/client_src/reducers/zoom-reducer.js":
+/*!******************************************************!*\
+  !*** ./frontend/client_src/reducers/zoom-reducer.js ***!
+  \******************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _action_types__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./action-types */ "./frontend/client_src/reducers/action-types.js");
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+
+
+var zoomReducer = function zoomReducer(state, action) {
+  switch (action.type) {
+    case _action_types__WEBPACK_IMPORTED_MODULE_0__["ON_ZOOMED"]:
+      return _objectSpread(_objectSpread({}, state), {}, {
+        zoom: action.payload
+      });
+
+    default:
+      return state;
+  }
+};
+
+/* harmony default export */ __webpack_exports__["default"] = (zoomReducer);
 
 /***/ }),
 
@@ -2455,7 +2653,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _utilities_graphql_fragments_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../utilities/graphql/fragments.js */ "./node_modules/@apollo/client/utilities/graphql/fragments.js");
 /* harmony import */ var _utilities_graphql_storeUtils_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../utilities/graphql/storeUtils.js */ "./node_modules/@apollo/client/utilities/graphql/storeUtils.js");
 /* harmony import */ var _utilities_graphql_getFromAST_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../utilities/graphql/getFromAST.js */ "./node_modules/@apollo/client/utilities/graphql/getFromAST.js");
-/* harmony import */ var graphql_language_visitor__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! graphql/language/visitor */ "./node_modules/graphql/language/visitor.mjs");
+/* harmony import */ var graphql_language_visitor__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! graphql/language/visitor */ "./node_modules/graphql/language/visitor.js");
+/* harmony import */ var graphql_language_visitor__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(graphql_language_visitor__WEBPACK_IMPORTED_MODULE_5__);
 /* harmony import */ var _utilities_graphql_directives_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../utilities/graphql/directives.js */ "./node_modules/@apollo/client/utilities/graphql/directives.js");
 /* harmony import */ var _utilities_graphql_transform_js__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../utilities/graphql/transform.js */ "./node_modules/@apollo/client/utilities/graphql/transform.js");
 /* harmony import */ var _utilities_common_mergeDeep_js__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../utilities/common/mergeDeep.js */ "./node_modules/@apollo/client/utilities/common/mergeDeep.js");
@@ -5284,7 +5483,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "fallbackHttpConfig", function() { return fallbackHttpConfig; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "selectHttpOptionsAndBody", function() { return selectHttpOptionsAndBody; });
 /* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
-/* harmony import */ var graphql_language_printer__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! graphql/language/printer */ "./node_modules/graphql/language/printer.mjs");
+/* harmony import */ var graphql_language_printer__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! graphql/language/printer */ "./node_modules/graphql/language/printer.js");
+/* harmony import */ var graphql_language_printer__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(graphql_language_printer__WEBPACK_IMPORTED_MODULE_1__);
 
 
 
@@ -7162,7 +7362,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "hasDirectives", function() { return hasDirectives; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "shouldInclude", function() { return shouldInclude; });
 /* harmony import */ var ts_invariant__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ts-invariant */ "./node_modules/ts-invariant/lib/invariant.esm.js");
-/* harmony import */ var graphql_language_visitor__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! graphql/language/visitor */ "./node_modules/graphql/language/visitor.mjs");
+/* harmony import */ var graphql_language_visitor__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! graphql/language/visitor */ "./node_modules/graphql/language/visitor.js");
+/* harmony import */ var graphql_language_visitor__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(graphql_language_visitor__WEBPACK_IMPORTED_MODULE_1__);
 
 
 
@@ -7650,7 +7851,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _fragments_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./fragments.js */ "./node_modules/@apollo/client/utilities/graphql/fragments.js");
 /* harmony import */ var _storeUtils_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./storeUtils.js */ "./node_modules/@apollo/client/utilities/graphql/storeUtils.js");
 /* harmony import */ var _getFromAST_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./getFromAST.js */ "./node_modules/@apollo/client/utilities/graphql/getFromAST.js");
-/* harmony import */ var graphql_language_visitor__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! graphql/language/visitor */ "./node_modules/graphql/language/visitor.mjs");
+/* harmony import */ var graphql_language_visitor__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! graphql/language/visitor */ "./node_modules/graphql/language/visitor.js");
+/* harmony import */ var graphql_language_visitor__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(graphql_language_visitor__WEBPACK_IMPORTED_MODULE_5__);
 /* harmony import */ var _common_filterInPlace_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../common/filterInPlace.js */ "./node_modules/@apollo/client/utilities/common/filterInPlace.js");
 
 
@@ -8825,7 +9027,7 @@ module.exports = function (data, opts) {
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-var parser = __webpack_require__(/*! graphql/language/parser */ "./node_modules/graphql/language/parser.mjs");
+var parser = __webpack_require__(/*! graphql/language/parser */ "./node_modules/graphql/language/parser.js");
 
 var parse = parser.parse;
 
@@ -9009,21 +9211,32 @@ module.exports = gql;
 
 /***/ }),
 
-/***/ "./node_modules/graphql/error/GraphQLError.mjs":
-/*!*****************************************************!*\
-  !*** ./node_modules/graphql/error/GraphQLError.mjs ***!
-  \*****************************************************/
-/*! exports provided: GraphQLError, printError */
-/***/ (function(__webpack_module__, __webpack_exports__, __webpack_require__) {
+/***/ "./node_modules/graphql/error/GraphQLError.js":
+/*!****************************************************!*\
+  !*** ./node_modules/graphql/error/GraphQLError.js ***!
+  \****************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "GraphQLError", function() { return GraphQLError; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "printError", function() { return printError; });
-/* harmony import */ var _jsutils_isObjectLike_mjs__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../jsutils/isObjectLike.mjs */ "./node_modules/graphql/jsutils/isObjectLike.mjs");
-/* harmony import */ var _polyfills_symbols_mjs__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../polyfills/symbols.mjs */ "./node_modules/graphql/polyfills/symbols.mjs");
-/* harmony import */ var _language_location_mjs__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../language/location.mjs */ "./node_modules/graphql/language/location.mjs");
-/* harmony import */ var _language_printLocation_mjs__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../language/printLocation.mjs */ "./node_modules/graphql/language/printLocation.mjs");
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.printError = printError;
+exports.GraphQLError = void 0;
+
+var _isObjectLike = _interopRequireDefault(__webpack_require__(/*! ../jsutils/isObjectLike */ "./node_modules/graphql/jsutils/isObjectLike.js"));
+
+var _symbols = __webpack_require__(/*! ../polyfills/symbols */ "./node_modules/graphql/polyfills/symbols.js");
+
+var _location = __webpack_require__(/*! ../language/location */ "./node_modules/graphql/language/location.js");
+
+var _printLocation = __webpack_require__(/*! ../language/printLocation */ "./node_modules/graphql/language/printLocation.js");
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -9052,19 +9265,12 @@ function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || func
 
 function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
 
-// FIXME:
-// flowlint uninitialized-instance-property:off
-
-
-
-
 /**
  * A GraphQLError describes an Error found during the parse, validate, or
  * execute phases of performing a GraphQL operation. In addition to a message
  * and stack trace, it also includes information about the locations in a
  * GraphQL document and/or execution result that correspond to the Error.
  */
-
 var GraphQLError = /*#__PURE__*/function (_Error) {
   _inherits(GraphQLError, _Error);
 
@@ -9159,12 +9365,12 @@ var GraphQLError = /*#__PURE__*/function (_Error) {
 
     if (positions && source) {
       _locations = positions.map(function (pos) {
-        return Object(_language_location_mjs__WEBPACK_IMPORTED_MODULE_2__["getLocation"])(source, pos);
+        return (0, _location.getLocation)(source, pos);
       });
     } else if (_nodes) {
       _locations = _nodes.reduce(function (list, node) {
         if (node.loc) {
-          list.push(Object(_language_location_mjs__WEBPACK_IMPORTED_MODULE_2__["getLocation"])(node.loc.source, node.loc.start));
+          list.push((0, _location.getLocation)(node.loc.source, node.loc.start));
         }
 
         return list;
@@ -9176,7 +9382,7 @@ var GraphQLError = /*#__PURE__*/function (_Error) {
     if (_extensions == null && originalError != null) {
       var originalExtensions = originalError.extensions;
 
-      if (Object(_jsutils_isObjectLike_mjs__WEBPACK_IMPORTED_MODULE_0__["default"])(originalExtensions)) {
+      if ((0, _isObjectLike.default)(originalExtensions)) {
         _extensions = originalExtensions;
       }
     }
@@ -9265,7 +9471,7 @@ var GraphQLError = /*#__PURE__*/function (_Error) {
     // $FlowFixMe Flow doesn't support computed properties yet
 
   }, {
-    key: _polyfills_symbols_mjs__WEBPACK_IMPORTED_MODULE_1__["SYMBOL_TO_STRING_TAG"],
+    key: _symbols.SYMBOL_TO_STRING_TAG,
     get: function get() {
       return 'Object';
     }
@@ -9278,6 +9484,9 @@ var GraphQLError = /*#__PURE__*/function (_Error) {
  * about the error's position in the source.
  */
 
+
+exports.GraphQLError = GraphQLError;
+
 function printError(error) {
   var output = error.message;
 
@@ -9286,13 +9495,13 @@ function printError(error) {
       var node = _error$nodes2[_i2];
 
       if (node.loc) {
-        output += '\n\n' + Object(_language_printLocation_mjs__WEBPACK_IMPORTED_MODULE_3__["printLocation"])(node.loc);
+        output += '\n\n' + (0, _printLocation.printLocation)(node.loc);
       }
     }
   } else if (error.source && error.locations) {
     for (var _i4 = 0, _error$locations2 = error.locations; _i4 < _error$locations2.length; _i4++) {
       var location = _error$locations2[_i4];
-      output += '\n\n' + Object(_language_printLocation_mjs__WEBPACK_IMPORTED_MODULE_3__["printSourceLocation"])(error.source, location);
+      output += '\n\n' + (0, _printLocation.printSourceLocation)(error.source, location);
     }
   }
 
@@ -9302,71 +9511,86 @@ function printError(error) {
 
 /***/ }),
 
-/***/ "./node_modules/graphql/error/syntaxError.mjs":
-/*!****************************************************!*\
-  !*** ./node_modules/graphql/error/syntaxError.mjs ***!
-  \****************************************************/
-/*! exports provided: syntaxError */
-/***/ (function(__webpack_module__, __webpack_exports__, __webpack_require__) {
+/***/ "./node_modules/graphql/error/syntaxError.js":
+/*!***************************************************!*\
+  !*** ./node_modules/graphql/error/syntaxError.js ***!
+  \***************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "syntaxError", function() { return syntaxError; });
-/* harmony import */ var _GraphQLError_mjs__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./GraphQLError.mjs */ "./node_modules/graphql/error/GraphQLError.mjs");
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.syntaxError = syntaxError;
+
+var _GraphQLError = __webpack_require__(/*! ./GraphQLError */ "./node_modules/graphql/error/GraphQLError.js");
 
 /**
  * Produces a GraphQLError representing a syntax error, containing useful
  * descriptive information about the syntax error's position in the source.
  */
-
 function syntaxError(source, position, description) {
-  return new _GraphQLError_mjs__WEBPACK_IMPORTED_MODULE_0__["GraphQLError"]("Syntax Error: ".concat(description), undefined, source, [position]);
+  return new _GraphQLError.GraphQLError("Syntax Error: ".concat(description), undefined, source, [position]);
 }
 
 
 /***/ }),
 
-/***/ "./node_modules/graphql/jsutils/defineInspect.mjs":
-/*!********************************************************!*\
-  !*** ./node_modules/graphql/jsutils/defineInspect.mjs ***!
-  \********************************************************/
-/*! exports provided: default */
-/***/ (function(__webpack_module__, __webpack_exports__, __webpack_require__) {
+/***/ "./node_modules/graphql/jsutils/defineInspect.js":
+/*!*******************************************************!*\
+  !*** ./node_modules/graphql/jsutils/defineInspect.js ***!
+  \*******************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return defineInspect; });
-/* harmony import */ var _invariant_mjs__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./invariant.mjs */ "./node_modules/graphql/jsutils/invariant.mjs");
-/* harmony import */ var _nodejsCustomInspectSymbol_mjs__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./nodejsCustomInspectSymbol.mjs */ "./node_modules/graphql/jsutils/nodejsCustomInspectSymbol.mjs");
 
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = defineInspect;
+
+var _invariant = _interopRequireDefault(__webpack_require__(/*! ./invariant */ "./node_modules/graphql/jsutils/invariant.js"));
+
+var _nodejsCustomInspectSymbol = _interopRequireDefault(__webpack_require__(/*! ./nodejsCustomInspectSymbol */ "./node_modules/graphql/jsutils/nodejsCustomInspectSymbol.js"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 /**
  * The `defineInspect()` function defines `inspect()` prototype method as alias of `toJSON`
  */
-
 function defineInspect(classObject) {
   var fn = classObject.prototype.toJSON;
-  typeof fn === 'function' || Object(_invariant_mjs__WEBPACK_IMPORTED_MODULE_0__["default"])(0);
+  typeof fn === 'function' || (0, _invariant.default)(0);
   classObject.prototype.inspect = fn; // istanbul ignore else (See: 'https://github.com/graphql/graphql-js/issues/2317')
 
-  if (_nodejsCustomInspectSymbol_mjs__WEBPACK_IMPORTED_MODULE_1__["default"]) {
-    classObject.prototype[_nodejsCustomInspectSymbol_mjs__WEBPACK_IMPORTED_MODULE_1__["default"]] = fn;
+  if (_nodejsCustomInspectSymbol.default) {
+    classObject.prototype[_nodejsCustomInspectSymbol.default] = fn;
   }
 }
 
 
 /***/ }),
 
-/***/ "./node_modules/graphql/jsutils/devAssert.mjs":
-/*!****************************************************!*\
-  !*** ./node_modules/graphql/jsutils/devAssert.mjs ***!
-  \****************************************************/
-/*! exports provided: default */
-/***/ (function(__webpack_module__, __webpack_exports__, __webpack_require__) {
+/***/ "./node_modules/graphql/jsutils/devAssert.js":
+/*!***************************************************!*\
+  !*** ./node_modules/graphql/jsutils/devAssert.js ***!
+  \***************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return devAssert; });
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = devAssert;
+
 function devAssert(condition, message) {
   var booleanCondition = Boolean(condition); // istanbul ignore else (See transformation done in './resources/inlineInvariant.js')
 
@@ -9378,19 +9602,26 @@ function devAssert(condition, message) {
 
 /***/ }),
 
-/***/ "./node_modules/graphql/jsutils/inspect.mjs":
-/*!**************************************************!*\
-  !*** ./node_modules/graphql/jsutils/inspect.mjs ***!
-  \**************************************************/
-/*! exports provided: default */
-/***/ (function(__webpack_module__, __webpack_exports__, __webpack_require__) {
+/***/ "./node_modules/graphql/jsutils/inspect.js":
+/*!*************************************************!*\
+  !*** ./node_modules/graphql/jsutils/inspect.js ***!
+  \*************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return inspect; });
-/* harmony import */ var _nodejsCustomInspectSymbol_mjs__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./nodejsCustomInspectSymbol.mjs */ "./node_modules/graphql/jsutils/nodejsCustomInspectSymbol.mjs");
-function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = inspect;
+
+var _nodejsCustomInspectSymbol = _interopRequireDefault(__webpack_require__(/*! ./nodejsCustomInspectSymbol */ "./node_modules/graphql/jsutils/nodejsCustomInspectSymbol.js"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 var MAX_ARRAY_LENGTH = 10;
 var MAX_RECURSIVE_DEPTH = 2;
@@ -9489,7 +9720,7 @@ function formatArray(array, seenValues) {
 }
 
 function getCustomFn(object) {
-  var customInspectFn = object[String(_nodejsCustomInspectSymbol_mjs__WEBPACK_IMPORTED_MODULE_0__["default"])];
+  var customInspectFn = object[String(_nodejsCustomInspectSymbol.default)];
 
   if (typeof customInspectFn === 'function') {
     return customInspectFn;
@@ -9517,16 +9748,21 @@ function getObjectTag(object) {
 
 /***/ }),
 
-/***/ "./node_modules/graphql/jsutils/invariant.mjs":
-/*!****************************************************!*\
-  !*** ./node_modules/graphql/jsutils/invariant.mjs ***!
-  \****************************************************/
-/*! exports provided: default */
-/***/ (function(__webpack_module__, __webpack_exports__, __webpack_require__) {
+/***/ "./node_modules/graphql/jsutils/invariant.js":
+/*!***************************************************!*\
+  !*** ./node_modules/graphql/jsutils/invariant.js ***!
+  \***************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return invariant; });
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = invariant;
+
 function invariant(condition, message) {
   var booleanCondition = Boolean(condition); // istanbul ignore else (See transformation done in './resources/inlineInvariant.js')
 
@@ -9538,16 +9774,21 @@ function invariant(condition, message) {
 
 /***/ }),
 
-/***/ "./node_modules/graphql/jsutils/isObjectLike.mjs":
-/*!*******************************************************!*\
-  !*** ./node_modules/graphql/jsutils/isObjectLike.mjs ***!
-  \*******************************************************/
-/*! exports provided: default */
-/***/ (function(__webpack_module__, __webpack_exports__, __webpack_require__) {
+/***/ "./node_modules/graphql/jsutils/isObjectLike.js":
+/*!******************************************************!*\
+  !*** ./node_modules/graphql/jsutils/isObjectLike.js ***!
+  \******************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return isObjectLike; });
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = isObjectLike;
+
 function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 /**
@@ -9561,36 +9802,47 @@ function isObjectLike(value) {
 
 /***/ }),
 
-/***/ "./node_modules/graphql/jsutils/nodejsCustomInspectSymbol.mjs":
-/*!********************************************************************!*\
-  !*** ./node_modules/graphql/jsutils/nodejsCustomInspectSymbol.mjs ***!
-  \********************************************************************/
-/*! exports provided: default */
-/***/ (function(__webpack_module__, __webpack_exports__, __webpack_require__) {
+/***/ "./node_modules/graphql/jsutils/nodejsCustomInspectSymbol.js":
+/*!*******************************************************************!*\
+  !*** ./node_modules/graphql/jsutils/nodejsCustomInspectSymbol.js ***!
+  \*******************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-__webpack_require__.r(__webpack_exports__);
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
 // istanbul ignore next (See: 'https://github.com/graphql/graphql-js/issues/2317')
 var nodejsCustomInspectSymbol = typeof Symbol === 'function' && typeof Symbol.for === 'function' ? Symbol.for('nodejs.util.inspect.custom') : undefined;
-/* harmony default export */ __webpack_exports__["default"] = (nodejsCustomInspectSymbol);
+var _default = nodejsCustomInspectSymbol;
+exports.default = _default;
 
 
 /***/ }),
 
-/***/ "./node_modules/graphql/language/ast.mjs":
-/*!***********************************************!*\
-  !*** ./node_modules/graphql/language/ast.mjs ***!
-  \***********************************************/
-/*! exports provided: Location, Token, isNode */
-/***/ (function(__webpack_module__, __webpack_exports__, __webpack_require__) {
+/***/ "./node_modules/graphql/language/ast.js":
+/*!**********************************************!*\
+  !*** ./node_modules/graphql/language/ast.js ***!
+  \**********************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Location", function() { return Location; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Token", function() { return Token; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "isNode", function() { return isNode; });
-/* harmony import */ var _jsutils_defineInspect_mjs__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../jsutils/defineInspect.mjs */ "./node_modules/graphql/jsutils/defineInspect.mjs");
 
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.isNode = isNode;
+exports.Token = exports.Location = void 0;
+
+var _defineInspect = _interopRequireDefault(__webpack_require__(/*! ../jsutils/defineInspect */ "./node_modules/graphql/jsutils/defineInspect.js"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 /**
  * Contains a range of UTF-8 character offsets and token references that
@@ -9636,7 +9888,9 @@ var Location = /*#__PURE__*/function () {
   return Location;
 }(); // Print a simplified form when appearing in `inspect` and `util.inspect`.
 
-Object(_jsutils_defineInspect_mjs__WEBPACK_IMPORTED_MODULE_0__["default"])(Location);
+
+exports.Location = Location;
+(0, _defineInspect.default)(Location);
 /**
  * Represents a range of characters represented by a lexical token
  * within a Source.
@@ -9697,7 +9951,9 @@ var Token = /*#__PURE__*/function () {
   return Token;
 }(); // Print a simplified form when appearing in `inspect` and `util.inspect`.
 
-Object(_jsutils_defineInspect_mjs__WEBPACK_IMPORTED_MODULE_0__["default"])(Token);
+
+exports.Token = Token;
+(0, _defineInspect.default)(Token);
 /**
  * @internal
  */
@@ -9712,18 +9968,23 @@ function isNode(maybeNode) {
 
 /***/ }),
 
-/***/ "./node_modules/graphql/language/blockString.mjs":
-/*!*******************************************************!*\
-  !*** ./node_modules/graphql/language/blockString.mjs ***!
-  \*******************************************************/
-/*! exports provided: dedentBlockStringValue, getBlockStringIndentation, printBlockString */
-/***/ (function(__webpack_module__, __webpack_exports__, __webpack_require__) {
+/***/ "./node_modules/graphql/language/blockString.js":
+/*!******************************************************!*\
+  !*** ./node_modules/graphql/language/blockString.js ***!
+  \******************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "dedentBlockStringValue", function() { return dedentBlockStringValue; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getBlockStringIndentation", function() { return getBlockStringIndentation; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "printBlockString", function() { return printBlockString; });
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.dedentBlockStringValue = dedentBlockStringValue;
+exports.getBlockStringIndentation = getBlockStringIndentation;
+exports.printBlockString = printBlockString;
+
 /**
  * Produces the value of a block string from its parsed raw value, similar to
  * CoffeeScript's block string, Python's docstring trim or Ruby's strip_heredoc.
@@ -9759,6 +10020,7 @@ function dedentBlockStringValue(rawString) {
 /**
  * @internal
  */
+
 
 function getBlockStringIndentation(lines) {
   var commonIndent = null;
@@ -9831,16 +10093,21 @@ function printBlockString(value) {
 
 /***/ }),
 
-/***/ "./node_modules/graphql/language/directiveLocation.mjs":
-/*!*************************************************************!*\
-  !*** ./node_modules/graphql/language/directiveLocation.mjs ***!
-  \*************************************************************/
-/*! exports provided: DirectiveLocation */
-/***/ (function(__webpack_module__, __webpack_exports__, __webpack_require__) {
+/***/ "./node_modules/graphql/language/directiveLocation.js":
+/*!************************************************************!*\
+  !*** ./node_modules/graphql/language/directiveLocation.js ***!
+  \************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "DirectiveLocation", function() { return DirectiveLocation; });
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.DirectiveLocation = void 0;
+
 /**
  * The set of allowed directive location values.
  */
@@ -9871,19 +10138,26 @@ var DirectiveLocation = Object.freeze({
  * The enum type representing the directive location values.
  */
 
+exports.DirectiveLocation = DirectiveLocation;
+
 
 /***/ }),
 
-/***/ "./node_modules/graphql/language/kinds.mjs":
-/*!*************************************************!*\
-  !*** ./node_modules/graphql/language/kinds.mjs ***!
-  \*************************************************/
-/*! exports provided: Kind */
-/***/ (function(__webpack_module__, __webpack_exports__, __webpack_require__) {
+/***/ "./node_modules/graphql/language/kinds.js":
+/*!************************************************!*\
+  !*** ./node_modules/graphql/language/kinds.js ***!
+  \************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Kind", function() { return Kind; });
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.Kind = void 0;
+
 /**
  * The set of allowed kind values for AST nodes.
  */
@@ -9947,27 +10221,34 @@ var Kind = Object.freeze({
  * The enum type representing the possible kind values of AST nodes.
  */
 
+exports.Kind = Kind;
+
 
 /***/ }),
 
-/***/ "./node_modules/graphql/language/lexer.mjs":
-/*!*************************************************!*\
-  !*** ./node_modules/graphql/language/lexer.mjs ***!
-  \*************************************************/
-/*! exports provided: Lexer, isPunctuatorTokenKind */
-/***/ (function(__webpack_module__, __webpack_exports__, __webpack_require__) {
+/***/ "./node_modules/graphql/language/lexer.js":
+/*!************************************************!*\
+  !*** ./node_modules/graphql/language/lexer.js ***!
+  \************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Lexer", function() { return Lexer; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "isPunctuatorTokenKind", function() { return isPunctuatorTokenKind; });
-/* harmony import */ var _error_syntaxError_mjs__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../error/syntaxError.mjs */ "./node_modules/graphql/error/syntaxError.mjs");
-/* harmony import */ var _ast_mjs__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./ast.mjs */ "./node_modules/graphql/language/ast.mjs");
-/* harmony import */ var _tokenKind_mjs__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./tokenKind.mjs */ "./node_modules/graphql/language/tokenKind.mjs");
-/* harmony import */ var _blockString_mjs__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./blockString.mjs */ "./node_modules/graphql/language/blockString.mjs");
 
 
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.isPunctuatorTokenKind = isPunctuatorTokenKind;
+exports.Lexer = void 0;
 
+var _syntaxError = __webpack_require__(/*! ../error/syntaxError */ "./node_modules/graphql/error/syntaxError.js");
+
+var _ast = __webpack_require__(/*! ./ast */ "./node_modules/graphql/language/ast.js");
+
+var _tokenKind = __webpack_require__(/*! ./tokenKind */ "./node_modules/graphql/language/tokenKind.js");
+
+var _blockString = __webpack_require__(/*! ./blockString */ "./node_modules/graphql/language/blockString.js");
 
 /**
  * Given a Source object, creates a Lexer for that source.
@@ -9977,7 +10258,6 @@ __webpack_require__.r(__webpack_exports__);
  * EOF, after which the lexer will repeatedly return the same EOF token
  * whenever called.
  */
-
 var Lexer = /*#__PURE__*/function () {
   /**
    * The previously focused non-ignored token.
@@ -9995,7 +10275,7 @@ var Lexer = /*#__PURE__*/function () {
    * The character offset at which the current line begins.
    */
   function Lexer(source) {
-    var startOfFileToken = new _ast_mjs__WEBPACK_IMPORTED_MODULE_1__["Token"](_tokenKind_mjs__WEBPACK_IMPORTED_MODULE_2__["TokenKind"].SOF, 0, 0, 0, 0, null);
+    var startOfFileToken = new _ast.Token(_tokenKind.TokenKind.SOF, 0, 0, 0, 0, null);
     this.source = source;
     this.lastToken = startOfFileToken;
     this.token = startOfFileToken;
@@ -10023,13 +10303,13 @@ var Lexer = /*#__PURE__*/function () {
   _proto.lookahead = function lookahead() {
     var token = this.token;
 
-    if (token.kind !== _tokenKind_mjs__WEBPACK_IMPORTED_MODULE_2__["TokenKind"].EOF) {
+    if (token.kind !== _tokenKind.TokenKind.EOF) {
       do {
         var _token$next;
 
         // Note: next is only mutable during parsing, so we cast to allow this.
         token = (_token$next = token.next) !== null && _token$next !== void 0 ? _token$next : token.next = readToken(this, token);
-      } while (token.kind === _tokenKind_mjs__WEBPACK_IMPORTED_MODULE_2__["TokenKind"].COMMENT);
+      } while (token.kind === _tokenKind.TokenKind.COMMENT);
     }
 
     return token;
@@ -10041,13 +10321,16 @@ var Lexer = /*#__PURE__*/function () {
  * @internal
  */
 
+
+exports.Lexer = Lexer;
+
 function isPunctuatorTokenKind(kind) {
-  return kind === _tokenKind_mjs__WEBPACK_IMPORTED_MODULE_2__["TokenKind"].BANG || kind === _tokenKind_mjs__WEBPACK_IMPORTED_MODULE_2__["TokenKind"].DOLLAR || kind === _tokenKind_mjs__WEBPACK_IMPORTED_MODULE_2__["TokenKind"].AMP || kind === _tokenKind_mjs__WEBPACK_IMPORTED_MODULE_2__["TokenKind"].PAREN_L || kind === _tokenKind_mjs__WEBPACK_IMPORTED_MODULE_2__["TokenKind"].PAREN_R || kind === _tokenKind_mjs__WEBPACK_IMPORTED_MODULE_2__["TokenKind"].SPREAD || kind === _tokenKind_mjs__WEBPACK_IMPORTED_MODULE_2__["TokenKind"].COLON || kind === _tokenKind_mjs__WEBPACK_IMPORTED_MODULE_2__["TokenKind"].EQUALS || kind === _tokenKind_mjs__WEBPACK_IMPORTED_MODULE_2__["TokenKind"].AT || kind === _tokenKind_mjs__WEBPACK_IMPORTED_MODULE_2__["TokenKind"].BRACKET_L || kind === _tokenKind_mjs__WEBPACK_IMPORTED_MODULE_2__["TokenKind"].BRACKET_R || kind === _tokenKind_mjs__WEBPACK_IMPORTED_MODULE_2__["TokenKind"].BRACE_L || kind === _tokenKind_mjs__WEBPACK_IMPORTED_MODULE_2__["TokenKind"].PIPE || kind === _tokenKind_mjs__WEBPACK_IMPORTED_MODULE_2__["TokenKind"].BRACE_R;
+  return kind === _tokenKind.TokenKind.BANG || kind === _tokenKind.TokenKind.DOLLAR || kind === _tokenKind.TokenKind.AMP || kind === _tokenKind.TokenKind.PAREN_L || kind === _tokenKind.TokenKind.PAREN_R || kind === _tokenKind.TokenKind.SPREAD || kind === _tokenKind.TokenKind.COLON || kind === _tokenKind.TokenKind.EQUALS || kind === _tokenKind.TokenKind.AT || kind === _tokenKind.TokenKind.BRACKET_L || kind === _tokenKind.TokenKind.BRACKET_R || kind === _tokenKind.TokenKind.BRACE_L || kind === _tokenKind.TokenKind.PIPE || kind === _tokenKind.TokenKind.BRACE_R;
 }
 
 function printCharCode(code) {
   return (// NaN/undefined represents access beyond the end of the file.
-    isNaN(code) ? _tokenKind_mjs__WEBPACK_IMPORTED_MODULE_2__["TokenKind"].EOF : // Trust JSON for ASCII.
+    isNaN(code) ? _tokenKind.TokenKind.EOF : // Trust JSON for ASCII.
     code < 0x007f ? JSON.stringify(String.fromCharCode(code)) : // Otherwise print the escaped form.
     "\"\\u".concat(('00' + code.toString(16).toUpperCase()).slice(-4), "\"")
   );
@@ -10070,7 +10353,7 @@ function readToken(lexer, prev) {
   var col = 1 + pos - lexer.lineStart;
 
   if (pos >= bodyLength) {
-    return new _ast_mjs__WEBPACK_IMPORTED_MODULE_1__["Token"](_tokenKind_mjs__WEBPACK_IMPORTED_MODULE_2__["TokenKind"].EOF, bodyLength, bodyLength, line, col, prev);
+    return new _ast.Token(_tokenKind.TokenKind.EOF, bodyLength, bodyLength, line, col, prev);
   }
 
   var code = body.charCodeAt(pos); // SourceCharacter
@@ -10078,7 +10361,7 @@ function readToken(lexer, prev) {
   switch (code) {
     // !
     case 33:
-      return new _ast_mjs__WEBPACK_IMPORTED_MODULE_1__["Token"](_tokenKind_mjs__WEBPACK_IMPORTED_MODULE_2__["TokenKind"].BANG, pos, pos + 1, line, col, prev);
+      return new _ast.Token(_tokenKind.TokenKind.BANG, pos, pos + 1, line, col, prev);
     // #
 
     case 35:
@@ -10086,59 +10369,59 @@ function readToken(lexer, prev) {
     // $
 
     case 36:
-      return new _ast_mjs__WEBPACK_IMPORTED_MODULE_1__["Token"](_tokenKind_mjs__WEBPACK_IMPORTED_MODULE_2__["TokenKind"].DOLLAR, pos, pos + 1, line, col, prev);
+      return new _ast.Token(_tokenKind.TokenKind.DOLLAR, pos, pos + 1, line, col, prev);
     // &
 
     case 38:
-      return new _ast_mjs__WEBPACK_IMPORTED_MODULE_1__["Token"](_tokenKind_mjs__WEBPACK_IMPORTED_MODULE_2__["TokenKind"].AMP, pos, pos + 1, line, col, prev);
+      return new _ast.Token(_tokenKind.TokenKind.AMP, pos, pos + 1, line, col, prev);
     // (
 
     case 40:
-      return new _ast_mjs__WEBPACK_IMPORTED_MODULE_1__["Token"](_tokenKind_mjs__WEBPACK_IMPORTED_MODULE_2__["TokenKind"].PAREN_L, pos, pos + 1, line, col, prev);
+      return new _ast.Token(_tokenKind.TokenKind.PAREN_L, pos, pos + 1, line, col, prev);
     // )
 
     case 41:
-      return new _ast_mjs__WEBPACK_IMPORTED_MODULE_1__["Token"](_tokenKind_mjs__WEBPACK_IMPORTED_MODULE_2__["TokenKind"].PAREN_R, pos, pos + 1, line, col, prev);
+      return new _ast.Token(_tokenKind.TokenKind.PAREN_R, pos, pos + 1, line, col, prev);
     // .
 
     case 46:
       if (body.charCodeAt(pos + 1) === 46 && body.charCodeAt(pos + 2) === 46) {
-        return new _ast_mjs__WEBPACK_IMPORTED_MODULE_1__["Token"](_tokenKind_mjs__WEBPACK_IMPORTED_MODULE_2__["TokenKind"].SPREAD, pos, pos + 3, line, col, prev);
+        return new _ast.Token(_tokenKind.TokenKind.SPREAD, pos, pos + 3, line, col, prev);
       }
 
       break;
     // :
 
     case 58:
-      return new _ast_mjs__WEBPACK_IMPORTED_MODULE_1__["Token"](_tokenKind_mjs__WEBPACK_IMPORTED_MODULE_2__["TokenKind"].COLON, pos, pos + 1, line, col, prev);
+      return new _ast.Token(_tokenKind.TokenKind.COLON, pos, pos + 1, line, col, prev);
     // =
 
     case 61:
-      return new _ast_mjs__WEBPACK_IMPORTED_MODULE_1__["Token"](_tokenKind_mjs__WEBPACK_IMPORTED_MODULE_2__["TokenKind"].EQUALS, pos, pos + 1, line, col, prev);
+      return new _ast.Token(_tokenKind.TokenKind.EQUALS, pos, pos + 1, line, col, prev);
     // @
 
     case 64:
-      return new _ast_mjs__WEBPACK_IMPORTED_MODULE_1__["Token"](_tokenKind_mjs__WEBPACK_IMPORTED_MODULE_2__["TokenKind"].AT, pos, pos + 1, line, col, prev);
+      return new _ast.Token(_tokenKind.TokenKind.AT, pos, pos + 1, line, col, prev);
     // [
 
     case 91:
-      return new _ast_mjs__WEBPACK_IMPORTED_MODULE_1__["Token"](_tokenKind_mjs__WEBPACK_IMPORTED_MODULE_2__["TokenKind"].BRACKET_L, pos, pos + 1, line, col, prev);
+      return new _ast.Token(_tokenKind.TokenKind.BRACKET_L, pos, pos + 1, line, col, prev);
     // ]
 
     case 93:
-      return new _ast_mjs__WEBPACK_IMPORTED_MODULE_1__["Token"](_tokenKind_mjs__WEBPACK_IMPORTED_MODULE_2__["TokenKind"].BRACKET_R, pos, pos + 1, line, col, prev);
+      return new _ast.Token(_tokenKind.TokenKind.BRACKET_R, pos, pos + 1, line, col, prev);
     // {
 
     case 123:
-      return new _ast_mjs__WEBPACK_IMPORTED_MODULE_1__["Token"](_tokenKind_mjs__WEBPACK_IMPORTED_MODULE_2__["TokenKind"].BRACE_L, pos, pos + 1, line, col, prev);
+      return new _ast.Token(_tokenKind.TokenKind.BRACE_L, pos, pos + 1, line, col, prev);
     // |
 
     case 124:
-      return new _ast_mjs__WEBPACK_IMPORTED_MODULE_1__["Token"](_tokenKind_mjs__WEBPACK_IMPORTED_MODULE_2__["TokenKind"].PIPE, pos, pos + 1, line, col, prev);
+      return new _ast.Token(_tokenKind.TokenKind.PIPE, pos, pos + 1, line, col, prev);
     // }
 
     case 125:
-      return new _ast_mjs__WEBPACK_IMPORTED_MODULE_1__["Token"](_tokenKind_mjs__WEBPACK_IMPORTED_MODULE_2__["TokenKind"].BRACE_R, pos, pos + 1, line, col, prev);
+      return new _ast.Token(_tokenKind.TokenKind.BRACE_R, pos, pos + 1, line, col, prev);
     // A-Z _ a-z
 
     case 65:
@@ -10219,7 +10502,7 @@ function readToken(lexer, prev) {
       return readString(source, pos, line, col, prev);
   }
 
-  throw Object(_error_syntaxError_mjs__WEBPACK_IMPORTED_MODULE_0__["syntaxError"])(source, pos, unexpectedCharacterMessage(code));
+  throw (0, _syntaxError.syntaxError)(source, pos, unexpectedCharacterMessage(code));
 }
 /**
  * Report a message that an unexpected character was encountered.
@@ -10292,7 +10575,7 @@ function readComment(source, start, line, col, prev) {
   } while (!isNaN(code) && ( // SourceCharacter but not LineTerminator
   code > 0x001f || code === 0x0009));
 
-  return new _ast_mjs__WEBPACK_IMPORTED_MODULE_1__["Token"](_tokenKind_mjs__WEBPACK_IMPORTED_MODULE_2__["TokenKind"].COMMENT, start, position, line, col, prev, body.slice(start + 1, position));
+  return new _ast.Token(_tokenKind.TokenKind.COMMENT, start, position, line, col, prev, body.slice(start + 1, position));
 }
 /**
  * Reads a number token from the source file, either a float
@@ -10319,7 +10602,7 @@ function readNumber(source, start, firstCode, line, col, prev) {
     code = body.charCodeAt(++position);
 
     if (code >= 48 && code <= 57) {
-      throw Object(_error_syntaxError_mjs__WEBPACK_IMPORTED_MODULE_0__["syntaxError"])(source, position, "Invalid number, unexpected digit after 0: ".concat(printCharCode(code), "."));
+      throw (0, _syntaxError.syntaxError)(source, position, "Invalid number, unexpected digit after 0: ".concat(printCharCode(code), "."));
     }
   } else {
     position = readDigits(source, position, code);
@@ -10350,10 +10633,10 @@ function readNumber(source, start, firstCode, line, col, prev) {
 
 
   if (code === 46 || isNameStart(code)) {
-    throw Object(_error_syntaxError_mjs__WEBPACK_IMPORTED_MODULE_0__["syntaxError"])(source, position, "Invalid number, expected digit but got: ".concat(printCharCode(code), "."));
+    throw (0, _syntaxError.syntaxError)(source, position, "Invalid number, expected digit but got: ".concat(printCharCode(code), "."));
   }
 
-  return new _ast_mjs__WEBPACK_IMPORTED_MODULE_1__["Token"](isFloat ? _tokenKind_mjs__WEBPACK_IMPORTED_MODULE_2__["TokenKind"].FLOAT : _tokenKind_mjs__WEBPACK_IMPORTED_MODULE_2__["TokenKind"].INT, start, position, line, col, prev, body.slice(start, position));
+  return new _ast.Token(isFloat ? _tokenKind.TokenKind.FLOAT : _tokenKind.TokenKind.INT, start, position, line, col, prev, body.slice(start, position));
 }
 /**
  * Returns the new position in the source after reading digits.
@@ -10375,7 +10658,7 @@ function readDigits(source, start, firstCode) {
     return position;
   }
 
-  throw Object(_error_syntaxError_mjs__WEBPACK_IMPORTED_MODULE_0__["syntaxError"])(source, position, "Invalid number, expected digit but got: ".concat(printCharCode(code), "."));
+  throw (0, _syntaxError.syntaxError)(source, position, "Invalid number, expected digit but got: ".concat(printCharCode(code), "."));
 }
 /**
  * Reads a string token from the source file.
@@ -10396,12 +10679,12 @@ function readString(source, start, line, col, prev) {
     // Closing Quote (")
     if (code === 34) {
       value += body.slice(chunkStart, position);
-      return new _ast_mjs__WEBPACK_IMPORTED_MODULE_1__["Token"](_tokenKind_mjs__WEBPACK_IMPORTED_MODULE_2__["TokenKind"].STRING, start, position + 1, line, col, prev, value);
+      return new _ast.Token(_tokenKind.TokenKind.STRING, start, position + 1, line, col, prev, value);
     } // SourceCharacter
 
 
     if (code < 0x0020 && code !== 0x0009) {
-      throw Object(_error_syntaxError_mjs__WEBPACK_IMPORTED_MODULE_0__["syntaxError"])(source, position, "Invalid character within String: ".concat(printCharCode(code), "."));
+      throw (0, _syntaxError.syntaxError)(source, position, "Invalid character within String: ".concat(printCharCode(code), "."));
     }
 
     ++position;
@@ -10451,7 +10734,7 @@ function readString(source, start, line, col, prev) {
 
             if (charCode < 0) {
               var invalidSequence = body.slice(position + 1, position + 5);
-              throw Object(_error_syntaxError_mjs__WEBPACK_IMPORTED_MODULE_0__["syntaxError"])(source, position, "Invalid character escape sequence: \\u".concat(invalidSequence, "."));
+              throw (0, _syntaxError.syntaxError)(source, position, "Invalid character escape sequence: \\u".concat(invalidSequence, "."));
             }
 
             value += String.fromCharCode(charCode);
@@ -10460,7 +10743,7 @@ function readString(source, start, line, col, prev) {
           }
 
         default:
-          throw Object(_error_syntaxError_mjs__WEBPACK_IMPORTED_MODULE_0__["syntaxError"])(source, position, "Invalid character escape sequence: \\".concat(String.fromCharCode(code), "."));
+          throw (0, _syntaxError.syntaxError)(source, position, "Invalid character escape sequence: \\".concat(String.fromCharCode(code), "."));
       }
 
       ++position;
@@ -10468,7 +10751,7 @@ function readString(source, start, line, col, prev) {
     }
   }
 
-  throw Object(_error_syntaxError_mjs__WEBPACK_IMPORTED_MODULE_0__["syntaxError"])(source, position, 'Unterminated string.');
+  throw (0, _syntaxError.syntaxError)(source, position, 'Unterminated string.');
 }
 /**
  * Reads a block string token from the source file.
@@ -10488,12 +10771,12 @@ function readBlockString(source, start, line, col, prev, lexer) {
     // Closing Triple-Quote (""")
     if (code === 34 && body.charCodeAt(position + 1) === 34 && body.charCodeAt(position + 2) === 34) {
       rawValue += body.slice(chunkStart, position);
-      return new _ast_mjs__WEBPACK_IMPORTED_MODULE_1__["Token"](_tokenKind_mjs__WEBPACK_IMPORTED_MODULE_2__["TokenKind"].BLOCK_STRING, start, position + 3, line, col, prev, Object(_blockString_mjs__WEBPACK_IMPORTED_MODULE_3__["dedentBlockStringValue"])(rawValue));
+      return new _ast.Token(_tokenKind.TokenKind.BLOCK_STRING, start, position + 3, line, col, prev, (0, _blockString.dedentBlockStringValue)(rawValue));
     } // SourceCharacter
 
 
     if (code < 0x0020 && code !== 0x0009 && code !== 0x000a && code !== 0x000d) {
-      throw Object(_error_syntaxError_mjs__WEBPACK_IMPORTED_MODULE_0__["syntaxError"])(source, position, "Invalid character within String: ".concat(printCharCode(code), "."));
+      throw (0, _syntaxError.syntaxError)(source, position, "Invalid character within String: ".concat(printCharCode(code), "."));
     }
 
     if (code === 10) {
@@ -10521,7 +10804,7 @@ function readBlockString(source, start, line, col, prev, lexer) {
     }
   }
 
-  throw Object(_error_syntaxError_mjs__WEBPACK_IMPORTED_MODULE_0__["syntaxError"])(source, position, 'Unterminated string.');
+  throw (0, _syntaxError.syntaxError)(source, position, 'Unterminated string.');
 }
 /**
  * Converts four hexadecimal chars to the integer that the
@@ -10575,7 +10858,7 @@ function readName(source, start, line, col, prev) {
     ++position;
   }
 
-  return new _ast_mjs__WEBPACK_IMPORTED_MODULE_1__["Token"](_tokenKind_mjs__WEBPACK_IMPORTED_MODULE_2__["TokenKind"].NAME, start, position, line, col, prev, body.slice(start, position));
+  return new _ast.Token(_tokenKind.TokenKind.NAME, start, position, line, col, prev, body.slice(start, position));
 } // _ A-Z a-z
 
 
@@ -10586,16 +10869,21 @@ function isNameStart(code) {
 
 /***/ }),
 
-/***/ "./node_modules/graphql/language/location.mjs":
-/*!****************************************************!*\
-  !*** ./node_modules/graphql/language/location.mjs ***!
-  \****************************************************/
-/*! exports provided: getLocation */
-/***/ (function(__webpack_module__, __webpack_exports__, __webpack_require__) {
+/***/ "./node_modules/graphql/language/location.js":
+/*!***************************************************!*\
+  !*** ./node_modules/graphql/language/location.js ***!
+  \***************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getLocation", function() { return getLocation; });
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.getLocation = getLocation;
+
 /**
  * Represents a location in a Source.
  */
@@ -10624,39 +10912,42 @@ function getLocation(source, position) {
 
 /***/ }),
 
-/***/ "./node_modules/graphql/language/parser.mjs":
-/*!**************************************************!*\
-  !*** ./node_modules/graphql/language/parser.mjs ***!
-  \**************************************************/
-/*! exports provided: parse, parseValue, parseType */
-/***/ (function(__webpack_module__, __webpack_exports__, __webpack_require__) {
+/***/ "./node_modules/graphql/language/parser.js":
+/*!*************************************************!*\
+  !*** ./node_modules/graphql/language/parser.js ***!
+  \*************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "parse", function() { return parse; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "parseValue", function() { return parseValue; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "parseType", function() { return parseType; });
-/* harmony import */ var _jsutils_inspect_mjs__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../jsutils/inspect.mjs */ "./node_modules/graphql/jsutils/inspect.mjs");
-/* harmony import */ var _jsutils_devAssert_mjs__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../jsutils/devAssert.mjs */ "./node_modules/graphql/jsutils/devAssert.mjs");
-/* harmony import */ var _error_syntaxError_mjs__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../error/syntaxError.mjs */ "./node_modules/graphql/error/syntaxError.mjs");
-/* harmony import */ var _kinds_mjs__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./kinds.mjs */ "./node_modules/graphql/language/kinds.mjs");
-/* harmony import */ var _ast_mjs__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./ast.mjs */ "./node_modules/graphql/language/ast.mjs");
-/* harmony import */ var _source_mjs__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./source.mjs */ "./node_modules/graphql/language/source.mjs");
-/* harmony import */ var _tokenKind_mjs__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./tokenKind.mjs */ "./node_modules/graphql/language/tokenKind.mjs");
-/* harmony import */ var _directiveLocation_mjs__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./directiveLocation.mjs */ "./node_modules/graphql/language/directiveLocation.mjs");
-/* harmony import */ var _lexer_mjs__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./lexer.mjs */ "./node_modules/graphql/language/lexer.mjs");
 
 
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.parse = parse;
+exports.parseValue = parseValue;
+exports.parseType = parseType;
 
+var _inspect = _interopRequireDefault(__webpack_require__(/*! ../jsutils/inspect */ "./node_modules/graphql/jsutils/inspect.js"));
 
+var _devAssert = _interopRequireDefault(__webpack_require__(/*! ../jsutils/devAssert */ "./node_modules/graphql/jsutils/devAssert.js"));
 
+var _syntaxError = __webpack_require__(/*! ../error/syntaxError */ "./node_modules/graphql/error/syntaxError.js");
 
+var _kinds = __webpack_require__(/*! ./kinds */ "./node_modules/graphql/language/kinds.js");
 
+var _ast = __webpack_require__(/*! ./ast */ "./node_modules/graphql/language/ast.js");
 
+var _source = __webpack_require__(/*! ./source */ "./node_modules/graphql/language/source.js");
 
-/**
- * Configuration options to control parser behavior
- */
+var _tokenKind = __webpack_require__(/*! ./tokenKind */ "./node_modules/graphql/language/tokenKind.js");
+
+var _directiveLocation = __webpack_require__(/*! ./directiveLocation */ "./node_modules/graphql/language/directiveLocation.js");
+
+var _lexer = __webpack_require__(/*! ./lexer */ "./node_modules/graphql/language/lexer.js");
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 /**
  * Given a GraphQL source, parses it into a Document.
@@ -10677,11 +10968,12 @@ function parse(source, options) {
  * Consider providing the results to the utility function: valueFromAST().
  */
 
+
 function parseValue(source, options) {
   var parser = new Parser(source, options);
-  parser.expectToken(_tokenKind_mjs__WEBPACK_IMPORTED_MODULE_6__["TokenKind"].SOF);
+  parser.expectToken(_tokenKind.TokenKind.SOF);
   var value = parser.parseValueLiteral(false);
-  parser.expectToken(_tokenKind_mjs__WEBPACK_IMPORTED_MODULE_6__["TokenKind"].EOF);
+  parser.expectToken(_tokenKind.TokenKind.EOF);
   return value;
 }
 /**
@@ -10695,19 +10987,20 @@ function parseValue(source, options) {
  * Consider providing the results to the utility function: typeFromAST().
  */
 
+
 function parseType(source, options) {
   var parser = new Parser(source, options);
-  parser.expectToken(_tokenKind_mjs__WEBPACK_IMPORTED_MODULE_6__["TokenKind"].SOF);
+  parser.expectToken(_tokenKind.TokenKind.SOF);
   var type = parser.parseTypeReference();
-  parser.expectToken(_tokenKind_mjs__WEBPACK_IMPORTED_MODULE_6__["TokenKind"].EOF);
+  parser.expectToken(_tokenKind.TokenKind.EOF);
   return type;
 }
 
 var Parser = /*#__PURE__*/function () {
   function Parser(source, options) {
-    var sourceObj = typeof source === 'string' ? new _source_mjs__WEBPACK_IMPORTED_MODULE_5__["Source"](source) : source;
-    sourceObj instanceof _source_mjs__WEBPACK_IMPORTED_MODULE_5__["Source"] || Object(_jsutils_devAssert_mjs__WEBPACK_IMPORTED_MODULE_1__["default"])(0, "Must provide Source. Received: ".concat(Object(_jsutils_inspect_mjs__WEBPACK_IMPORTED_MODULE_0__["default"])(sourceObj), "."));
-    this._lexer = new _lexer_mjs__WEBPACK_IMPORTED_MODULE_8__["Lexer"](sourceObj);
+    var sourceObj = typeof source === 'string' ? new _source.Source(source) : source;
+    sourceObj instanceof _source.Source || (0, _devAssert.default)(0, "Must provide Source. Received: ".concat((0, _inspect.default)(sourceObj), "."));
+    this._lexer = new _lexer.Lexer(sourceObj);
     this._options = options;
   }
   /**
@@ -10718,9 +11011,9 @@ var Parser = /*#__PURE__*/function () {
   var _proto = Parser.prototype;
 
   _proto.parseName = function parseName() {
-    var token = this.expectToken(_tokenKind_mjs__WEBPACK_IMPORTED_MODULE_6__["TokenKind"].NAME);
+    var token = this.expectToken(_tokenKind.TokenKind.NAME);
     return {
-      kind: _kinds_mjs__WEBPACK_IMPORTED_MODULE_3__["Kind"].NAME,
+      kind: _kinds.Kind.NAME,
       value: token.value,
       loc: this.loc(token)
     };
@@ -10734,8 +11027,8 @@ var Parser = /*#__PURE__*/function () {
   _proto.parseDocument = function parseDocument() {
     var start = this._lexer.token;
     return {
-      kind: _kinds_mjs__WEBPACK_IMPORTED_MODULE_3__["Kind"].DOCUMENT,
-      definitions: this.many(_tokenKind_mjs__WEBPACK_IMPORTED_MODULE_6__["TokenKind"].SOF, this.parseDefinition, _tokenKind_mjs__WEBPACK_IMPORTED_MODULE_6__["TokenKind"].EOF),
+      kind: _kinds.Kind.DOCUMENT,
+      definitions: this.many(_tokenKind.TokenKind.SOF, this.parseDefinition, _tokenKind.TokenKind.EOF),
       loc: this.loc(start)
     };
   }
@@ -10752,7 +11045,7 @@ var Parser = /*#__PURE__*/function () {
   ;
 
   _proto.parseDefinition = function parseDefinition() {
-    if (this.peek(_tokenKind_mjs__WEBPACK_IMPORTED_MODULE_6__["TokenKind"].NAME)) {
+    if (this.peek(_tokenKind.TokenKind.NAME)) {
       switch (this._lexer.token.value) {
         case 'query':
         case 'mutation':
@@ -10775,7 +11068,7 @@ var Parser = /*#__PURE__*/function () {
         case 'extend':
           return this.parseTypeSystemExtension();
       }
-    } else if (this.peek(_tokenKind_mjs__WEBPACK_IMPORTED_MODULE_6__["TokenKind"].BRACE_L)) {
+    } else if (this.peek(_tokenKind.TokenKind.BRACE_L)) {
       return this.parseOperationDefinition();
     } else if (this.peekDescription()) {
       return this.parseTypeSystemDefinition();
@@ -10794,9 +11087,9 @@ var Parser = /*#__PURE__*/function () {
   _proto.parseOperationDefinition = function parseOperationDefinition() {
     var start = this._lexer.token;
 
-    if (this.peek(_tokenKind_mjs__WEBPACK_IMPORTED_MODULE_6__["TokenKind"].BRACE_L)) {
+    if (this.peek(_tokenKind.TokenKind.BRACE_L)) {
       return {
-        kind: _kinds_mjs__WEBPACK_IMPORTED_MODULE_3__["Kind"].OPERATION_DEFINITION,
+        kind: _kinds.Kind.OPERATION_DEFINITION,
         operation: 'query',
         name: undefined,
         variableDefinitions: [],
@@ -10809,12 +11102,12 @@ var Parser = /*#__PURE__*/function () {
     var operation = this.parseOperationType();
     var name;
 
-    if (this.peek(_tokenKind_mjs__WEBPACK_IMPORTED_MODULE_6__["TokenKind"].NAME)) {
+    if (this.peek(_tokenKind.TokenKind.NAME)) {
       name = this.parseName();
     }
 
     return {
-      kind: _kinds_mjs__WEBPACK_IMPORTED_MODULE_3__["Kind"].OPERATION_DEFINITION,
+      kind: _kinds.Kind.OPERATION_DEFINITION,
       operation: operation,
       name: name,
       variableDefinitions: this.parseVariableDefinitions(),
@@ -10829,7 +11122,7 @@ var Parser = /*#__PURE__*/function () {
   ;
 
   _proto.parseOperationType = function parseOperationType() {
-    var operationToken = this.expectToken(_tokenKind_mjs__WEBPACK_IMPORTED_MODULE_6__["TokenKind"].NAME);
+    var operationToken = this.expectToken(_tokenKind.TokenKind.NAME);
 
     switch (operationToken.value) {
       case 'query':
@@ -10850,7 +11143,7 @@ var Parser = /*#__PURE__*/function () {
   ;
 
   _proto.parseVariableDefinitions = function parseVariableDefinitions() {
-    return this.optionalMany(_tokenKind_mjs__WEBPACK_IMPORTED_MODULE_6__["TokenKind"].PAREN_L, this.parseVariableDefinition, _tokenKind_mjs__WEBPACK_IMPORTED_MODULE_6__["TokenKind"].PAREN_R);
+    return this.optionalMany(_tokenKind.TokenKind.PAREN_L, this.parseVariableDefinition, _tokenKind.TokenKind.PAREN_R);
   }
   /**
    * VariableDefinition : Variable : Type DefaultValue? Directives[Const]?
@@ -10860,10 +11153,10 @@ var Parser = /*#__PURE__*/function () {
   _proto.parseVariableDefinition = function parseVariableDefinition() {
     var start = this._lexer.token;
     return {
-      kind: _kinds_mjs__WEBPACK_IMPORTED_MODULE_3__["Kind"].VARIABLE_DEFINITION,
+      kind: _kinds.Kind.VARIABLE_DEFINITION,
       variable: this.parseVariable(),
-      type: (this.expectToken(_tokenKind_mjs__WEBPACK_IMPORTED_MODULE_6__["TokenKind"].COLON), this.parseTypeReference()),
-      defaultValue: this.expectOptionalToken(_tokenKind_mjs__WEBPACK_IMPORTED_MODULE_6__["TokenKind"].EQUALS) ? this.parseValueLiteral(true) : undefined,
+      type: (this.expectToken(_tokenKind.TokenKind.COLON), this.parseTypeReference()),
+      defaultValue: this.expectOptionalToken(_tokenKind.TokenKind.EQUALS) ? this.parseValueLiteral(true) : undefined,
       directives: this.parseDirectives(true),
       loc: this.loc(start)
     };
@@ -10875,9 +11168,9 @@ var Parser = /*#__PURE__*/function () {
 
   _proto.parseVariable = function parseVariable() {
     var start = this._lexer.token;
-    this.expectToken(_tokenKind_mjs__WEBPACK_IMPORTED_MODULE_6__["TokenKind"].DOLLAR);
+    this.expectToken(_tokenKind.TokenKind.DOLLAR);
     return {
-      kind: _kinds_mjs__WEBPACK_IMPORTED_MODULE_3__["Kind"].VARIABLE,
+      kind: _kinds.Kind.VARIABLE,
       name: this.parseName(),
       loc: this.loc(start)
     };
@@ -10890,8 +11183,8 @@ var Parser = /*#__PURE__*/function () {
   _proto.parseSelectionSet = function parseSelectionSet() {
     var start = this._lexer.token;
     return {
-      kind: _kinds_mjs__WEBPACK_IMPORTED_MODULE_3__["Kind"].SELECTION_SET,
-      selections: this.many(_tokenKind_mjs__WEBPACK_IMPORTED_MODULE_6__["TokenKind"].BRACE_L, this.parseSelection, _tokenKind_mjs__WEBPACK_IMPORTED_MODULE_6__["TokenKind"].BRACE_R),
+      kind: _kinds.Kind.SELECTION_SET,
+      selections: this.many(_tokenKind.TokenKind.BRACE_L, this.parseSelection, _tokenKind.TokenKind.BRACE_R),
       loc: this.loc(start)
     };
   }
@@ -10904,7 +11197,7 @@ var Parser = /*#__PURE__*/function () {
   ;
 
   _proto.parseSelection = function parseSelection() {
-    return this.peek(_tokenKind_mjs__WEBPACK_IMPORTED_MODULE_6__["TokenKind"].SPREAD) ? this.parseFragment() : this.parseField();
+    return this.peek(_tokenKind.TokenKind.SPREAD) ? this.parseFragment() : this.parseField();
   }
   /**
    * Field : Alias? Name Arguments? Directives? SelectionSet?
@@ -10919,7 +11212,7 @@ var Parser = /*#__PURE__*/function () {
     var alias;
     var name;
 
-    if (this.expectOptionalToken(_tokenKind_mjs__WEBPACK_IMPORTED_MODULE_6__["TokenKind"].COLON)) {
+    if (this.expectOptionalToken(_tokenKind.TokenKind.COLON)) {
       alias = nameOrAlias;
       name = this.parseName();
     } else {
@@ -10927,12 +11220,12 @@ var Parser = /*#__PURE__*/function () {
     }
 
     return {
-      kind: _kinds_mjs__WEBPACK_IMPORTED_MODULE_3__["Kind"].FIELD,
+      kind: _kinds.Kind.FIELD,
       alias: alias,
       name: name,
       arguments: this.parseArguments(false),
       directives: this.parseDirectives(false),
-      selectionSet: this.peek(_tokenKind_mjs__WEBPACK_IMPORTED_MODULE_6__["TokenKind"].BRACE_L) ? this.parseSelectionSet() : undefined,
+      selectionSet: this.peek(_tokenKind.TokenKind.BRACE_L) ? this.parseSelectionSet() : undefined,
       loc: this.loc(start)
     };
   }
@@ -10943,7 +11236,7 @@ var Parser = /*#__PURE__*/function () {
 
   _proto.parseArguments = function parseArguments(isConst) {
     var item = isConst ? this.parseConstArgument : this.parseArgument;
-    return this.optionalMany(_tokenKind_mjs__WEBPACK_IMPORTED_MODULE_6__["TokenKind"].PAREN_L, item, _tokenKind_mjs__WEBPACK_IMPORTED_MODULE_6__["TokenKind"].PAREN_R);
+    return this.optionalMany(_tokenKind.TokenKind.PAREN_L, item, _tokenKind.TokenKind.PAREN_R);
   }
   /**
    * Argument[Const] : Name : Value[?Const]
@@ -10953,9 +11246,9 @@ var Parser = /*#__PURE__*/function () {
   _proto.parseArgument = function parseArgument() {
     var start = this._lexer.token;
     var name = this.parseName();
-    this.expectToken(_tokenKind_mjs__WEBPACK_IMPORTED_MODULE_6__["TokenKind"].COLON);
+    this.expectToken(_tokenKind.TokenKind.COLON);
     return {
-      kind: _kinds_mjs__WEBPACK_IMPORTED_MODULE_3__["Kind"].ARGUMENT,
+      kind: _kinds.Kind.ARGUMENT,
       name: name,
       value: this.parseValueLiteral(false),
       loc: this.loc(start)
@@ -10965,9 +11258,9 @@ var Parser = /*#__PURE__*/function () {
   _proto.parseConstArgument = function parseConstArgument() {
     var start = this._lexer.token;
     return {
-      kind: _kinds_mjs__WEBPACK_IMPORTED_MODULE_3__["Kind"].ARGUMENT,
+      kind: _kinds.Kind.ARGUMENT,
       name: this.parseName(),
-      value: (this.expectToken(_tokenKind_mjs__WEBPACK_IMPORTED_MODULE_6__["TokenKind"].COLON), this.parseValueLiteral(true)),
+      value: (this.expectToken(_tokenKind.TokenKind.COLON), this.parseValueLiteral(true)),
       loc: this.loc(start)
     };
   } // Implements the parsing rules in the Fragments section.
@@ -10983,12 +11276,12 @@ var Parser = /*#__PURE__*/function () {
 
   _proto.parseFragment = function parseFragment() {
     var start = this._lexer.token;
-    this.expectToken(_tokenKind_mjs__WEBPACK_IMPORTED_MODULE_6__["TokenKind"].SPREAD);
+    this.expectToken(_tokenKind.TokenKind.SPREAD);
     var hasTypeCondition = this.expectOptionalKeyword('on');
 
-    if (!hasTypeCondition && this.peek(_tokenKind_mjs__WEBPACK_IMPORTED_MODULE_6__["TokenKind"].NAME)) {
+    if (!hasTypeCondition && this.peek(_tokenKind.TokenKind.NAME)) {
       return {
-        kind: _kinds_mjs__WEBPACK_IMPORTED_MODULE_3__["Kind"].FRAGMENT_SPREAD,
+        kind: _kinds.Kind.FRAGMENT_SPREAD,
         name: this.parseFragmentName(),
         directives: this.parseDirectives(false),
         loc: this.loc(start)
@@ -10996,7 +11289,7 @@ var Parser = /*#__PURE__*/function () {
     }
 
     return {
-      kind: _kinds_mjs__WEBPACK_IMPORTED_MODULE_3__["Kind"].INLINE_FRAGMENT,
+      kind: _kinds.Kind.INLINE_FRAGMENT,
       typeCondition: hasTypeCondition ? this.parseNamedType() : undefined,
       directives: this.parseDirectives(false),
       selectionSet: this.parseSelectionSet(),
@@ -11021,7 +11314,7 @@ var Parser = /*#__PURE__*/function () {
 
     if (((_this$_options = this._options) === null || _this$_options === void 0 ? void 0 : _this$_options.experimentalFragmentVariables) === true) {
       return {
-        kind: _kinds_mjs__WEBPACK_IMPORTED_MODULE_3__["Kind"].FRAGMENT_DEFINITION,
+        kind: _kinds.Kind.FRAGMENT_DEFINITION,
         name: this.parseFragmentName(),
         variableDefinitions: this.parseVariableDefinitions(),
         typeCondition: (this.expectKeyword('on'), this.parseNamedType()),
@@ -11032,7 +11325,7 @@ var Parser = /*#__PURE__*/function () {
     }
 
     return {
-      kind: _kinds_mjs__WEBPACK_IMPORTED_MODULE_3__["Kind"].FRAGMENT_DEFINITION,
+      kind: _kinds.Kind.FRAGMENT_DEFINITION,
       name: this.parseFragmentName(),
       typeCondition: (this.expectKeyword('on'), this.parseNamedType()),
       directives: this.parseDirectives(false),
@@ -11077,67 +11370,67 @@ var Parser = /*#__PURE__*/function () {
     var token = this._lexer.token;
 
     switch (token.kind) {
-      case _tokenKind_mjs__WEBPACK_IMPORTED_MODULE_6__["TokenKind"].BRACKET_L:
+      case _tokenKind.TokenKind.BRACKET_L:
         return this.parseList(isConst);
 
-      case _tokenKind_mjs__WEBPACK_IMPORTED_MODULE_6__["TokenKind"].BRACE_L:
+      case _tokenKind.TokenKind.BRACE_L:
         return this.parseObject(isConst);
 
-      case _tokenKind_mjs__WEBPACK_IMPORTED_MODULE_6__["TokenKind"].INT:
+      case _tokenKind.TokenKind.INT:
         this._lexer.advance();
 
         return {
-          kind: _kinds_mjs__WEBPACK_IMPORTED_MODULE_3__["Kind"].INT,
+          kind: _kinds.Kind.INT,
           value: token.value,
           loc: this.loc(token)
         };
 
-      case _tokenKind_mjs__WEBPACK_IMPORTED_MODULE_6__["TokenKind"].FLOAT:
+      case _tokenKind.TokenKind.FLOAT:
         this._lexer.advance();
 
         return {
-          kind: _kinds_mjs__WEBPACK_IMPORTED_MODULE_3__["Kind"].FLOAT,
+          kind: _kinds.Kind.FLOAT,
           value: token.value,
           loc: this.loc(token)
         };
 
-      case _tokenKind_mjs__WEBPACK_IMPORTED_MODULE_6__["TokenKind"].STRING:
-      case _tokenKind_mjs__WEBPACK_IMPORTED_MODULE_6__["TokenKind"].BLOCK_STRING:
+      case _tokenKind.TokenKind.STRING:
+      case _tokenKind.TokenKind.BLOCK_STRING:
         return this.parseStringLiteral();
 
-      case _tokenKind_mjs__WEBPACK_IMPORTED_MODULE_6__["TokenKind"].NAME:
+      case _tokenKind.TokenKind.NAME:
         this._lexer.advance();
 
         switch (token.value) {
           case 'true':
             return {
-              kind: _kinds_mjs__WEBPACK_IMPORTED_MODULE_3__["Kind"].BOOLEAN,
+              kind: _kinds.Kind.BOOLEAN,
               value: true,
               loc: this.loc(token)
             };
 
           case 'false':
             return {
-              kind: _kinds_mjs__WEBPACK_IMPORTED_MODULE_3__["Kind"].BOOLEAN,
+              kind: _kinds.Kind.BOOLEAN,
               value: false,
               loc: this.loc(token)
             };
 
           case 'null':
             return {
-              kind: _kinds_mjs__WEBPACK_IMPORTED_MODULE_3__["Kind"].NULL,
+              kind: _kinds.Kind.NULL,
               loc: this.loc(token)
             };
 
           default:
             return {
-              kind: _kinds_mjs__WEBPACK_IMPORTED_MODULE_3__["Kind"].ENUM,
+              kind: _kinds.Kind.ENUM,
               value: token.value,
               loc: this.loc(token)
             };
         }
 
-      case _tokenKind_mjs__WEBPACK_IMPORTED_MODULE_6__["TokenKind"].DOLLAR:
+      case _tokenKind.TokenKind.DOLLAR:
         if (!isConst) {
           return this.parseVariable();
         }
@@ -11154,9 +11447,9 @@ var Parser = /*#__PURE__*/function () {
     this._lexer.advance();
 
     return {
-      kind: _kinds_mjs__WEBPACK_IMPORTED_MODULE_3__["Kind"].STRING,
+      kind: _kinds.Kind.STRING,
       value: token.value,
-      block: token.kind === _tokenKind_mjs__WEBPACK_IMPORTED_MODULE_6__["TokenKind"].BLOCK_STRING,
+      block: token.kind === _tokenKind.TokenKind.BLOCK_STRING,
       loc: this.loc(token)
     };
   }
@@ -11177,8 +11470,8 @@ var Parser = /*#__PURE__*/function () {
     };
 
     return {
-      kind: _kinds_mjs__WEBPACK_IMPORTED_MODULE_3__["Kind"].LIST,
-      values: this.any(_tokenKind_mjs__WEBPACK_IMPORTED_MODULE_6__["TokenKind"].BRACKET_L, item, _tokenKind_mjs__WEBPACK_IMPORTED_MODULE_6__["TokenKind"].BRACKET_R),
+      kind: _kinds.Kind.LIST,
+      values: this.any(_tokenKind.TokenKind.BRACKET_L, item, _tokenKind.TokenKind.BRACKET_R),
       loc: this.loc(start)
     };
   }
@@ -11199,8 +11492,8 @@ var Parser = /*#__PURE__*/function () {
     };
 
     return {
-      kind: _kinds_mjs__WEBPACK_IMPORTED_MODULE_3__["Kind"].OBJECT,
-      fields: this.any(_tokenKind_mjs__WEBPACK_IMPORTED_MODULE_6__["TokenKind"].BRACE_L, item, _tokenKind_mjs__WEBPACK_IMPORTED_MODULE_6__["TokenKind"].BRACE_R),
+      kind: _kinds.Kind.OBJECT,
+      fields: this.any(_tokenKind.TokenKind.BRACE_L, item, _tokenKind.TokenKind.BRACE_R),
       loc: this.loc(start)
     };
   }
@@ -11212,9 +11505,9 @@ var Parser = /*#__PURE__*/function () {
   _proto.parseObjectField = function parseObjectField(isConst) {
     var start = this._lexer.token;
     var name = this.parseName();
-    this.expectToken(_tokenKind_mjs__WEBPACK_IMPORTED_MODULE_6__["TokenKind"].COLON);
+    this.expectToken(_tokenKind.TokenKind.COLON);
     return {
-      kind: _kinds_mjs__WEBPACK_IMPORTED_MODULE_3__["Kind"].OBJECT_FIELD,
+      kind: _kinds.Kind.OBJECT_FIELD,
       name: name,
       value: this.parseValueLiteral(isConst),
       loc: this.loc(start)
@@ -11229,7 +11522,7 @@ var Parser = /*#__PURE__*/function () {
   _proto.parseDirectives = function parseDirectives(isConst) {
     var directives = [];
 
-    while (this.peek(_tokenKind_mjs__WEBPACK_IMPORTED_MODULE_6__["TokenKind"].AT)) {
+    while (this.peek(_tokenKind.TokenKind.AT)) {
       directives.push(this.parseDirective(isConst));
     }
 
@@ -11242,9 +11535,9 @@ var Parser = /*#__PURE__*/function () {
 
   _proto.parseDirective = function parseDirective(isConst) {
     var start = this._lexer.token;
-    this.expectToken(_tokenKind_mjs__WEBPACK_IMPORTED_MODULE_6__["TokenKind"].AT);
+    this.expectToken(_tokenKind.TokenKind.AT);
     return {
-      kind: _kinds_mjs__WEBPACK_IMPORTED_MODULE_3__["Kind"].DIRECTIVE,
+      kind: _kinds.Kind.DIRECTIVE,
       name: this.parseName(),
       arguments: this.parseArguments(isConst),
       loc: this.loc(start)
@@ -11263,11 +11556,11 @@ var Parser = /*#__PURE__*/function () {
     var start = this._lexer.token;
     var type;
 
-    if (this.expectOptionalToken(_tokenKind_mjs__WEBPACK_IMPORTED_MODULE_6__["TokenKind"].BRACKET_L)) {
+    if (this.expectOptionalToken(_tokenKind.TokenKind.BRACKET_L)) {
       type = this.parseTypeReference();
-      this.expectToken(_tokenKind_mjs__WEBPACK_IMPORTED_MODULE_6__["TokenKind"].BRACKET_R);
+      this.expectToken(_tokenKind.TokenKind.BRACKET_R);
       type = {
-        kind: _kinds_mjs__WEBPACK_IMPORTED_MODULE_3__["Kind"].LIST_TYPE,
+        kind: _kinds.Kind.LIST_TYPE,
         type: type,
         loc: this.loc(start)
       };
@@ -11275,9 +11568,9 @@ var Parser = /*#__PURE__*/function () {
       type = this.parseNamedType();
     }
 
-    if (this.expectOptionalToken(_tokenKind_mjs__WEBPACK_IMPORTED_MODULE_6__["TokenKind"].BANG)) {
+    if (this.expectOptionalToken(_tokenKind.TokenKind.BANG)) {
       return {
-        kind: _kinds_mjs__WEBPACK_IMPORTED_MODULE_3__["Kind"].NON_NULL_TYPE,
+        kind: _kinds.Kind.NON_NULL_TYPE,
         type: type,
         loc: this.loc(start)
       };
@@ -11293,7 +11586,7 @@ var Parser = /*#__PURE__*/function () {
   _proto.parseNamedType = function parseNamedType() {
     var start = this._lexer.token;
     return {
-      kind: _kinds_mjs__WEBPACK_IMPORTED_MODULE_3__["Kind"].NAMED_TYPE,
+      kind: _kinds.Kind.NAMED_TYPE,
       name: this.parseName(),
       loc: this.loc(start)
     };
@@ -11319,7 +11612,7 @@ var Parser = /*#__PURE__*/function () {
     // Many definitions begin with a description and require a lookahead.
     var keywordToken = this.peekDescription() ? this._lexer.lookahead() : this._lexer.token;
 
-    if (keywordToken.kind === _tokenKind_mjs__WEBPACK_IMPORTED_MODULE_6__["TokenKind"].NAME) {
+    if (keywordToken.kind === _tokenKind.TokenKind.NAME) {
       switch (keywordToken.value) {
         case 'schema':
           return this.parseSchemaDefinition();
@@ -11351,7 +11644,7 @@ var Parser = /*#__PURE__*/function () {
   };
 
   _proto.peekDescription = function peekDescription() {
-    return this.peek(_tokenKind_mjs__WEBPACK_IMPORTED_MODULE_6__["TokenKind"].STRING) || this.peek(_tokenKind_mjs__WEBPACK_IMPORTED_MODULE_6__["TokenKind"].BLOCK_STRING);
+    return this.peek(_tokenKind.TokenKind.STRING) || this.peek(_tokenKind.TokenKind.BLOCK_STRING);
   }
   /**
    * Description : StringValue
@@ -11373,9 +11666,9 @@ var Parser = /*#__PURE__*/function () {
     var description = this.parseDescription();
     this.expectKeyword('schema');
     var directives = this.parseDirectives(true);
-    var operationTypes = this.many(_tokenKind_mjs__WEBPACK_IMPORTED_MODULE_6__["TokenKind"].BRACE_L, this.parseOperationTypeDefinition, _tokenKind_mjs__WEBPACK_IMPORTED_MODULE_6__["TokenKind"].BRACE_R);
+    var operationTypes = this.many(_tokenKind.TokenKind.BRACE_L, this.parseOperationTypeDefinition, _tokenKind.TokenKind.BRACE_R);
     return {
-      kind: _kinds_mjs__WEBPACK_IMPORTED_MODULE_3__["Kind"].SCHEMA_DEFINITION,
+      kind: _kinds.Kind.SCHEMA_DEFINITION,
       description: description,
       directives: directives,
       operationTypes: operationTypes,
@@ -11390,10 +11683,10 @@ var Parser = /*#__PURE__*/function () {
   _proto.parseOperationTypeDefinition = function parseOperationTypeDefinition() {
     var start = this._lexer.token;
     var operation = this.parseOperationType();
-    this.expectToken(_tokenKind_mjs__WEBPACK_IMPORTED_MODULE_6__["TokenKind"].COLON);
+    this.expectToken(_tokenKind.TokenKind.COLON);
     var type = this.parseNamedType();
     return {
-      kind: _kinds_mjs__WEBPACK_IMPORTED_MODULE_3__["Kind"].OPERATION_TYPE_DEFINITION,
+      kind: _kinds.Kind.OPERATION_TYPE_DEFINITION,
       operation: operation,
       type: type,
       loc: this.loc(start)
@@ -11411,7 +11704,7 @@ var Parser = /*#__PURE__*/function () {
     var name = this.parseName();
     var directives = this.parseDirectives(true);
     return {
-      kind: _kinds_mjs__WEBPACK_IMPORTED_MODULE_3__["Kind"].SCALAR_TYPE_DEFINITION,
+      kind: _kinds.Kind.SCALAR_TYPE_DEFINITION,
       description: description,
       name: name,
       directives: directives,
@@ -11434,7 +11727,7 @@ var Parser = /*#__PURE__*/function () {
     var directives = this.parseDirectives(true);
     var fields = this.parseFieldsDefinition();
     return {
-      kind: _kinds_mjs__WEBPACK_IMPORTED_MODULE_3__["Kind"].OBJECT_TYPE_DEFINITION,
+      kind: _kinds.Kind.OBJECT_TYPE_DEFINITION,
       description: description,
       name: name,
       interfaces: interfaces,
@@ -11455,14 +11748,14 @@ var Parser = /*#__PURE__*/function () {
 
     if (this.expectOptionalKeyword('implements')) {
       // Optional leading ampersand
-      this.expectOptionalToken(_tokenKind_mjs__WEBPACK_IMPORTED_MODULE_6__["TokenKind"].AMP);
+      this.expectOptionalToken(_tokenKind.TokenKind.AMP);
 
       do {
         var _this$_options2;
 
         types.push(this.parseNamedType());
-      } while (this.expectOptionalToken(_tokenKind_mjs__WEBPACK_IMPORTED_MODULE_6__["TokenKind"].AMP) || // Legacy support for the SDL?
-      ((_this$_options2 = this._options) === null || _this$_options2 === void 0 ? void 0 : _this$_options2.allowLegacySDLImplementsInterfaces) === true && this.peek(_tokenKind_mjs__WEBPACK_IMPORTED_MODULE_6__["TokenKind"].NAME));
+      } while (this.expectOptionalToken(_tokenKind.TokenKind.AMP) || // Legacy support for the SDL?
+      ((_this$_options2 = this._options) === null || _this$_options2 === void 0 ? void 0 : _this$_options2.allowLegacySDLImplementsInterfaces) === true && this.peek(_tokenKind.TokenKind.NAME));
     }
 
     return types;
@@ -11476,7 +11769,7 @@ var Parser = /*#__PURE__*/function () {
     var _this$_options3;
 
     // Legacy support for the SDL?
-    if (((_this$_options3 = this._options) === null || _this$_options3 === void 0 ? void 0 : _this$_options3.allowLegacySDLEmptyFields) === true && this.peek(_tokenKind_mjs__WEBPACK_IMPORTED_MODULE_6__["TokenKind"].BRACE_L) && this._lexer.lookahead().kind === _tokenKind_mjs__WEBPACK_IMPORTED_MODULE_6__["TokenKind"].BRACE_R) {
+    if (((_this$_options3 = this._options) === null || _this$_options3 === void 0 ? void 0 : _this$_options3.allowLegacySDLEmptyFields) === true && this.peek(_tokenKind.TokenKind.BRACE_L) && this._lexer.lookahead().kind === _tokenKind.TokenKind.BRACE_R) {
       this._lexer.advance();
 
       this._lexer.advance();
@@ -11484,7 +11777,7 @@ var Parser = /*#__PURE__*/function () {
       return [];
     }
 
-    return this.optionalMany(_tokenKind_mjs__WEBPACK_IMPORTED_MODULE_6__["TokenKind"].BRACE_L, this.parseFieldDefinition, _tokenKind_mjs__WEBPACK_IMPORTED_MODULE_6__["TokenKind"].BRACE_R);
+    return this.optionalMany(_tokenKind.TokenKind.BRACE_L, this.parseFieldDefinition, _tokenKind.TokenKind.BRACE_R);
   }
   /**
    * FieldDefinition :
@@ -11497,11 +11790,11 @@ var Parser = /*#__PURE__*/function () {
     var description = this.parseDescription();
     var name = this.parseName();
     var args = this.parseArgumentDefs();
-    this.expectToken(_tokenKind_mjs__WEBPACK_IMPORTED_MODULE_6__["TokenKind"].COLON);
+    this.expectToken(_tokenKind.TokenKind.COLON);
     var type = this.parseTypeReference();
     var directives = this.parseDirectives(true);
     return {
-      kind: _kinds_mjs__WEBPACK_IMPORTED_MODULE_3__["Kind"].FIELD_DEFINITION,
+      kind: _kinds.Kind.FIELD_DEFINITION,
       description: description,
       name: name,
       arguments: args,
@@ -11516,7 +11809,7 @@ var Parser = /*#__PURE__*/function () {
   ;
 
   _proto.parseArgumentDefs = function parseArgumentDefs() {
-    return this.optionalMany(_tokenKind_mjs__WEBPACK_IMPORTED_MODULE_6__["TokenKind"].PAREN_L, this.parseInputValueDef, _tokenKind_mjs__WEBPACK_IMPORTED_MODULE_6__["TokenKind"].PAREN_R);
+    return this.optionalMany(_tokenKind.TokenKind.PAREN_L, this.parseInputValueDef, _tokenKind.TokenKind.PAREN_R);
   }
   /**
    * InputValueDefinition :
@@ -11528,17 +11821,17 @@ var Parser = /*#__PURE__*/function () {
     var start = this._lexer.token;
     var description = this.parseDescription();
     var name = this.parseName();
-    this.expectToken(_tokenKind_mjs__WEBPACK_IMPORTED_MODULE_6__["TokenKind"].COLON);
+    this.expectToken(_tokenKind.TokenKind.COLON);
     var type = this.parseTypeReference();
     var defaultValue;
 
-    if (this.expectOptionalToken(_tokenKind_mjs__WEBPACK_IMPORTED_MODULE_6__["TokenKind"].EQUALS)) {
+    if (this.expectOptionalToken(_tokenKind.TokenKind.EQUALS)) {
       defaultValue = this.parseValueLiteral(true);
     }
 
     var directives = this.parseDirectives(true);
     return {
-      kind: _kinds_mjs__WEBPACK_IMPORTED_MODULE_3__["Kind"].INPUT_VALUE_DEFINITION,
+      kind: _kinds.Kind.INPUT_VALUE_DEFINITION,
       description: description,
       name: name,
       type: type,
@@ -11562,7 +11855,7 @@ var Parser = /*#__PURE__*/function () {
     var directives = this.parseDirectives(true);
     var fields = this.parseFieldsDefinition();
     return {
-      kind: _kinds_mjs__WEBPACK_IMPORTED_MODULE_3__["Kind"].INTERFACE_TYPE_DEFINITION,
+      kind: _kinds.Kind.INTERFACE_TYPE_DEFINITION,
       description: description,
       name: name,
       interfaces: interfaces,
@@ -11585,7 +11878,7 @@ var Parser = /*#__PURE__*/function () {
     var directives = this.parseDirectives(true);
     var types = this.parseUnionMemberTypes();
     return {
-      kind: _kinds_mjs__WEBPACK_IMPORTED_MODULE_3__["Kind"].UNION_TYPE_DEFINITION,
+      kind: _kinds.Kind.UNION_TYPE_DEFINITION,
       description: description,
       name: name,
       directives: directives,
@@ -11603,13 +11896,13 @@ var Parser = /*#__PURE__*/function () {
   _proto.parseUnionMemberTypes = function parseUnionMemberTypes() {
     var types = [];
 
-    if (this.expectOptionalToken(_tokenKind_mjs__WEBPACK_IMPORTED_MODULE_6__["TokenKind"].EQUALS)) {
+    if (this.expectOptionalToken(_tokenKind.TokenKind.EQUALS)) {
       // Optional leading pipe
-      this.expectOptionalToken(_tokenKind_mjs__WEBPACK_IMPORTED_MODULE_6__["TokenKind"].PIPE);
+      this.expectOptionalToken(_tokenKind.TokenKind.PIPE);
 
       do {
         types.push(this.parseNamedType());
-      } while (this.expectOptionalToken(_tokenKind_mjs__WEBPACK_IMPORTED_MODULE_6__["TokenKind"].PIPE));
+      } while (this.expectOptionalToken(_tokenKind.TokenKind.PIPE));
     }
 
     return types;
@@ -11628,7 +11921,7 @@ var Parser = /*#__PURE__*/function () {
     var directives = this.parseDirectives(true);
     var values = this.parseEnumValuesDefinition();
     return {
-      kind: _kinds_mjs__WEBPACK_IMPORTED_MODULE_3__["Kind"].ENUM_TYPE_DEFINITION,
+      kind: _kinds.Kind.ENUM_TYPE_DEFINITION,
       description: description,
       name: name,
       directives: directives,
@@ -11642,7 +11935,7 @@ var Parser = /*#__PURE__*/function () {
   ;
 
   _proto.parseEnumValuesDefinition = function parseEnumValuesDefinition() {
-    return this.optionalMany(_tokenKind_mjs__WEBPACK_IMPORTED_MODULE_6__["TokenKind"].BRACE_L, this.parseEnumValueDefinition, _tokenKind_mjs__WEBPACK_IMPORTED_MODULE_6__["TokenKind"].BRACE_R);
+    return this.optionalMany(_tokenKind.TokenKind.BRACE_L, this.parseEnumValueDefinition, _tokenKind.TokenKind.BRACE_R);
   }
   /**
    * EnumValueDefinition : Description? EnumValue Directives[Const]?
@@ -11657,7 +11950,7 @@ var Parser = /*#__PURE__*/function () {
     var name = this.parseName();
     var directives = this.parseDirectives(true);
     return {
-      kind: _kinds_mjs__WEBPACK_IMPORTED_MODULE_3__["Kind"].ENUM_VALUE_DEFINITION,
+      kind: _kinds.Kind.ENUM_VALUE_DEFINITION,
       description: description,
       name: name,
       directives: directives,
@@ -11678,7 +11971,7 @@ var Parser = /*#__PURE__*/function () {
     var directives = this.parseDirectives(true);
     var fields = this.parseInputFieldsDefinition();
     return {
-      kind: _kinds_mjs__WEBPACK_IMPORTED_MODULE_3__["Kind"].INPUT_OBJECT_TYPE_DEFINITION,
+      kind: _kinds.Kind.INPUT_OBJECT_TYPE_DEFINITION,
       description: description,
       name: name,
       directives: directives,
@@ -11692,7 +11985,7 @@ var Parser = /*#__PURE__*/function () {
   ;
 
   _proto.parseInputFieldsDefinition = function parseInputFieldsDefinition() {
-    return this.optionalMany(_tokenKind_mjs__WEBPACK_IMPORTED_MODULE_6__["TokenKind"].BRACE_L, this.parseInputValueDef, _tokenKind_mjs__WEBPACK_IMPORTED_MODULE_6__["TokenKind"].BRACE_R);
+    return this.optionalMany(_tokenKind.TokenKind.BRACE_L, this.parseInputValueDef, _tokenKind.TokenKind.BRACE_R);
   }
   /**
    * TypeSystemExtension :
@@ -11712,7 +12005,7 @@ var Parser = /*#__PURE__*/function () {
   _proto.parseTypeSystemExtension = function parseTypeSystemExtension() {
     var keywordToken = this._lexer.lookahead();
 
-    if (keywordToken.kind === _tokenKind_mjs__WEBPACK_IMPORTED_MODULE_6__["TokenKind"].NAME) {
+    if (keywordToken.kind === _tokenKind.TokenKind.NAME) {
       switch (keywordToken.value) {
         case 'schema':
           return this.parseSchemaExtension();
@@ -11751,14 +12044,14 @@ var Parser = /*#__PURE__*/function () {
     this.expectKeyword('extend');
     this.expectKeyword('schema');
     var directives = this.parseDirectives(true);
-    var operationTypes = this.optionalMany(_tokenKind_mjs__WEBPACK_IMPORTED_MODULE_6__["TokenKind"].BRACE_L, this.parseOperationTypeDefinition, _tokenKind_mjs__WEBPACK_IMPORTED_MODULE_6__["TokenKind"].BRACE_R);
+    var operationTypes = this.optionalMany(_tokenKind.TokenKind.BRACE_L, this.parseOperationTypeDefinition, _tokenKind.TokenKind.BRACE_R);
 
     if (directives.length === 0 && operationTypes.length === 0) {
       throw this.unexpected();
     }
 
     return {
-      kind: _kinds_mjs__WEBPACK_IMPORTED_MODULE_3__["Kind"].SCHEMA_EXTENSION,
+      kind: _kinds.Kind.SCHEMA_EXTENSION,
       directives: directives,
       operationTypes: operationTypes,
       loc: this.loc(start)
@@ -11782,7 +12075,7 @@ var Parser = /*#__PURE__*/function () {
     }
 
     return {
-      kind: _kinds_mjs__WEBPACK_IMPORTED_MODULE_3__["Kind"].SCALAR_TYPE_EXTENSION,
+      kind: _kinds.Kind.SCALAR_TYPE_EXTENSION,
       name: name,
       directives: directives,
       loc: this.loc(start)
@@ -11810,7 +12103,7 @@ var Parser = /*#__PURE__*/function () {
     }
 
     return {
-      kind: _kinds_mjs__WEBPACK_IMPORTED_MODULE_3__["Kind"].OBJECT_TYPE_EXTENSION,
+      kind: _kinds.Kind.OBJECT_TYPE_EXTENSION,
       name: name,
       interfaces: interfaces,
       directives: directives,
@@ -11840,7 +12133,7 @@ var Parser = /*#__PURE__*/function () {
     }
 
     return {
-      kind: _kinds_mjs__WEBPACK_IMPORTED_MODULE_3__["Kind"].INTERFACE_TYPE_EXTENSION,
+      kind: _kinds.Kind.INTERFACE_TYPE_EXTENSION,
       name: name,
       interfaces: interfaces,
       directives: directives,
@@ -11868,7 +12161,7 @@ var Parser = /*#__PURE__*/function () {
     }
 
     return {
-      kind: _kinds_mjs__WEBPACK_IMPORTED_MODULE_3__["Kind"].UNION_TYPE_EXTENSION,
+      kind: _kinds.Kind.UNION_TYPE_EXTENSION,
       name: name,
       directives: directives,
       types: types,
@@ -11895,7 +12188,7 @@ var Parser = /*#__PURE__*/function () {
     }
 
     return {
-      kind: _kinds_mjs__WEBPACK_IMPORTED_MODULE_3__["Kind"].ENUM_TYPE_EXTENSION,
+      kind: _kinds.Kind.ENUM_TYPE_EXTENSION,
       name: name,
       directives: directives,
       values: values,
@@ -11922,7 +12215,7 @@ var Parser = /*#__PURE__*/function () {
     }
 
     return {
-      kind: _kinds_mjs__WEBPACK_IMPORTED_MODULE_3__["Kind"].INPUT_OBJECT_TYPE_EXTENSION,
+      kind: _kinds.Kind.INPUT_OBJECT_TYPE_EXTENSION,
       name: name,
       directives: directives,
       fields: fields,
@@ -11939,14 +12232,14 @@ var Parser = /*#__PURE__*/function () {
     var start = this._lexer.token;
     var description = this.parseDescription();
     this.expectKeyword('directive');
-    this.expectToken(_tokenKind_mjs__WEBPACK_IMPORTED_MODULE_6__["TokenKind"].AT);
+    this.expectToken(_tokenKind.TokenKind.AT);
     var name = this.parseName();
     var args = this.parseArgumentDefs();
     var repeatable = this.expectOptionalKeyword('repeatable');
     this.expectKeyword('on');
     var locations = this.parseDirectiveLocations();
     return {
-      kind: _kinds_mjs__WEBPACK_IMPORTED_MODULE_3__["Kind"].DIRECTIVE_DEFINITION,
+      kind: _kinds.Kind.DIRECTIVE_DEFINITION,
       description: description,
       name: name,
       arguments: args,
@@ -11964,12 +12257,12 @@ var Parser = /*#__PURE__*/function () {
 
   _proto.parseDirectiveLocations = function parseDirectiveLocations() {
     // Optional leading pipe
-    this.expectOptionalToken(_tokenKind_mjs__WEBPACK_IMPORTED_MODULE_6__["TokenKind"].PIPE);
+    this.expectOptionalToken(_tokenKind.TokenKind.PIPE);
     var locations = [];
 
     do {
       locations.push(this.parseDirectiveLocation());
-    } while (this.expectOptionalToken(_tokenKind_mjs__WEBPACK_IMPORTED_MODULE_6__["TokenKind"].PIPE));
+    } while (this.expectOptionalToken(_tokenKind.TokenKind.PIPE));
 
     return locations;
   }
@@ -12006,7 +12299,7 @@ var Parser = /*#__PURE__*/function () {
     var start = this._lexer.token;
     var name = this.parseName();
 
-    if (_directiveLocation_mjs__WEBPACK_IMPORTED_MODULE_7__["DirectiveLocation"][name.value] !== undefined) {
+    if (_directiveLocation.DirectiveLocation[name.value] !== undefined) {
       return name;
     }
 
@@ -12023,7 +12316,7 @@ var Parser = /*#__PURE__*/function () {
     var _this$_options4;
 
     if (((_this$_options4 = this._options) === null || _this$_options4 === void 0 ? void 0 : _this$_options4.noLocation) !== true) {
-      return new _ast_mjs__WEBPACK_IMPORTED_MODULE_4__["Location"](startToken, this._lexer.lastToken, this._lexer.source);
+      return new _ast.Location(startToken, this._lexer.lastToken, this._lexer.source);
     }
   }
   /**
@@ -12049,7 +12342,7 @@ var Parser = /*#__PURE__*/function () {
       return token;
     }
 
-    throw Object(_error_syntaxError_mjs__WEBPACK_IMPORTED_MODULE_2__["syntaxError"])(this._lexer.source, token.start, "Expected ".concat(getTokenKindDesc(kind), ", found ").concat(getTokenDesc(token), "."));
+    throw (0, _syntaxError.syntaxError)(this._lexer.source, token.start, "Expected ".concat(getTokenKindDesc(kind), ", found ").concat(getTokenDesc(token), "."));
   }
   /**
    * If the next token is of the given kind, return that token after advancing
@@ -12077,10 +12370,10 @@ var Parser = /*#__PURE__*/function () {
   _proto.expectKeyword = function expectKeyword(value) {
     var token = this._lexer.token;
 
-    if (token.kind === _tokenKind_mjs__WEBPACK_IMPORTED_MODULE_6__["TokenKind"].NAME && token.value === value) {
+    if (token.kind === _tokenKind.TokenKind.NAME && token.value === value) {
       this._lexer.advance();
     } else {
-      throw Object(_error_syntaxError_mjs__WEBPACK_IMPORTED_MODULE_2__["syntaxError"])(this._lexer.source, token.start, "Expected \"".concat(value, "\", found ").concat(getTokenDesc(token), "."));
+      throw (0, _syntaxError.syntaxError)(this._lexer.source, token.start, "Expected \"".concat(value, "\", found ").concat(getTokenDesc(token), "."));
     }
   }
   /**
@@ -12092,7 +12385,7 @@ var Parser = /*#__PURE__*/function () {
   _proto.expectOptionalKeyword = function expectOptionalKeyword(value) {
     var token = this._lexer.token;
 
-    if (token.kind === _tokenKind_mjs__WEBPACK_IMPORTED_MODULE_6__["TokenKind"].NAME && token.value === value) {
+    if (token.kind === _tokenKind.TokenKind.NAME && token.value === value) {
       this._lexer.advance();
 
       return true;
@@ -12108,7 +12401,7 @@ var Parser = /*#__PURE__*/function () {
 
   _proto.unexpected = function unexpected(atToken) {
     var token = atToken !== null && atToken !== void 0 ? atToken : this._lexer.token;
-    return Object(_error_syntaxError_mjs__WEBPACK_IMPORTED_MODULE_2__["syntaxError"])(this._lexer.source, token.start, "Unexpected ".concat(getTokenDesc(token), "."));
+    return (0, _syntaxError.syntaxError)(this._lexer.source, token.start, "Unexpected ".concat(getTokenDesc(token), "."));
   }
   /**
    * Returns a possibly empty list of parse nodes, determined by
@@ -12186,35 +12479,40 @@ function getTokenDesc(token) {
 
 
 function getTokenKindDesc(kind) {
-  return Object(_lexer_mjs__WEBPACK_IMPORTED_MODULE_8__["isPunctuatorTokenKind"])(kind) ? "\"".concat(kind, "\"") : kind;
+  return (0, _lexer.isPunctuatorTokenKind)(kind) ? "\"".concat(kind, "\"") : kind;
 }
 
 
 /***/ }),
 
-/***/ "./node_modules/graphql/language/printLocation.mjs":
-/*!*********************************************************!*\
-  !*** ./node_modules/graphql/language/printLocation.mjs ***!
-  \*********************************************************/
-/*! exports provided: printLocation, printSourceLocation */
-/***/ (function(__webpack_module__, __webpack_exports__, __webpack_require__) {
+/***/ "./node_modules/graphql/language/printLocation.js":
+/*!********************************************************!*\
+  !*** ./node_modules/graphql/language/printLocation.js ***!
+  \********************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "printLocation", function() { return printLocation; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "printSourceLocation", function() { return printSourceLocation; });
-/* harmony import */ var _location_mjs__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./location.mjs */ "./node_modules/graphql/language/location.mjs");
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.printLocation = printLocation;
+exports.printSourceLocation = printSourceLocation;
+
+var _location = __webpack_require__(/*! ./location */ "./node_modules/graphql/language/location.js");
 
 /**
  * Render a helpful description of the location in the GraphQL Source document.
  */
-
 function printLocation(location) {
-  return printSourceLocation(location.source, Object(_location_mjs__WEBPACK_IMPORTED_MODULE_0__["getLocation"])(location.source, location.start));
+  return printSourceLocation(location.source, (0, _location.getLocation)(location.source, location.start));
 }
 /**
  * Render a helpful description of the location in the GraphQL Source document.
  */
+
 
 function printSourceLocation(source, sourceLocation) {
   var firstLineColumnOffset = source.locationOffset.column - 1;
@@ -12274,30 +12572,35 @@ function leftPad(len, str) {
 
 /***/ }),
 
-/***/ "./node_modules/graphql/language/printer.mjs":
-/*!***************************************************!*\
-  !*** ./node_modules/graphql/language/printer.mjs ***!
-  \***************************************************/
-/*! exports provided: print */
-/***/ (function(__webpack_module__, __webpack_exports__, __webpack_require__) {
+/***/ "./node_modules/graphql/language/printer.js":
+/*!**************************************************!*\
+  !*** ./node_modules/graphql/language/printer.js ***!
+  \**************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "print", function() { return print; });
-/* harmony import */ var _visitor_mjs__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./visitor.mjs */ "./node_modules/graphql/language/visitor.mjs");
-/* harmony import */ var _blockString_mjs__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./blockString.mjs */ "./node_modules/graphql/language/blockString.mjs");
 
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.print = print;
+
+var _visitor = __webpack_require__(/*! ./visitor */ "./node_modules/graphql/language/visitor.js");
+
+var _blockString = __webpack_require__(/*! ./blockString */ "./node_modules/graphql/language/blockString.js");
 
 /**
  * Converts an AST into a string, using one set of reasonable
  * formatting rules.
  */
-
 function print(ast) {
-  return Object(_visitor_mjs__WEBPACK_IMPORTED_MODULE_0__["visit"])(ast, {
+  return (0, _visitor.visit)(ast, {
     leave: printDocASTReducer
   });
 } // TODO: provide better type coverage in future
+
 
 var printDocASTReducer = {
   Name: function Name(node) {
@@ -12379,7 +12682,7 @@ var printDocASTReducer = {
   StringValue: function StringValue(_ref10, key) {
     var value = _ref10.value,
         isBlockString = _ref10.block;
-    return isBlockString ? Object(_blockString_mjs__WEBPACK_IMPORTED_MODULE_1__["printBlockString"])(value, key === 'description' ? '' : '  ') : JSON.stringify(value);
+    return isBlockString ? (0, _blockString.printBlockString)(value, key === 'description' ? '' : '  ') : JSON.stringify(value);
   },
   BooleanValue: function BooleanValue(_ref11) {
     var value = _ref11.value;
@@ -12596,24 +12899,30 @@ function hasMultilineItems(maybeArray) {
 
 /***/ }),
 
-/***/ "./node_modules/graphql/language/source.mjs":
-/*!**************************************************!*\
-  !*** ./node_modules/graphql/language/source.mjs ***!
-  \**************************************************/
-/*! exports provided: Source */
-/***/ (function(__webpack_module__, __webpack_exports__, __webpack_require__) {
+/***/ "./node_modules/graphql/language/source.js":
+/*!*************************************************!*\
+  !*** ./node_modules/graphql/language/source.js ***!
+  \*************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Source", function() { return Source; });
-/* harmony import */ var _polyfills_symbols_mjs__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../polyfills/symbols.mjs */ "./node_modules/graphql/polyfills/symbols.mjs");
-/* harmony import */ var _jsutils_devAssert_mjs__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../jsutils/devAssert.mjs */ "./node_modules/graphql/jsutils/devAssert.mjs");
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.Source = void 0;
+
+var _symbols = __webpack_require__(/*! ../polyfills/symbols */ "./node_modules/graphql/polyfills/symbols.js");
+
+var _devAssert = _interopRequireDefault(__webpack_require__(/*! ../jsutils/devAssert */ "./node_modules/graphql/jsutils/devAssert.js"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
 
 function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
-
-
-
 
 /**
  * A representation of source input to GraphQL. The `name` and `locationOffset` parameters are
@@ -12632,13 +12941,13 @@ var Source = /*#__PURE__*/function () {
     this.body = body;
     this.name = name;
     this.locationOffset = locationOffset;
-    this.locationOffset.line > 0 || Object(_jsutils_devAssert_mjs__WEBPACK_IMPORTED_MODULE_1__["default"])(0, 'line in locationOffset is 1-indexed and must be positive.');
-    this.locationOffset.column > 0 || Object(_jsutils_devAssert_mjs__WEBPACK_IMPORTED_MODULE_1__["default"])(0, 'column in locationOffset is 1-indexed and must be positive.');
+    this.locationOffset.line > 0 || (0, _devAssert.default)(0, 'line in locationOffset is 1-indexed and must be positive.');
+    this.locationOffset.column > 0 || (0, _devAssert.default)(0, 'column in locationOffset is 1-indexed and must be positive.');
   } // $FlowFixMe Flow doesn't support computed properties yet
 
 
   _createClass(Source, [{
-    key: _polyfills_symbols_mjs__WEBPACK_IMPORTED_MODULE_0__["SYMBOL_TO_STRING_TAG"],
+    key: _symbols.SYMBOL_TO_STRING_TAG,
     get: function get() {
       return 'Source';
     }
@@ -12647,19 +12956,26 @@ var Source = /*#__PURE__*/function () {
   return Source;
 }();
 
+exports.Source = Source;
+
 
 /***/ }),
 
-/***/ "./node_modules/graphql/language/tokenKind.mjs":
-/*!*****************************************************!*\
-  !*** ./node_modules/graphql/language/tokenKind.mjs ***!
-  \*****************************************************/
-/*! exports provided: TokenKind */
-/***/ (function(__webpack_module__, __webpack_exports__, __webpack_require__) {
+/***/ "./node_modules/graphql/language/tokenKind.js":
+/*!****************************************************!*\
+  !*** ./node_modules/graphql/language/tokenKind.js ***!
+  \****************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "TokenKind", function() { return TokenKind; });
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.TokenKind = void 0;
+
 /**
  * An exported enum describing the different kinds of tokens that the
  * lexer emits.
@@ -12692,31 +13008,34 @@ var TokenKind = Object.freeze({
  * The enum type representing the token kinds values.
  */
 
+exports.TokenKind = TokenKind;
+
 
 /***/ }),
 
-/***/ "./node_modules/graphql/language/visitor.mjs":
-/*!***************************************************!*\
-  !*** ./node_modules/graphql/language/visitor.mjs ***!
-  \***************************************************/
-/*! exports provided: QueryDocumentKeys, BREAK, visit, visitInParallel, getVisitFn */
-/***/ (function(__webpack_module__, __webpack_exports__, __webpack_require__) {
+/***/ "./node_modules/graphql/language/visitor.js":
+/*!**************************************************!*\
+  !*** ./node_modules/graphql/language/visitor.js ***!
+  \**************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "QueryDocumentKeys", function() { return QueryDocumentKeys; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "BREAK", function() { return BREAK; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "visit", function() { return visit; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "visitInParallel", function() { return visitInParallel; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getVisitFn", function() { return getVisitFn; });
-/* harmony import */ var _jsutils_inspect_mjs__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../jsutils/inspect.mjs */ "./node_modules/graphql/jsutils/inspect.mjs");
-/* harmony import */ var _ast_mjs__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./ast.mjs */ "./node_modules/graphql/language/ast.mjs");
 
 
-/**
- * A visitor is provided to visit, it contains the collection of
- * relevant functions to be called during the visitor's traversal.
- */
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.visit = visit;
+exports.visitInParallel = visitInParallel;
+exports.getVisitFn = getVisitFn;
+exports.BREAK = exports.QueryDocumentKeys = void 0;
+
+var _inspect = _interopRequireDefault(__webpack_require__(/*! ../jsutils/inspect */ "./node_modules/graphql/jsutils/inspect.js"));
+
+var _ast = __webpack_require__(/*! ./ast */ "./node_modules/graphql/language/ast.js");
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var QueryDocumentKeys = {
   Name: [],
@@ -12765,6 +13084,7 @@ var QueryDocumentKeys = {
   EnumTypeExtension: ['name', 'directives', 'values'],
   InputObjectTypeExtension: ['name', 'directives', 'fields']
 };
+exports.QueryDocumentKeys = QueryDocumentKeys;
 var BREAK = Object.freeze({});
 /**
  * visit() will walk through an AST using a depth-first traversal, calling
@@ -12853,6 +13173,8 @@ var BREAK = Object.freeze({});
  *     })
  */
 
+exports.BREAK = BREAK;
+
 function visit(root, visitor) {
   var visitorKeys = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : QueryDocumentKeys;
 
@@ -12934,8 +13256,8 @@ function visit(root, visitor) {
     var result = void 0;
 
     if (!Array.isArray(node)) {
-      if (!Object(_ast_mjs__WEBPACK_IMPORTED_MODULE_1__["isNode"])(node)) {
-        throw new Error("Invalid AST Node: ".concat(Object(_jsutils_inspect_mjs__WEBPACK_IMPORTED_MODULE_0__["default"])(node), "."));
+      if (!(0, _ast.isNode)(node)) {
+        throw new Error("Invalid AST Node: ".concat((0, _inspect.default)(node), "."));
       }
 
       var visitFn = getVisitFn(visitor, node.kind, isLeaving);
@@ -12956,7 +13278,7 @@ function visit(root, visitor) {
           edits.push([key, result]);
 
           if (!isLeaving) {
-            if (Object(_ast_mjs__WEBPACK_IMPORTED_MODULE_1__["isNode"])(result)) {
+            if ((0, _ast.isNode)(result)) {
               node = result;
             } else {
               path.pop();
@@ -13008,6 +13330,7 @@ function visit(root, visitor) {
  *
  * If a prior visitor edits a node, no following visitors will see that node.
  */
+
 
 function visitInParallel(visitors) {
   var skipping = new Array(visitors.length);
@@ -13061,6 +13384,7 @@ function visitInParallel(visitors) {
  * the function the visitor runtime should call.
  */
 
+
 function getVisitFn(visitor, kind, isLeaving) {
   var kindVisitor = visitor[kind];
 
@@ -13098,28 +13422,33 @@ function getVisitFn(visitor, kind, isLeaving) {
 
 /***/ }),
 
-/***/ "./node_modules/graphql/polyfills/symbols.mjs":
-/*!****************************************************!*\
-  !*** ./node_modules/graphql/polyfills/symbols.mjs ***!
-  \****************************************************/
-/*! exports provided: SYMBOL_ITERATOR, SYMBOL_ASYNC_ITERATOR, SYMBOL_TO_STRING_TAG */
-/***/ (function(__webpack_module__, __webpack_exports__, __webpack_require__) {
+/***/ "./node_modules/graphql/polyfills/symbols.js":
+/*!***************************************************!*\
+  !*** ./node_modules/graphql/polyfills/symbols.js ***!
+  \***************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SYMBOL_ITERATOR", function() { return SYMBOL_ITERATOR; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SYMBOL_ASYNC_ITERATOR", function() { return SYMBOL_ASYNC_ITERATOR; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SYMBOL_TO_STRING_TAG", function() { return SYMBOL_TO_STRING_TAG; });
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.SYMBOL_TO_STRING_TAG = exports.SYMBOL_ASYNC_ITERATOR = exports.SYMBOL_ITERATOR = void 0;
 // In ES2015 (or a polyfilled) environment, this will be Symbol.iterator
 // istanbul ignore next (See: 'https://github.com/graphql/graphql-js/issues/2317')
 var SYMBOL_ITERATOR = typeof Symbol === 'function' ? Symbol.iterator : '@@iterator'; // In ES2017 (or a polyfilled) environment, this will be Symbol.asyncIterator
 // istanbul ignore next (See: 'https://github.com/graphql/graphql-js/issues/2317')
 
+exports.SYMBOL_ITERATOR = SYMBOL_ITERATOR;
 var SYMBOL_ASYNC_ITERATOR = // $FlowFixMe Flow doesn't define `Symbol.asyncIterator` yet
 typeof Symbol === 'function' ? Symbol.asyncIterator : '@@asyncIterator'; // istanbul ignore next (See: 'https://github.com/graphql/graphql-js/issues/2317')
 
+exports.SYMBOL_ASYNC_ITERATOR = SYMBOL_ASYNC_ITERATOR;
 var SYMBOL_TO_STRING_TAG = // $FlowFixMe Flow doesn't define `Symbol.toStringTag` yet
 typeof Symbol === 'function' ? Symbol.toStringTag : '@@toStringTag';
+exports.SYMBOL_TO_STRING_TAG = SYMBOL_TO_STRING_TAG;
 
 
 /***/ }),

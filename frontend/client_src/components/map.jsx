@@ -1,23 +1,35 @@
-import React, { useEffect } from 'react';
-import L from 'leaflet';
+import React,{useContext} from 'react'
+import { Map, TileLayer, LayersControl } from 'react-leaflet';
+import { ZoomContext, CenterContext } from '../contexts';
+import Mun from './municiple';
+import Ward from './ward';
 
-const Map = ({ zoom, center }) => {
-    useEffect(() => {
-        // Initialize the map
-        var map = L.map('map', {
-            scrollWheelZoom: true
-        });
 
-        // Set the position and zoom level of the map
-        map.setView(zoom, center);
-        // Base Layer
-        let osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
-        }).addTo(map);
-    }, []);
+const { BaseLayer, Overlay } = LayersControl
+
+const mid = 'iaEL7GVAzOtRL';
+
+const MainMap = () => {
+    const zoomcontext = useContext(ZoomContext);
+    const centercontext = useContext(CenterContext);
+    
+    const handleViewPort = (e) => {
+        zoomcontext.onZoom(e.zoom);
+        centercontext.setCenter(e.center);
+    }
+
     return (
-        <div id="map"></div>
+        <Map center={centercontext.state.center} zoom={zoomcontext.state.zoom} onViewportChanged={handleViewPort} >
+            <LayersControl position="topright">
+                <BaseLayer checked name="OpenStreetMap.Mapnik">
+                    <TileLayer maxZoom={20} 
+                        attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+                        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                    />
+                </BaseLayer>
+                {zoomcontext.state.zoom <12 ? <Mun mid={mid}></Mun> : <Ward mid={mid}></Ward>}
+            </LayersControl>
+        </Map>
     )
-};
-
-export default Map;
+}
+export default MainMap;

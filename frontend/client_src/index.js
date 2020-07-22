@@ -1,7 +1,9 @@
-import React, {StrictMode} from 'react'
+import React, { StrictMode } from 'react'
 import ReactDOM from 'react-dom'
-import {ApolloProvider, ApolloClient, InMemoryCache } from '@apollo/client'
+import { ApolloProvider, ApolloClient, InMemoryCache } from '@apollo/client'
 import App from './App.jsx';
+import ZoomContextProvider from './contexts/zoom-context.js';
+import CenterContextProvider from './contexts/center-context.js';
 
 const client = new ApolloClient({
 	uri: "http://api.localhost:8000/",
@@ -11,7 +13,11 @@ const client = new ApolloClient({
 ReactDOM.render(
 	<StrictMode>
 		<ApolloProvider client={client}>
-			<App/> 
+			<ZoomContextProvider>
+				<CenterContextProvider>
+					<App />
+				</CenterContextProvider>
+			</ZoomContextProvider>
 		</ApolloProvider>
 	</StrictMode>,
 	document.getElementById('wrapper'));
