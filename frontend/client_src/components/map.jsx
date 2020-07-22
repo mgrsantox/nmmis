@@ -15,12 +15,12 @@ const MainMap = () => {
     const centercontext = useContext(CenterContext);
     
     const handleViewPort = (e) => {
-        zoomcontext.onZoom(e.zoom);
-        centercontext.setCenter(e.center);
+        zoomcontext.onZoom(e.target._zoom);
+        centercontext.setCenter(e.target._animateToCenter);
     }
-
+// onViewportChanged={handleViewPort}
     return (
-        <Map center={centercontext.state.center} zoom={zoomcontext.state.zoom} minZoom={4} maxZoom={19} onViewportChanged={handleViewPort} >
+        <Map center={centercontext.state.center} zoom={zoomcontext.state.zoom} minZoom={4} maxZoom={19} onZoom={handleViewPort} >
             <LayersControl position="topright">
                 <BaseLayer checked name="OpenStreetMap.Mapnik">
                     <TileLayer maxZoom={20} 
@@ -28,7 +28,7 @@ const MainMap = () => {
                         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                     />
                 </BaseLayer>
-                {zoomcontext.state.zoom <12 ? <Munciple mid={mid}></Munciple> : <Ward mid={mid}></Ward>}
+                {zoomcontext.state.zoom <=12 ? <Munciple mid={mid}></Munciple> : <Ward mid={mid}></Ward>}
                 <Place mid={mid}></Place>
             </LayersControl>
         </Map>

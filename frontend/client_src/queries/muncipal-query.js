@@ -6,7 +6,13 @@ query Municipal($mid: String){
     municipal(mid: $mid){
       properties{
         name
-        area
+        hindu
+        buddhist
+        muslim
+        other
+        total
+        male
+        female
       }
       geometry{
         type

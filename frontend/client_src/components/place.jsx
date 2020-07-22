@@ -22,7 +22,9 @@ const Place = ({ mid }) => {
                 placesCrd.map(place => {
                     return (
                         <Marker key={place.id} position={place.geometry.coordinates}>
-                            <Popup>{place.properties.name}</Popup>
+                            <Popup>
+                                <h1>{place.properties.name}</h1>
+                                </Popup>
                         </Marker>
                     )
                 })

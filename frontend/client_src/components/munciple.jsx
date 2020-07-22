@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { Polygon, Marker,Popup } from 'react-leaflet'
 import { useQuery } from '@apollo/client';
+import { Chart } from "react-google-charts";
 import { MUNICIPAL_QUERY } from '../queries/muncipal-query';
+import MunPopChart from './info-chart/municipal/pop-chart';
 
 const Munciple = ({ mid }) => {
     const [munCrd, setMunCrd] = useState([]);
@@ -24,8 +26,7 @@ const Munciple = ({ mid }) => {
             </Marker>
             <Polygon maxZoom={20} color="purple" positions={munCrd} >
                 <Popup>
-                    <h1>Name: {munProp.name}</h1>
-                    <h1>Area: {munProp.area} Sqm.</h1>
+                    <MunPopChart mundata={munProp} />
                 </Popup>
             </Polygon>
         </div>

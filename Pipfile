@@ -18,6 +18,7 @@ psycopg2-binary = "*"
 django-graphql-geojson = "*"
 django-cors-headers = "*"
 geopandas = "*"
+pillow = "*"
 
 [requires]
 python_version = "3.8"
