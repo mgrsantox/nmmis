@@ -6,6 +6,7 @@ export const PLACES_QUERY = gql`
             id
             properties{
                 name
+                image
             }
             geometry{
                 type

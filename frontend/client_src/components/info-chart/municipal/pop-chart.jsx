@@ -17,7 +17,7 @@ const MunPopChart = ({ mundata }) => {
                 options={{
                     // Material design options
                     chart: {
-                        title: 'By Male/Female',
+                        title: 'By Sex',
                         subtitle: 'some description',
                     },
                 }}

@@ -141,7 +141,7 @@ var MunPopChart = function MunPopChart(_ref) {
     options: {
       // Material design options
       chart: {
-        title: 'By Male/Female',
+        title: 'By Sex',
         subtitle: 'some description'
       }
     } // For tests
@@ -369,7 +369,10 @@ var Place = function Place(_ref) {
     return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_leaflet__WEBPACK_IMPORTED_MODULE_1__["Marker"], {
       key: place.id,
       position: place.geometry.coordinates
-    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_leaflet__WEBPACK_IMPORTED_MODULE_1__["Popup"], null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, place.properties.name)));
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_leaflet__WEBPACK_IMPORTED_MODULE_1__["Popup"], null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, place.properties.name), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
+      src: place.properties.image,
+      alt: "Place"
+    })));
   }));
 };
 
@@ -666,7 +669,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "PLACES_QUERY", function() { return PLACES_QUERY; });
 /* harmony import */ var _apollo_client__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @apollo/client */ "./node_modules/@apollo/client/index.js");
 function _templateObject() {
-  var data = _taggedTemplateLiteral(["\n    query Places($mid: String){\n        places(mid: $mid){\n            id\n            properties{\n                name\n            }\n            geometry{\n                type\n                coordinates\n            }\n        }\n    }\n"]);
+  var data = _taggedTemplateLiteral(["\n    query Places($mid: String){\n        places(mid: $mid){\n            id\n            properties{\n                name\n                image\n            }\n            geometry{\n                type\n                coordinates\n            }\n        }\n    }\n"]);
 
   _templateObject = function _templateObject() {
     return data;
