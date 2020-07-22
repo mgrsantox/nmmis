@@ -1,7 +1,7 @@
 import React,{useContext} from 'react'
 import { Map, TileLayer, LayersControl } from 'react-leaflet';
 import { ZoomContext, CenterContext } from '../contexts';
-import Mun from './municiple';
+import Munciple from './munciple';
 import Ward from './ward';
 
 
@@ -19,7 +19,7 @@ const MainMap = () => {
     }
 
     return (
-        <Map center={centercontext.state.center} zoom={zoomcontext.state.zoom} onViewportChanged={handleViewPort} >
+        <Map center={centercontext.state.center} zoom={zoomcontext.state.zoom} minZoom={4} maxZoom={19} onViewportChanged={handleViewPort} >
             <LayersControl position="topright">
                 <BaseLayer checked name="OpenStreetMap.Mapnik">
                     <TileLayer maxZoom={20} 
@@ -27,7 +27,7 @@ const MainMap = () => {
                         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                     />
                 </BaseLayer>
-                {zoomcontext.state.zoom <12 ? <Mun mid={mid}></Mun> : <Ward mid={mid}></Ward>}
+                {zoomcontext.state.zoom <12 ? <Munciple mid={mid}></Munciple> : <Ward mid={mid}></Ward>}
             </LayersControl>
         </Map>
     )

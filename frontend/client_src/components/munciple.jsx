@@ -3,7 +3,7 @@ import { Polygon, Marker,Popup } from 'react-leaflet'
 import { useQuery } from '@apollo/client';
 import { MUNICIPAL_QUERY } from '../queries/muncipal-query';
 
-const Mun = ({ mid }) => {
+const Munciple = ({ mid }) => {
     const [munCrd, setMunCrd] = useState([]);
     const [munProp, setMunProp] = useState({});
 
@@ -32,4 +32,4 @@ const Mun = ({ mid }) => {
     )
 }
 
-export default Mun;
+export default Munciple;

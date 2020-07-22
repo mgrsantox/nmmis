@@ -122,7 +122,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var react_leaflet__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-leaflet */ "./node_modules/react-leaflet/es/index.js");
 /* harmony import */ var _contexts__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../contexts */ "./frontend/client_src/contexts/index.js");
-/* harmony import */ var _municiple__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./municiple */ "./frontend/client_src/components/municiple.jsx");
+/* harmony import */ var _munciple__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./munciple */ "./frontend/client_src/components/munciple.jsx");
 /* harmony import */ var _ward__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./ward */ "./frontend/client_src/components/ward.jsx");
 
 
@@ -145,6 +145,8 @@ var MainMap = function MainMap() {
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_leaflet__WEBPACK_IMPORTED_MODULE_1__["Map"], {
     center: centercontext.state.center,
     zoom: zoomcontext.state.zoom,
+    minZoom: 4,
+    maxZoom: 19,
     onViewportChanged: handleViewPort
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_leaflet__WEBPACK_IMPORTED_MODULE_1__["LayersControl"], {
     position: "topright"
@@ -155,7 +157,7 @@ var MainMap = function MainMap() {
     maxZoom: 20,
     attribution: "&copy <a href=\"http://osm.org/copyright\">OpenStreetMap</a> contributors",
     url: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-  })), zoomcontext.state.zoom < 12 ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_municiple__WEBPACK_IMPORTED_MODULE_3__["default"], {
+  })), zoomcontext.state.zoom < 12 ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_munciple__WEBPACK_IMPORTED_MODULE_3__["default"], {
     mid: mid
   }) : /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_ward__WEBPACK_IMPORTED_MODULE_4__["default"], {
     mid: mid
@@ -166,10 +168,10 @@ var MainMap = function MainMap() {
 
 /***/ }),
 
-/***/ "./frontend/client_src/components/municiple.jsx":
-/*!******************************************************!*\
-  !*** ./frontend/client_src/components/municiple.jsx ***!
-  \******************************************************/
+/***/ "./frontend/client_src/components/munciple.jsx":
+/*!*****************************************************!*\
+  !*** ./frontend/client_src/components/munciple.jsx ***!
+  \*****************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -197,7 +199,7 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 
 
-var Mun = function Mun(_ref) {
+var Munciple = function Munciple(_ref) {
   var mid = _ref.mid;
 
   var _useState = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])([]),
@@ -234,7 +236,7 @@ var Mun = function Mun(_ref) {
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_leaflet__WEBPACK_IMPORTED_MODULE_1__["Popup"], null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, "Name: ", munProp.name), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, "Area: ", munProp.area, " Sqm."))));
 };
 
-/* harmony default export */ __webpack_exports__["default"] = (Mun);
+/* harmony default export */ __webpack_exports__["default"] = (Munciple);
 
 /***/ }),
 

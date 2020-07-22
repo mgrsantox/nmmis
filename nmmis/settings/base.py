@@ -35,6 +35,7 @@ LOCAL_APPS = [
     'nmmis.contrib.province',
     'nmmis.contrib.district',
     'nmmis.contrib.municipal',
+    'nmmis.contrib.place',
 ]
 
 
