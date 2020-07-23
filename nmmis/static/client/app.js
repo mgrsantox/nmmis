@@ -688,6 +688,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react_leaflet__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-leaflet */ "./node_modules/react-leaflet/es/index.js");
 /* harmony import */ var _apollo_client__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @apollo/client */ "./node_modules/@apollo/client/index.js");
 /* harmony import */ var _queries_muncipal_query__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../queries/muncipal-query */ "./frontend/client_src/queries/muncipal-query.js");
+/* harmony import */ var _contexts__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../contexts */ "./frontend/client_src/contexts/index.js");
 function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
 
 function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
@@ -705,8 +706,10 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 
 
+
 var Ward = function Ward(_ref) {
   var mid = _ref.mid;
+  var zoomcontext = Object(react__WEBPACK_IMPORTED_MODULE_0__["useContext"])(_contexts__WEBPACK_IMPORTED_MODULE_4__["ZoomContext"]);
 
   var _useState = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])([]),
       _useState2 = _slicedToArray(_useState, 2),
@@ -733,7 +736,7 @@ var Ward = function Ward(_ref) {
       key: ward.id,
       color: "purple",
       positions: ward.geometry.coordinates
-    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_leaflet__WEBPACK_IMPORTED_MODULE_1__["Popup"], null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, "Name: ", ward.properties.name), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, "Area: ", ward.properties.area, " Sqm."), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, "Population: ", ward.properties.total), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, "Male: ", ward.properties.male), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, "Female: ", ward.properties.female)));
+    }, zoomcontext.state.zoom < 15 ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_leaflet__WEBPACK_IMPORTED_MODULE_1__["Popup"], null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, "Name: ", ward.properties.name), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, "Area: ", ward.properties.area, " Sqm."), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, "Population: ", ward.properties.total), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, "Male: ", ward.properties.male), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, "Female: ", ward.properties.female)) : null);
   }));
 };
 

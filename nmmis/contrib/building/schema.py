@@ -22,6 +22,7 @@ class Query(graphene.ObjectType):
     building = graphene.Field(BuildingType, buid=graphene.String())
 
     def resolve_buildings(self, info, mid, *args, **kwargs):
+        print("Buildings Called")
         return Building.objects.filter(ward__municipal__id=mid)
     
     def resolve_building(self, info, buid, *args, **kwargs):

@@ -22,6 +22,7 @@ class Query(graphene.ObjectType):
     place = graphene.Field(PlaceType, plid=graphene.String())
 
     def resolve_places(self, info, mid, *args, **kwargs):
+        print("Place called")
         return Place.objects.filter(ward__municipal__id=mid)
     
     def resolve_place(self, info, plid, *args, **kwargs):

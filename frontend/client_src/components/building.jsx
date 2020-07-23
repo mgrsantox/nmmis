@@ -26,7 +26,7 @@ const Building =({mid})=>{
         if (!loading) {
             setBuildingsCrd(data.buildings);
         }
-    });
+    },);
     return togglecontext.state.toggle_building? (
         <div>
             {
