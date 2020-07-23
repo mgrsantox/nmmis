@@ -3,6 +3,7 @@ import { useQuery } from '@apollo/client';
 import { Marker, Popup } from 'react-leaflet'
 import { BUILDINGS_QUERY } from '../queries/building-query';
 import { ToggleContext } from '../contexts';
+import { schoolIcon, houseIcon, bankIcon } from './icon/building-icon';
 
 const Building =({mid})=>{
     const [buildingsCrd, setBuildingsCrd] = useState([]);
@@ -11,6 +12,16 @@ const Building =({mid})=>{
     const {loading, error, data} = useQuery(BUILDINGS_QUERY,{
         variables: { mid },
     });
+    const handleIcon = (catg)=>{
+        switch (catg) {
+            case "School":
+                return schoolIcon
+            case "Finance":
+                return bankIcon
+            default:
+                return houseIcon
+        }
+    }
     useEffect(() => {
         if (!loading) {
             setBuildingsCrd(data.buildings);
@@ -21,7 +32,7 @@ const Building =({mid})=>{
             {
                 buildingsCrd.map(building => {
                     return (
-                        <Marker key={building.id} position={building.geometry.coordinates}>
+                        <Marker key={building.id} icon={handleIcon(building.properties.catg)} position={building.geometry.coordinates}>
                             <Popup>
                                 <h1>Building Name: {building.properties.name}</h1>
                                 <h1>Building Number: {building.properties.buildingNo}</h1>

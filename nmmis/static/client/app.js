@@ -128,6 +128,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react_leaflet__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react-leaflet */ "./node_modules/react-leaflet/es/index.js");
 /* harmony import */ var _queries_building_query__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../queries/building-query */ "./frontend/client_src/queries/building-query.js");
 /* harmony import */ var _contexts__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../contexts */ "./frontend/client_src/contexts/index.js");
+/* harmony import */ var _icon_building_icon__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./icon/building-icon */ "./frontend/client_src/components/icon/building-icon.js");
 function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
 
 function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
@@ -139,6 +140,7 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 function _iterableToArrayLimit(arr, i) { if (typeof Symbol === "undefined" || !(Symbol.iterator in Object(arr))) return; var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
 
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+
 
 
 
@@ -165,6 +167,19 @@ var Building = function Building(_ref) {
       error = _useQuery.error,
       data = _useQuery.data;
 
+  var handleIcon = function handleIcon(catg) {
+    switch (catg) {
+      case "School":
+        return _icon_building_icon__WEBPACK_IMPORTED_MODULE_5__["schoolIcon"];
+
+      case "Finance":
+        return _icon_building_icon__WEBPACK_IMPORTED_MODULE_5__["bankIcon"];
+
+      default:
+        return _icon_building_icon__WEBPACK_IMPORTED_MODULE_5__["houseIcon"];
+    }
+  };
+
   Object(react__WEBPACK_IMPORTED_MODULE_0__["useEffect"])(function () {
     if (!loading) {
       setBuildingsCrd(data.buildings);
@@ -173,6 +188,7 @@ var Building = function Building(_ref) {
   return togglecontext.state.toggle_building ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, buildingsCrd.map(function (building) {
     return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_leaflet__WEBPACK_IMPORTED_MODULE_2__["Marker"], {
       key: building.id,
+      icon: handleIcon(building.properties.catg),
       position: building.geometry.coordinates
     }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_leaflet__WEBPACK_IMPORTED_MODULE_2__["Popup"], null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, "Building Name: ", building.properties.name), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, "Building Number: ", building.properties.buildingNo), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h4", null, "Category: ", building.properties.catg), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h4", null, "Sub-Category: ", building.properties.subCatg), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h4", null, "Land Area: ", building.properties.landArea), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h4", null, "Build Area: ", building.properties.buildArea), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h4", null, "Build Date: ", building.properties.buildDate), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h4", null, "Roof Type: ", building.properties.roofType), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h4", null, "Total Floor: ", building.properties.floor), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h4", null, "Toilet: ", building.properties.toilet), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h4", null, "Road Acces: ", building.properties.roadAccess ? 'Yes' : 'No'), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h4", null, "Electricity Access: ", building.properties.electAccess ? 'Yes' : 'No'), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
       src: building.properties.image,
@@ -182,6 +198,54 @@ var Building = function Building(_ref) {
 };
 
 /* harmony default export */ __webpack_exports__["default"] = (Building);
+
+/***/ }),
+
+/***/ "./frontend/client_src/components/icon/building-icon.js":
+/*!**************************************************************!*\
+  !*** ./frontend/client_src/components/icon/building-icon.js ***!
+  \**************************************************************/
+/*! exports provided: schoolIcon, bankIcon, houseIcon */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "schoolIcon", function() { return schoolIcon; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "bankIcon", function() { return bankIcon; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "houseIcon", function() { return houseIcon; });
+/* harmony import */ var leaflet__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! leaflet */ "./node_modules/leaflet/dist/leaflet-src.js");
+/* harmony import */ var leaflet__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(leaflet__WEBPACK_IMPORTED_MODULE_0__);
+
+var schoolIcon = new leaflet__WEBPACK_IMPORTED_MODULE_0___default.a.Icon({
+  iconUrl: 'static/client/icon/school.svg',
+  iconRetinaUrl: 'static/client/icon/school.svg',
+  iconAnchor: [5, 55],
+  popupAnchor: [10, -44],
+  iconSize: [25, 55],
+  // shadowUrl: '../assets/marker-shadow.png',
+  shadowSize: [68, 95],
+  shadowAnchor: [20, 92]
+});
+var bankIcon = new leaflet__WEBPACK_IMPORTED_MODULE_0___default.a.Icon({
+  iconUrl: 'static/client/icon/bank.svg',
+  iconRetinaUrl: 'static/client/icon/bank.svg',
+  iconAnchor: [5, 55],
+  popupAnchor: [10, -44],
+  iconSize: [25, 55],
+  // shadowUrl: '../assets/marker-shadow.png',
+  shadowSize: [68, 95],
+  shadowAnchor: [20, 92]
+});
+var houseIcon = new leaflet__WEBPACK_IMPORTED_MODULE_0___default.a.Icon({
+  iconUrl: 'static/client/icon/house.svg',
+  iconRetinaUrl: 'static/client/icon/house.svg',
+  iconAnchor: [5, 55],
+  popupAnchor: [10, -44],
+  iconSize: [25, 55],
+  // shadowUrl: '../assets/marker-shadow.png',
+  shadowSize: [68, 95],
+  shadowAnchor: [20, 92]
+});
 
 /***/ }),
 
@@ -202,7 +266,6 @@ __webpack_require__.r(__webpack_exports__);
 
 var MunPopChart = function MunPopChart(_ref) {
   var mundata = _ref.mundata;
-  console.log(mundata.male);
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
     style: {
       display: 'flex',

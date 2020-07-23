@@ -2,7 +2,6 @@ import React from 'react';
 import { Chart } from "react-google-charts";
 
 const MunPopChart = ({ mundata }) => {
-    console.log(mundata.male)
     return (
         <div style={{ display: 'flex', maxWidth: 900 }}>
             <Chart
