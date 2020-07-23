@@ -174,7 +174,7 @@ var Building = function Building(_ref) {
     return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_leaflet__WEBPACK_IMPORTED_MODULE_2__["Marker"], {
       key: building.id,
       position: building.geometry.coordinates
-    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_leaflet__WEBPACK_IMPORTED_MODULE_2__["Popup"], null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, "Building Name: ", building.properties.name), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_leaflet__WEBPACK_IMPORTED_MODULE_2__["Popup"], null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, "Building Name: ", building.properties.name), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, "Building Number: ", building.properties.buildingNo), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h4", null, "Category: ", building.properties.catg), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h4", null, "Sub-Category: ", building.properties.subCatg), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h4", null, "Land Area: ", building.properties.landArea), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h4", null, "Build Area: ", building.properties.buildArea), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h4", null, "Build Date: ", building.properties.buildDate), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h4", null, "Roof Type: ", building.properties.roofType), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h4", null, "Total Floor: ", building.properties.floor), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h4", null, "Toilet: ", building.properties.toilet), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h4", null, "Road Acces: ", building.properties.roadAccess ? 'Yes' : 'No'), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h4", null, "Electricity Access: ", building.properties.electAccess ? 'Yes' : 'No'), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
       src: building.properties.image,
       alt: "Building Image"
     })));
@@ -589,7 +589,7 @@ var Ward = function Ward(_ref) {
       key: ward.id,
       color: "purple",
       positions: ward.geometry.coordinates
-    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_leaflet__WEBPACK_IMPORTED_MODULE_1__["Popup"], null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, "Name: ", ward.properties.name), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, "Area: ", ward.properties.area, " Sqm.")));
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_leaflet__WEBPACK_IMPORTED_MODULE_1__["Popup"], null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, "Name: ", ward.properties.name), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, "Area: ", ward.properties.area, " Sqm."), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, "Population: ", ward.properties.total), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, "Male: ", ward.properties.male), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, "Female: ", ward.properties.female)));
   }));
 };
 
@@ -849,7 +849,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "BUILDINGS_QUERY", function() { return BUILDINGS_QUERY; });
 /* harmony import */ var _apollo_client__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @apollo/client */ "./node_modules/@apollo/client/index.js");
 function _templateObject() {
-  var data = _taggedTemplateLiteral(["\n    query Buildings($mid: String){\n        buildings(mid: $mid){\n            id\n            properties{\n                name\n                catg\n                image\n            }\n            geometry{\n                type\n                coordinates\n            }\n        }\n    }\n"]);
+  var data = _taggedTemplateLiteral(["\n    query Buildings($mid: String){\n        buildings(mid: $mid){\n            id\n            properties{\n                name\n                catg\n                image\n                buildingNo\n                subCatg\n                landArea\n                buildArea\n                buildDate\n                roofType\n                floor\n                toilet\n                roadAccess\n                electAccess\n            }\n            geometry{\n                type\n                coordinates\n            }\n        }\n    }\n"]);
 
   _templateObject = function _templateObject() {
     return data;
@@ -878,7 +878,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "WARDS_QUERY", function() { return WARDS_QUERY; });
 /* harmony import */ var _apollo_client__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @apollo/client */ "./node_modules/@apollo/client/index.js");
 function _templateObject2() {
-  var data = _taggedTemplateLiteral(["\nquery Wards($mid: String){\n  wards(mid: $mid){\n    id\n    properties{\n      name\n      area\n    }\n    geometry{\n      type\n      coordinates\n    }\n  }\n}\n"]);
+  var data = _taggedTemplateLiteral(["\nquery Wards($mid: String){\n  wards(mid: $mid){\n    id\n    properties{\n      name\n      area\n      total\n      male\n      female\n    }\n    geometry{\n      type\n      coordinates\n    }\n  }\n}\n"]);
 
   _templateObject2 = function _templateObject2() {
     return data;

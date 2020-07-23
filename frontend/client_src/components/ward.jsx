@@ -23,6 +23,9 @@ const Ward = ({ mid}) => {
                             <Popup>
                                 <h1>Name: {ward.properties.name}</h1>
                                 <h1>Area: {ward.properties.area} Sqm.</h1>
+                                <h1>Population: {ward.properties.total}</h1>
+                                <h1>Male: {ward.properties.male}</h1>
+                                <h1>Female: {ward.properties.female}</h1>
                             </Popup>
                         </Polygon>
                     )

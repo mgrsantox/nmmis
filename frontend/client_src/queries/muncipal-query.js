@@ -30,6 +30,9 @@ query Wards($mid: String){
     properties{
       name
       area
+      total
+      male
+      female
     }
     geometry{
       type

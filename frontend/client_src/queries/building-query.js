@@ -8,6 +8,16 @@ export const BUILDINGS_QUERY = gql`
                 name
                 catg
                 image
+                buildingNo
+                subCatg
+                landArea
+                buildArea
+                buildDate
+                roofType
+                floor
+                toilet
+                roadAccess
+                electAccess
             }
             geometry{
                 type
