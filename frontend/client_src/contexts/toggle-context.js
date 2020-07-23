@@ -6,7 +6,8 @@ import toggleReducer from '../reducers/toggle-reducer'
 
 const initialState = {
     toggle_place : false,
-    toggle_building:false
+    toggle_building:false,
+    toggle_road:false,
 }
 
 const ToggleContextProvider = (props)=>{
@@ -21,8 +22,13 @@ const ToggleContextProvider = (props)=>{
             type:TYPES.TOGGLE_BUILDING
         })
     };
+    const toggleRoad= () => {
+        dispatch({
+            type:TYPES.TOGGLE_ROAD
+        })
+    };
     return(
-        <ToggleContext.Provider value={{state, togglePlace, toggleBuilding}}>
+        <ToggleContext.Provider value={{state, togglePlace, toggleBuilding, toggleRoad}}>
             {props.children}
         </ToggleContext.Provider>
     )

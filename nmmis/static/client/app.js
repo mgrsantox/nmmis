@@ -326,6 +326,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _ward__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./ward */ "./frontend/client_src/components/ward.jsx");
 /* harmony import */ var _place__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./place */ "./frontend/client_src/components/place.jsx");
 /* harmony import */ var _building__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./building */ "./frontend/client_src/components/building.jsx");
+/* harmony import */ var _road__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./road */ "./frontend/client_src/components/road.jsx");
+
 
 
 
@@ -369,6 +371,8 @@ var MainMap = function MainMap() {
   }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_place__WEBPACK_IMPORTED_MODULE_5__["default"], {
     mid: mid
   }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_building__WEBPACK_IMPORTED_MODULE_6__["default"], {
+    mid: mid
+  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_road__WEBPACK_IMPORTED_MODULE_7__["default"], {
     mid: mid
   })));
 };
@@ -440,9 +444,7 @@ var Munciple = function Munciple(_ref) {
       setMunProp(data.municipal.properties);
     }
   });
-  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_leaflet__WEBPACK_IMPORTED_MODULE_1__["Marker"], {
-    position: [51.5, -0.1]
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_leaflet__WEBPACK_IMPORTED_MODULE_1__["Popup"], null, "Hello")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_leaflet__WEBPACK_IMPORTED_MODULE_1__["Polygon"], {
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_leaflet__WEBPACK_IMPORTED_MODULE_1__["Polygon"], {
     maxZoom: 20,
     color: "purple",
     positions: munCrd
@@ -502,6 +504,10 @@ var SideBar = function SideBar() {
     togglecontext.toggleBuilding();
   };
 
+  var handleChangeRoad = function handleChangeRoad(e) {
+    togglecontext.toggleRoad();
+  };
+
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
     type: "checkbox",
     onChange: handleChangePlace,
@@ -514,7 +520,13 @@ var SideBar = function SideBar() {
     checked: togglecontext.state.toggle_building
   }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", {
     htmlFor: "scales"
-  }, "Building"));
+  }, "Building"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+    type: "checkbox",
+    onChange: handleChangeRoad,
+    checked: togglecontext.state.toggle_road
+  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", {
+    htmlFor: "scales"
+  }, "Road"));
 };
 
 /* harmony default export */ __webpack_exports__["default"] = (SideBar);
@@ -590,6 +602,75 @@ var Place = function Place(_ref) {
 };
 
 /* harmony default export */ __webpack_exports__["default"] = (Place);
+
+/***/ }),
+
+/***/ "./frontend/client_src/components/road.jsx":
+/*!*************************************************!*\
+  !*** ./frontend/client_src/components/road.jsx ***!
+  \*************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _apollo_client__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @apollo/client */ "./node_modules/@apollo/client/index.js");
+/* harmony import */ var react_leaflet__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react-leaflet */ "./node_modules/react-leaflet/es/index.js");
+/* harmony import */ var _queries_muncipal_query__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../queries/muncipal-query */ "./frontend/client_src/queries/muncipal-query.js");
+/* harmony import */ var _contexts__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../contexts */ "./frontend/client_src/contexts/index.js");
+function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
+
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
+function _iterableToArrayLimit(arr, i) { if (typeof Symbol === "undefined" || !(Symbol.iterator in Object(arr))) return; var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
+
+function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+
+
+
+
+
+
+
+var Road = function Road(_ref) {
+  var mid = _ref.mid;
+  var togglecontext = Object(react__WEBPACK_IMPORTED_MODULE_0__["useContext"])(_contexts__WEBPACK_IMPORTED_MODULE_4__["ToggleContext"]);
+
+  var _useQuery = Object(_apollo_client__WEBPACK_IMPORTED_MODULE_1__["useQuery"])(_queries_muncipal_query__WEBPACK_IMPORTED_MODULE_3__["ROAD_QUERY"], {
+    variables: {
+      mid: mid
+    }
+  }),
+      loading = _useQuery.loading,
+      error = _useQuery.error,
+      data = _useQuery.data;
+
+  var _useState = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])([]),
+      _useState2 = _slicedToArray(_useState, 2),
+      roadsCrd = _useState2[0],
+      setRoadsCrd = _useState2[1];
+
+  Object(react__WEBPACK_IMPORTED_MODULE_0__["useEffect"])(function () {
+    if (!loading) {
+      setRoadsCrd(data.roads);
+    }
+  });
+  return togglecontext.state.toggle_road ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, roadsCrd.map(function (road) {
+    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_leaflet__WEBPACK_IMPORTED_MODULE_2__["Polyline"], {
+      color: "red",
+      key: road.id,
+      positions: road.geometry.coordinates
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_leaflet__WEBPACK_IMPORTED_MODULE_2__["Popup"], null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, road.properties.name)));
+  })) : '';
+};
+
+/* harmony default export */ __webpack_exports__["default"] = (Road);
 
 /***/ }),
 
@@ -772,7 +853,8 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 var initialState = {
   toggle_place: false,
-  toggle_building: false
+  toggle_building: false,
+  toggle_road: false
 };
 
 var ToggleContextProvider = function ToggleContextProvider(props) {
@@ -793,11 +875,18 @@ var ToggleContextProvider = function ToggleContextProvider(props) {
     });
   };
 
+  var toggleRoad = function toggleRoad() {
+    dispatch({
+      type: _reducers_action_types__WEBPACK_IMPORTED_MODULE_1__["TOGGLE_ROAD"]
+    });
+  };
+
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(___WEBPACK_IMPORTED_MODULE_2__["ToggleContext"].Provider, {
     value: {
       state: state,
       togglePlace: togglePlace,
-      toggleBuilding: toggleBuilding
+      toggleBuilding: toggleBuilding,
+      toggleRoad: toggleRoad
     }
   }, props.children);
 };
@@ -932,14 +1021,25 @@ var BUILDINGS_QUERY = Object(_apollo_client__WEBPACK_IMPORTED_MODULE_0__["gql"])
 /*!*******************************************************!*\
   !*** ./frontend/client_src/queries/muncipal-query.js ***!
   \*******************************************************/
-/*! exports provided: MUNICIPAL_QUERY, WARDS_QUERY */
+/*! exports provided: MUNICIPAL_QUERY, WARDS_QUERY, ROAD_QUERY */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "MUNICIPAL_QUERY", function() { return MUNICIPAL_QUERY; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "WARDS_QUERY", function() { return WARDS_QUERY; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ROAD_QUERY", function() { return ROAD_QUERY; });
 /* harmony import */ var _apollo_client__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @apollo/client */ "./node_modules/@apollo/client/index.js");
+function _templateObject3() {
+  var data = _taggedTemplateLiteral(["\nquery Roads($mid: String){\n  roads(mid: $mid){\n    id\n    properties{\n      name\n    }\n    geometry{\n      type\n      coordinates\n    }\n  }\n}\n"]);
+
+  _templateObject3 = function _templateObject3() {
+    return data;
+  };
+
+  return data;
+}
+
 function _templateObject2() {
   var data = _taggedTemplateLiteral(["\nquery Wards($mid: String){\n  wards(mid: $mid){\n    id\n    properties{\n      name\n      area\n      total\n      male\n      female\n    }\n    geometry{\n      type\n      coordinates\n    }\n  }\n}\n"]);
 
@@ -965,6 +1065,7 @@ function _taggedTemplateLiteral(strings, raw) { if (!raw) { raw = strings.slice(
 
 var MUNICIPAL_QUERY = Object(_apollo_client__WEBPACK_IMPORTED_MODULE_0__["gql"])(_templateObject());
 var WARDS_QUERY = Object(_apollo_client__WEBPACK_IMPORTED_MODULE_0__["gql"])(_templateObject2());
+var ROAD_QUERY = Object(_apollo_client__WEBPACK_IMPORTED_MODULE_0__["gql"])(_templateObject3());
 
 /***/ }),
 
@@ -1000,7 +1101,7 @@ var PLACES_QUERY = Object(_apollo_client__WEBPACK_IMPORTED_MODULE_0__["gql"])(_t
 /*!******************************************************!*\
   !*** ./frontend/client_src/reducers/action-types.js ***!
   \******************************************************/
-/*! exports provided: ON_ZOOMED, SET_CENTER, TOGGLE_PLACE, TOGGLE_BUILDING */
+/*! exports provided: ON_ZOOMED, SET_CENTER, TOGGLE_PLACE, TOGGLE_BUILDING, TOGGLE_ROAD */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1009,10 +1110,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SET_CENTER", function() { return SET_CENTER; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "TOGGLE_PLACE", function() { return TOGGLE_PLACE; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "TOGGLE_BUILDING", function() { return TOGGLE_BUILDING; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "TOGGLE_ROAD", function() { return TOGGLE_ROAD; });
 var ON_ZOOMED = 'ON_ZOOMED';
 var SET_CENTER = 'SET_CENTER';
 var TOGGLE_PLACE = 'TOGGLE_PLACE';
 var TOGGLE_BUILDING = 'TOGGLE_BUILDING';
+var TOGGLE_ROAD = 'TOGGLE_ROAD';
 
 /***/ }),
 
@@ -1078,6 +1181,11 @@ var toggleReducer = function toggleReducer(state, action) {
     case _action_types__WEBPACK_IMPORTED_MODULE_0__["TOGGLE_BUILDING"]:
       return _objectSpread(_objectSpread({}, state), {}, {
         toggle_building: !state.toggle_building
+      });
+
+    case _action_types__WEBPACK_IMPORTED_MODULE_0__["TOGGLE_ROAD"]:
+      return _objectSpread(_objectSpread({}, state), {}, {
+        toggle_road: !state.toggle_road
       });
 
     default:

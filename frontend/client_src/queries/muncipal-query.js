@@ -41,3 +41,18 @@ query Wards($mid: String){
   }
 }
 `;
+
+export const ROAD_QUERY = gql`
+query Roads($mid: String){
+  roads(mid: $mid){
+    id
+    properties{
+      name
+    }
+    geometry{
+      type
+      coordinates
+    }
+  }
+}
+`;

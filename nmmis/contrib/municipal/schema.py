@@ -1,7 +1,7 @@
 import graphene
 # from graphene_django import DjangoObjectType
 import graphql_geojson
-from nmmis.contrib.municipal.models import Municipal, Ward
+from nmmis.contrib.municipal.models import Municipal, Ward, Road
 
 
 class MunicipalType(graphql_geojson.GeoJSONType):
@@ -14,6 +14,11 @@ class WardType(graphql_geojson.GeoJSONType):
         model = Ward
         geojson_field = 'geom'
 
+class RoadType(graphql_geojson.GeoJSONType):
+    class Meta:
+        model = Road
+        geojson_field = 'geom'
+
 
 class Query(graphene.ObjectType):
     allmunicipals = graphene.List(MunicipalType)
@@ -22,6 +27,10 @@ class Query(graphene.ObjectType):
 
     wards = graphene.List(WardType, mid=graphene.String())
     ward = graphene.Field(WardType, wid=graphene.String())
+
+    roads = graphene.List(RoadType, mid=graphene.String())
+    road = graphene.List(RoadType, wid=graphene.String())
+    # road = graphene.Field(RoadType, wid=graphene.String())
 
     def resolve_allmunicipals(self, info, *args, **kwargs):
         return Municipal.objects.filter(district__province__country__name="Nepal")
@@ -39,3 +48,9 @@ class Query(graphene.ObjectType):
     
     def resolve_ward(self, info, wid, *args, **kwargs):
         return Ward.objects.get(id=wid)
+    
+    def resolve_roads(self, info, mid, *args, **kwargs):
+        return Road.objects.filter(ward__municipal__id=mid)
+    
+    def resolve_road(self, info, wid, *args, **kwargs):
+        return Road.objects.filter(ward__id=wid)

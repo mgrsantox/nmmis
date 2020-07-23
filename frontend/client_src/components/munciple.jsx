@@ -21,9 +21,6 @@ const Munciple = ({ mid }) => {
     });
     return (
         <div>
-            <Marker position={[51.5, -0.1]}>
-                <Popup>Hello</Popup>
-            </Marker>
             <Polygon maxZoom={20} color="purple" positions={munCrd} >
                 <Popup>
                     <MunPopChart mundata={munProp} />

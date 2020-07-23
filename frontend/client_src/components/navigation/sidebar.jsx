@@ -9,6 +9,9 @@ const SideBar = () => {
     const handleChangeBuilding = (e)=>{
         togglecontext.toggleBuilding()
     }
+    const handleChangeRoad = (e)=>{
+        togglecontext.toggleRoad()
+    }
     return (
         <div>
             <input type="checkbox" onChange={handleChangePlace} checked={togglecontext.state.toggle_place} />
@@ -16,6 +19,9 @@ const SideBar = () => {
             <br/>
             <input type="checkbox" onChange={handleChangeBuilding} checked={togglecontext.state.toggle_building} />
             <label htmlFor="scales">Building</label>
+            <br/>
+            <input type="checkbox" onChange={handleChangeRoad} checked={togglecontext.state.toggle_road} />
+            <label htmlFor="scales">Road</label>
         </div>
     )
 }

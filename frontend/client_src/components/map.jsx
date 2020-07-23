@@ -5,6 +5,7 @@ import Munciple from './munciple';
 import Ward from './ward';
 import Place from './place';
 import Building from './building';
+import Road from './road';
 
 
 const { BaseLayer, Overlay } = LayersControl
@@ -32,6 +33,7 @@ const MainMap = () => {
                 {zoomcontext.state.zoom <=12 ? <Munciple mid={mid}></Munciple> : <Ward mid={mid}></Ward>}
                 <Place mid={mid}></Place>
                 <Building mid={mid}></Building>
+                <Road mid={mid}></Road>
             </LayersControl>
         </Map>
     )

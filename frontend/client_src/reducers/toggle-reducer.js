@@ -12,6 +12,11 @@ const toggleReducer =(state, action)=>{
                 ...state,
                 toggle_building: !state.toggle_building
             }
+            case TYPES.TOGGLE_ROAD:
+                return{
+                    ...state,
+                    toggle_road: !state.toggle_road
+                }
         default:
             return state;
     }

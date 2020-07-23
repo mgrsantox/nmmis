@@ -47,3 +47,27 @@ class Ward(Population, TimeStamped):
 
     def __str__(self):
         return self.name
+    
+class Road(TimeStamped):
+    """
+    Class that describe the Road
+    """
+    id = models.CharField(
+        primary_key=True, default=aphnum_random,
+        max_length=12, editable=False)
+    ward = models.ForeignKey(Ward, on_delete=models.CASCADE)
+    name = models.CharField(max_length=80)
+    type = models.CharField(max_length=100)
+    surface = models.CharField(max_length=100)
+    length = models.IntegerField()
+    width = models.IntegerField()
+    geom = models.LineStringField(srid=4326)
+
+    class Meta:
+        ordering = ['id']
+        db_table = "road"
+        verbose_name = "Road"
+        verbose_name_plural = "Roads"
+
+    def __str__(self):
+        return self.name
