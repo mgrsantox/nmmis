@@ -113,6 +113,78 @@ var App = function App() {
 
 /***/ }),
 
+/***/ "./frontend/client_src/components/building.jsx":
+/*!*****************************************************!*\
+  !*** ./frontend/client_src/components/building.jsx ***!
+  \*****************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _apollo_client__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @apollo/client */ "./node_modules/@apollo/client/index.js");
+/* harmony import */ var react_leaflet__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react-leaflet */ "./node_modules/react-leaflet/es/index.js");
+/* harmony import */ var _queries_building_query__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../queries/building-query */ "./frontend/client_src/queries/building-query.js");
+/* harmony import */ var _contexts__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../contexts */ "./frontend/client_src/contexts/index.js");
+function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
+
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
+function _iterableToArrayLimit(arr, i) { if (typeof Symbol === "undefined" || !(Symbol.iterator in Object(arr))) return; var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
+
+function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+
+
+
+
+
+
+
+var Building = function Building(_ref) {
+  var mid = _ref.mid;
+
+  var _useState = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])([]),
+      _useState2 = _slicedToArray(_useState, 2),
+      buildingsCrd = _useState2[0],
+      setBuildingsCrd = _useState2[1];
+
+  var togglecontext = Object(react__WEBPACK_IMPORTED_MODULE_0__["useContext"])(_contexts__WEBPACK_IMPORTED_MODULE_4__["ToggleContext"]);
+
+  var _useQuery = Object(_apollo_client__WEBPACK_IMPORTED_MODULE_1__["useQuery"])(_queries_building_query__WEBPACK_IMPORTED_MODULE_3__["BUILDINGS_QUERY"], {
+    variables: {
+      mid: mid
+    }
+  }),
+      loading = _useQuery.loading,
+      error = _useQuery.error,
+      data = _useQuery.data;
+
+  Object(react__WEBPACK_IMPORTED_MODULE_0__["useEffect"])(function () {
+    if (!loading) {
+      setBuildingsCrd(data.buildings);
+    }
+  });
+  return togglecontext.state.toggle_building ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, buildingsCrd.map(function (building) {
+    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_leaflet__WEBPACK_IMPORTED_MODULE_2__["Marker"], {
+      key: building.id,
+      position: building.geometry.coordinates
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_leaflet__WEBPACK_IMPORTED_MODULE_2__["Popup"], null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, "Building Name: ", building.properties.name), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
+      src: building.properties.image,
+      alt: "Building Image"
+    })));
+  })) : '';
+};
+
+/* harmony default export */ __webpack_exports__["default"] = (Building);
+
+/***/ }),
+
 /***/ "./frontend/client_src/components/info-chart/municipal/pop-chart.jsx":
 /*!***************************************************************************!*\
   !*** ./frontend/client_src/components/info-chart/municipal/pop-chart.jsx ***!
@@ -190,6 +262,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _munciple__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./munciple */ "./frontend/client_src/components/munciple.jsx");
 /* harmony import */ var _ward__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./ward */ "./frontend/client_src/components/ward.jsx");
 /* harmony import */ var _place__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./place */ "./frontend/client_src/components/place.jsx");
+/* harmony import */ var _building__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./building */ "./frontend/client_src/components/building.jsx");
+
 
 
 
@@ -230,6 +304,8 @@ var MainMap = function MainMap() {
   }) : /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_ward__WEBPACK_IMPORTED_MODULE_4__["default"], {
     mid: mid
   }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_place__WEBPACK_IMPORTED_MODULE_5__["default"], {
+    mid: mid
+  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_building__WEBPACK_IMPORTED_MODULE_6__["default"], {
     mid: mid
   })));
 };
@@ -355,17 +431,27 @@ __webpack_require__.r(__webpack_exports__);
 var SideBar = function SideBar() {
   var togglecontext = Object(react__WEBPACK_IMPORTED_MODULE_0__["useContext"])(_contexts__WEBPACK_IMPORTED_MODULE_1__["ToggleContext"]);
 
-  var handleChange = function handleChange(e) {
+  var handleChangePlace = function handleChangePlace(e) {
     togglecontext.togglePlace();
+  };
+
+  var handleChangeBuilding = function handleChangeBuilding(e) {
+    togglecontext.toggleBuilding();
   };
 
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
     type: "checkbox",
-    onChange: handleChange,
+    onChange: handleChangePlace,
     checked: togglecontext.state.toggle_place
   }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", {
     htmlFor: "scales"
-  }, "Places"));
+  }, "Places"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+    type: "checkbox",
+    onChange: handleChangeBuilding,
+    checked: togglecontext.state.toggle_building
+  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", {
+    htmlFor: "scales"
+  }, "Building"));
 };
 
 /* harmony default export */ __webpack_exports__["default"] = (SideBar);
@@ -433,7 +519,7 @@ var Place = function Place(_ref) {
     return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_leaflet__WEBPACK_IMPORTED_MODULE_1__["Marker"], {
       key: place.id,
       position: place.geometry.coordinates
-    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_leaflet__WEBPACK_IMPORTED_MODULE_1__["Popup"], null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, place.properties.name), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_leaflet__WEBPACK_IMPORTED_MODULE_1__["Popup"], null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, "Place Name:", place.properties.name), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
       src: place.properties.image,
       alt: "Place"
     })));
@@ -622,7 +708,8 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 
 var initialState = {
-  toggle_place: false
+  toggle_place: false,
+  toggle_building: false
 };
 
 var ToggleContextProvider = function ToggleContextProvider(props) {
@@ -637,10 +724,17 @@ var ToggleContextProvider = function ToggleContextProvider(props) {
     });
   };
 
+  var toggleBuilding = function toggleBuilding() {
+    dispatch({
+      type: _reducers_action_types__WEBPACK_IMPORTED_MODULE_1__["TOGGLE_BUILDING"]
+    });
+  };
+
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(___WEBPACK_IMPORTED_MODULE_2__["ToggleContext"].Provider, {
     value: {
       state: state,
-      togglePlace: togglePlace
+      togglePlace: togglePlace,
+      toggleBuilding: toggleBuilding
     }
   }, props.children);
 };
@@ -743,6 +837,34 @@ react_dom__WEBPACK_IMPORTED_MODULE_1___default.a.render( /*#__PURE__*/react__WEB
 
 /***/ }),
 
+/***/ "./frontend/client_src/queries/building-query.js":
+/*!*******************************************************!*\
+  !*** ./frontend/client_src/queries/building-query.js ***!
+  \*******************************************************/
+/*! exports provided: BUILDINGS_QUERY */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "BUILDINGS_QUERY", function() { return BUILDINGS_QUERY; });
+/* harmony import */ var _apollo_client__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @apollo/client */ "./node_modules/@apollo/client/index.js");
+function _templateObject() {
+  var data = _taggedTemplateLiteral(["\n    query Buildings($mid: String){\n        buildings(mid: $mid){\n            id\n            properties{\n                name\n                catg\n                image\n            }\n            geometry{\n                type\n                coordinates\n            }\n        }\n    }\n"]);
+
+  _templateObject = function _templateObject() {
+    return data;
+  };
+
+  return data;
+}
+
+function _taggedTemplateLiteral(strings, raw) { if (!raw) { raw = strings.slice(0); } return Object.freeze(Object.defineProperties(strings, { raw: { value: Object.freeze(raw) } })); }
+
+
+var BUILDINGS_QUERY = Object(_apollo_client__WEBPACK_IMPORTED_MODULE_0__["gql"])(_templateObject());
+
+/***/ }),
+
 /***/ "./frontend/client_src/queries/muncipal-query.js":
 /*!*******************************************************!*\
   !*** ./frontend/client_src/queries/muncipal-query.js ***!
@@ -815,7 +937,7 @@ var PLACES_QUERY = Object(_apollo_client__WEBPACK_IMPORTED_MODULE_0__["gql"])(_t
 /*!******************************************************!*\
   !*** ./frontend/client_src/reducers/action-types.js ***!
   \******************************************************/
-/*! exports provided: ON_ZOOMED, SET_CENTER, TOGGLE_PLACE */
+/*! exports provided: ON_ZOOMED, SET_CENTER, TOGGLE_PLACE, TOGGLE_BUILDING */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -823,9 +945,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ON_ZOOMED", function() { return ON_ZOOMED; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SET_CENTER", function() { return SET_CENTER; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "TOGGLE_PLACE", function() { return TOGGLE_PLACE; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "TOGGLE_BUILDING", function() { return TOGGLE_BUILDING; });
 var ON_ZOOMED = 'ON_ZOOMED';
 var SET_CENTER = 'SET_CENTER';
 var TOGGLE_PLACE = 'TOGGLE_PLACE';
+var TOGGLE_BUILDING = 'TOGGLE_BUILDING';
 
 /***/ }),
 
@@ -886,6 +1010,11 @@ var toggleReducer = function toggleReducer(state, action) {
     case _action_types__WEBPACK_IMPORTED_MODULE_0__["TOGGLE_PLACE"]:
       return _objectSpread(_objectSpread({}, state), {}, {
         toggle_place: !state.toggle_place
+      });
+
+    case _action_types__WEBPACK_IMPORTED_MODULE_0__["TOGGLE_BUILDING"]:
+      return _objectSpread(_objectSpread({}, state), {}, {
+        toggle_building: !state.toggle_building
       });
 
     default:

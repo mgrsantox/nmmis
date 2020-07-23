@@ -4,6 +4,7 @@ import { ZoomContext, CenterContext } from '../contexts';
 import Munciple from './munciple';
 import Ward from './ward';
 import Place from './place';
+import Building from './building';
 
 
 const { BaseLayer, Overlay } = LayersControl
@@ -30,6 +31,7 @@ const MainMap = () => {
                 </BaseLayer>
                 {zoomcontext.state.zoom <=12 ? <Munciple mid={mid}></Munciple> : <Ward mid={mid}></Ward>}
                 <Place mid={mid}></Place>
+                <Building mid={mid}></Building>
             </LayersControl>
         </Map>
     )

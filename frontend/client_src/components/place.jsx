@@ -25,7 +25,7 @@ const Place = ({ mid }) => {
                     return (
                         <Marker key={place.id} position={place.geometry.coordinates}>
                             <Popup>
-                                <h1>{place.properties.name}</h1>
+                                <h1>Place Name:{place.properties.name}</h1>
                                 <img src={place.properties.image} alt="Place"/>
                                 </Popup>
                         </Marker>

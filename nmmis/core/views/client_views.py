@@ -5,16 +5,17 @@ import geopandas as gpd
 from django.contrib.gis.gdal import DataSource
 from nmmis.contrib.province.models import Province
 from nmmis.contrib.municipal.models import Municipal, Ward
+from nmmis.contrib.building.models import Building
 
 from django.contrib.gis.gdal import OGRGeometry
 
 
 class Index(TemplateView):
     # Data Load from Splited Boundary
-    # d = Ward.objects.get(id="NJPJ2ngWa3")
-    df = DataSource(
-        '/home/mgrsantox/Desktop/projects/nmmis/nmmis/core/views/data/building_pts.shp')
-    layer = df[0]
+    # d = Building.objects.get(id="5jOSNo4jDrAB")
+    # df = DataSource(
+    #     '/home/mgrsantox/Desktop/projects/nmmis/nmmis/core/views/data/building_pts.shp')
+    # layer = df[0]
     # for i in layer.get_geoms():
         # print(str(i))
     #     n = GEOSGeometry(str(i), srid=4326).transform(3857, clone=True).ewkt
@@ -29,9 +30,9 @@ class Index(TemplateView):
     #     d.geom = n
     #     d.save()
     # print(layer)
-    new_layer = layer[0].geom.clone()
-    new_layer.coord_dim = 2
-    n = GEOSGeometry(str(new_layer), srid=4326).transform(3857, clone=True).ewkt
+    # new_layer = layer[2].geom.clone()
+    # new_layer.coord_dim = 2
+    # n = GEOSGeometry(str(new_layer), srid=4326).transform(3857, clone=True).ewkt
     # d.geom = n
     # d.save()
 
