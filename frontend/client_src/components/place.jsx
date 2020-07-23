@@ -2,12 +2,10 @@ import React, { useState, useEffect, useContext } from 'react'
 import { Marker, Popup } from 'react-leaflet'
 import { useQuery } from '@apollo/client';
 import { PLACES_QUERY } from '../queries/place-query'
-import { ToggleContext } from '../contexts';
 
 
 const Place = ({ mid }) => {
     const [placesCrd, setPlacesCrd] = useState([]);
-    const togglecontext = useContext(ToggleContext);
 
     const { loading, error, data } = useQuery(PLACES_QUERY, {
         variables: { mid },
@@ -18,7 +16,7 @@ const Place = ({ mid }) => {
             setPlacesCrd(data.places);
         }
     });
-    return togglecontext.state.toggle_place? (
+    return(
         <div>
             {
                 placesCrd.map(place => {
@@ -33,7 +31,7 @@ const Place = ({ mid }) => {
                 })
             }
         </div>
-    ):''
+    )
 }
 
 export default Place;

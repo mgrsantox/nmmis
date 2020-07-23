@@ -56,3 +56,33 @@ query Roads($mid: String){
   }
 }
 `;
+
+export const TELECOM_QUERY = gql`
+query Telecoms($mid: String){
+  telecoms(mid: $mid){
+    id
+    properties{
+      type
+    }
+    geometry{
+      type
+      coordinates
+    }
+  }
+}
+`;
+
+export const TRANSFORMER_QUERY = gql`
+query Transformers($mid: String){
+  transformers(mid: $mid){
+    id
+    properties{
+      type
+    }
+    geometry{
+      type
+      coordinates
+    }
+  }
+}
+`;

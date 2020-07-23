@@ -127,8 +127,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _apollo_client__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @apollo/client */ "./node_modules/@apollo/client/index.js");
 /* harmony import */ var react_leaflet__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react-leaflet */ "./node_modules/react-leaflet/es/index.js");
 /* harmony import */ var _queries_building_query__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../queries/building-query */ "./frontend/client_src/queries/building-query.js");
-/* harmony import */ var _contexts__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../contexts */ "./frontend/client_src/contexts/index.js");
-/* harmony import */ var _icon_building_icon__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./icon/building-icon */ "./frontend/client_src/components/icon/building-icon.js");
+/* harmony import */ var _icon_building_icon__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./icon/building-icon */ "./frontend/client_src/components/icon/building-icon.js");
 function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
 
 function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
@@ -147,7 +146,6 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 
 
-
 var Building = function Building(_ref) {
   var mid = _ref.mid;
 
@@ -155,8 +153,6 @@ var Building = function Building(_ref) {
       _useState2 = _slicedToArray(_useState, 2),
       buildingsCrd = _useState2[0],
       setBuildingsCrd = _useState2[1];
-
-  var togglecontext = Object(react__WEBPACK_IMPORTED_MODULE_0__["useContext"])(_contexts__WEBPACK_IMPORTED_MODULE_4__["ToggleContext"]);
 
   var _useQuery = Object(_apollo_client__WEBPACK_IMPORTED_MODULE_1__["useQuery"])(_queries_building_query__WEBPACK_IMPORTED_MODULE_3__["BUILDINGS_QUERY"], {
     variables: {
@@ -170,13 +166,13 @@ var Building = function Building(_ref) {
   var handleIcon = function handleIcon(catg) {
     switch (catg) {
       case "School":
-        return _icon_building_icon__WEBPACK_IMPORTED_MODULE_5__["schoolIcon"];
+        return _icon_building_icon__WEBPACK_IMPORTED_MODULE_4__["schoolIcon"];
 
       case "Finance":
-        return _icon_building_icon__WEBPACK_IMPORTED_MODULE_5__["bankIcon"];
+        return _icon_building_icon__WEBPACK_IMPORTED_MODULE_4__["bankIcon"];
 
       default:
-        return _icon_building_icon__WEBPACK_IMPORTED_MODULE_5__["houseIcon"];
+        return _icon_building_icon__WEBPACK_IMPORTED_MODULE_4__["houseIcon"];
     }
   };
 
@@ -185,7 +181,7 @@ var Building = function Building(_ref) {
       setBuildingsCrd(data.buildings);
     }
   });
-  return togglecontext.state.toggle_building ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, buildingsCrd.map(function (building) {
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, buildingsCrd.map(function (building) {
     return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_leaflet__WEBPACK_IMPORTED_MODULE_2__["Marker"], {
       key: building.id,
       icon: handleIcon(building.properties.catg),
@@ -194,7 +190,7 @@ var Building = function Building(_ref) {
       src: building.properties.image,
       alt: "Building Image"
     })));
-  })) : '';
+  }));
 };
 
 /* harmony default export */ __webpack_exports__["default"] = (Building);
@@ -327,6 +323,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _place__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./place */ "./frontend/client_src/components/place.jsx");
 /* harmony import */ var _building__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./building */ "./frontend/client_src/components/building.jsx");
 /* harmony import */ var _road__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./road */ "./frontend/client_src/components/road.jsx");
+/* harmony import */ var _telecom__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./telecom */ "./frontend/client_src/components/telecom.jsx");
+/* harmony import */ var _transformer__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./transformer */ "./frontend/client_src/components/transformer.jsx");
+
+
 
 
 
@@ -341,6 +341,7 @@ var mid = 'iaEL7GVAzOtRL';
 
 var MainMap = function MainMap() {
   var zoomcontext = Object(react__WEBPACK_IMPORTED_MODULE_0__["useContext"])(_contexts__WEBPACK_IMPORTED_MODULE_2__["ZoomContext"]);
+  var togglecontext = Object(react__WEBPACK_IMPORTED_MODULE_0__["useContext"])(_contexts__WEBPACK_IMPORTED_MODULE_2__["ToggleContext"]);
   var centercontext = Object(react__WEBPACK_IMPORTED_MODULE_0__["useContext"])(_contexts__WEBPACK_IMPORTED_MODULE_2__["CenterContext"]);
 
   var handleViewPort = function handleViewPort(e) {
@@ -368,13 +369,17 @@ var MainMap = function MainMap() {
     mid: mid
   }) : /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_ward__WEBPACK_IMPORTED_MODULE_4__["default"], {
     mid: mid
-  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_place__WEBPACK_IMPORTED_MODULE_5__["default"], {
+  }), togglecontext.state.toggle_place ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_place__WEBPACK_IMPORTED_MODULE_5__["default"], {
     mid: mid
-  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_building__WEBPACK_IMPORTED_MODULE_6__["default"], {
+  }) : null, togglecontext.state.toggle_building ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_building__WEBPACK_IMPORTED_MODULE_6__["default"], {
     mid: mid
-  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_road__WEBPACK_IMPORTED_MODULE_7__["default"], {
+  }) : null, togglecontext.state.toggle_road ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_road__WEBPACK_IMPORTED_MODULE_7__["default"], {
     mid: mid
-  })));
+  }) : null, togglecontext.state.toggle_telecom ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_telecom__WEBPACK_IMPORTED_MODULE_8__["default"], {
+    mid: mid
+  }) : null, togglecontext.state.toggle_transformer ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_transformer__WEBPACK_IMPORTED_MODULE_9__["default"], {
+    mid: mid
+  }) : null));
 };
 
 /* harmony default export */ __webpack_exports__["default"] = (MainMap);
@@ -508,6 +513,14 @@ var SideBar = function SideBar() {
     togglecontext.toggleRoad();
   };
 
+  var handleChangeTelecom = function handleChangeTelecom(e) {
+    togglecontext.toggleTelecom();
+  };
+
+  var handleChangeTrasformer = function handleChangeTrasformer(e) {
+    togglecontext.toggleTransformer();
+  };
+
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
     type: "checkbox",
     onChange: handleChangePlace,
@@ -526,7 +539,19 @@ var SideBar = function SideBar() {
     checked: togglecontext.state.toggle_road
   }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", {
     htmlFor: "scales"
-  }, "Road"));
+  }, "Road"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+    type: "checkbox",
+    onChange: handleChangeTelecom,
+    checked: togglecontext.state.toggle_telecom
+  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", {
+    htmlFor: "scales"
+  }, "Telecom"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+    type: "checkbox",
+    onChange: handleChangeTrasformer,
+    checked: togglecontext.state.toggle_transformer
+  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", {
+    htmlFor: "scales"
+  }, "Trasnformer"));
 };
 
 /* harmony default export */ __webpack_exports__["default"] = (SideBar);
@@ -547,7 +572,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react_leaflet__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-leaflet */ "./node_modules/react-leaflet/es/index.js");
 /* harmony import */ var _apollo_client__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @apollo/client */ "./node_modules/@apollo/client/index.js");
 /* harmony import */ var _queries_place_query__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../queries/place-query */ "./frontend/client_src/queries/place-query.js");
-/* harmony import */ var _contexts__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../contexts */ "./frontend/client_src/contexts/index.js");
 function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
 
 function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
@@ -565,7 +589,6 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 
 
-
 var Place = function Place(_ref) {
   var mid = _ref.mid;
 
@@ -573,8 +596,6 @@ var Place = function Place(_ref) {
       _useState2 = _slicedToArray(_useState, 2),
       placesCrd = _useState2[0],
       setPlacesCrd = _useState2[1];
-
-  var togglecontext = Object(react__WEBPACK_IMPORTED_MODULE_0__["useContext"])(_contexts__WEBPACK_IMPORTED_MODULE_4__["ToggleContext"]);
 
   var _useQuery = Object(_apollo_client__WEBPACK_IMPORTED_MODULE_2__["useQuery"])(_queries_place_query__WEBPACK_IMPORTED_MODULE_3__["PLACES_QUERY"], {
     variables: {
@@ -590,7 +611,7 @@ var Place = function Place(_ref) {
       setPlacesCrd(data.places);
     }
   });
-  return togglecontext.state.toggle_place ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, placesCrd.map(function (place) {
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, placesCrd.map(function (place) {
     return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_leaflet__WEBPACK_IMPORTED_MODULE_1__["Marker"], {
       key: place.id,
       position: place.geometry.coordinates
@@ -598,7 +619,7 @@ var Place = function Place(_ref) {
       src: place.properties.image,
       alt: "Place"
     })));
-  })) : '';
+  }));
 };
 
 /* harmony default export */ __webpack_exports__["default"] = (Place);
@@ -619,7 +640,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _apollo_client__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @apollo/client */ "./node_modules/@apollo/client/index.js");
 /* harmony import */ var react_leaflet__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react-leaflet */ "./node_modules/react-leaflet/es/index.js");
 /* harmony import */ var _queries_muncipal_query__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../queries/muncipal-query */ "./frontend/client_src/queries/muncipal-query.js");
-/* harmony import */ var _contexts__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../contexts */ "./frontend/client_src/contexts/index.js");
 function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
 
 function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
@@ -637,10 +657,8 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 
 
-
 var Road = function Road(_ref) {
   var mid = _ref.mid;
-  var togglecontext = Object(react__WEBPACK_IMPORTED_MODULE_0__["useContext"])(_contexts__WEBPACK_IMPORTED_MODULE_4__["ToggleContext"]);
 
   var _useQuery = Object(_apollo_client__WEBPACK_IMPORTED_MODULE_1__["useQuery"])(_queries_muncipal_query__WEBPACK_IMPORTED_MODULE_3__["ROAD_QUERY"], {
     variables: {
@@ -661,16 +679,152 @@ var Road = function Road(_ref) {
       setRoadsCrd(data.roads);
     }
   });
-  return togglecontext.state.toggle_road ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, roadsCrd.map(function (road) {
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, roadsCrd.map(function (road) {
     return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_leaflet__WEBPACK_IMPORTED_MODULE_2__["Polyline"], {
       color: "red",
       key: road.id,
       positions: road.geometry.coordinates
     }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_leaflet__WEBPACK_IMPORTED_MODULE_2__["Popup"], null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, road.properties.name)));
-  })) : '';
+  }));
 };
 
 /* harmony default export */ __webpack_exports__["default"] = (Road);
+
+/***/ }),
+
+/***/ "./frontend/client_src/components/telecom.jsx":
+/*!****************************************************!*\
+  !*** ./frontend/client_src/components/telecom.jsx ***!
+  \****************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _apollo_client__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @apollo/client */ "./node_modules/@apollo/client/index.js");
+/* harmony import */ var react_leaflet__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react-leaflet */ "./node_modules/react-leaflet/es/index.js");
+/* harmony import */ var _queries_muncipal_query__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../queries/muncipal-query */ "./frontend/client_src/queries/muncipal-query.js");
+function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
+
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
+function _iterableToArrayLimit(arr, i) { if (typeof Symbol === "undefined" || !(Symbol.iterator in Object(arr))) return; var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
+
+function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+
+
+
+
+
+
+var Telecom = function Telecom(_ref) {
+  var mid = _ref.mid;
+
+  var _useState = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])([]),
+      _useState2 = _slicedToArray(_useState, 2),
+      telecoms = _useState2[0],
+      setTelecoms = _useState2[1];
+
+  var _useQuery = Object(_apollo_client__WEBPACK_IMPORTED_MODULE_1__["useQuery"])(_queries_muncipal_query__WEBPACK_IMPORTED_MODULE_3__["TELECOM_QUERY"], {
+    variables: {
+      mid: mid
+    }
+  }),
+      loading = _useQuery.loading,
+      error = _useQuery.error,
+      data = _useQuery.data;
+
+  Object(react__WEBPACK_IMPORTED_MODULE_0__["useEffect"])(function () {
+    if (!loading) {
+      setTelecoms(data.telecoms);
+    }
+  });
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, telecoms.map(function (telecom) {
+    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_leaflet__WEBPACK_IMPORTED_MODULE_2__["Marker"], {
+      key: telecom.id,
+      position: telecom.geometry.coordinates
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_leaflet__WEBPACK_IMPORTED_MODULE_2__["Popup"], null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, "Type Name:", telecom.properties.type), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
+      src: telecom.properties.image,
+      alt: "Telecom"
+    })));
+  }));
+};
+
+/* harmony default export */ __webpack_exports__["default"] = (Telecom);
+
+/***/ }),
+
+/***/ "./frontend/client_src/components/transformer.jsx":
+/*!********************************************************!*\
+  !*** ./frontend/client_src/components/transformer.jsx ***!
+  \********************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _apollo_client__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @apollo/client */ "./node_modules/@apollo/client/index.js");
+/* harmony import */ var react_leaflet__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react-leaflet */ "./node_modules/react-leaflet/es/index.js");
+/* harmony import */ var _queries_muncipal_query__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../queries/muncipal-query */ "./frontend/client_src/queries/muncipal-query.js");
+function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
+
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
+function _iterableToArrayLimit(arr, i) { if (typeof Symbol === "undefined" || !(Symbol.iterator in Object(arr))) return; var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
+
+function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+
+
+
+
+
+
+var Transformer = function Transformer(_ref) {
+  var mid = _ref.mid;
+
+  var _useState = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])([]),
+      _useState2 = _slicedToArray(_useState, 2),
+      transformers = _useState2[0],
+      setTransformers = _useState2[1];
+
+  var _useQuery = Object(_apollo_client__WEBPACK_IMPORTED_MODULE_1__["useQuery"])(_queries_muncipal_query__WEBPACK_IMPORTED_MODULE_3__["TRANSFORMER_QUERY"], {
+    variables: {
+      mid: mid
+    }
+  }),
+      loading = _useQuery.loading,
+      error = _useQuery.error,
+      data = _useQuery.data;
+
+  Object(react__WEBPACK_IMPORTED_MODULE_0__["useEffect"])(function () {
+    if (!loading) {
+      setTransformers(data.transformers);
+    }
+  });
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, transformers.map(function (transformer) {
+    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_leaflet__WEBPACK_IMPORTED_MODULE_2__["Marker"], {
+      key: transformer.id,
+      position: transformer.geometry.coordinates
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_leaflet__WEBPACK_IMPORTED_MODULE_2__["Popup"], null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, "Type Name:", transformer.properties.type), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
+      src: transformer.properties.image,
+      alt: "Transformer"
+    })));
+  }));
+};
+
+/* harmony default export */ __webpack_exports__["default"] = (Transformer);
 
 /***/ }),
 
@@ -857,7 +1011,9 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 var initialState = {
   toggle_place: false,
   toggle_building: false,
-  toggle_road: false
+  toggle_road: false,
+  toggle_telecom: false,
+  toggle_transformer: false
 };
 
 var ToggleContextProvider = function ToggleContextProvider(props) {
@@ -884,12 +1040,26 @@ var ToggleContextProvider = function ToggleContextProvider(props) {
     });
   };
 
+  var toggleTelecom = function toggleTelecom() {
+    dispatch({
+      type: _reducers_action_types__WEBPACK_IMPORTED_MODULE_1__["TOGGLE_TELECOM"]
+    });
+  };
+
+  var toggleTransformer = function toggleTransformer() {
+    dispatch({
+      type: _reducers_action_types__WEBPACK_IMPORTED_MODULE_1__["TOGGLE_TRANSFORMER"]
+    });
+  };
+
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(___WEBPACK_IMPORTED_MODULE_2__["ToggleContext"].Provider, {
     value: {
       state: state,
       togglePlace: togglePlace,
       toggleBuilding: toggleBuilding,
-      toggleRoad: toggleRoad
+      toggleRoad: toggleRoad,
+      toggleTelecom: toggleTelecom,
+      toggleTransformer: toggleTransformer
     }
   }, props.children);
 };
@@ -1024,7 +1194,7 @@ var BUILDINGS_QUERY = Object(_apollo_client__WEBPACK_IMPORTED_MODULE_0__["gql"])
 /*!*******************************************************!*\
   !*** ./frontend/client_src/queries/muncipal-query.js ***!
   \*******************************************************/
-/*! exports provided: MUNICIPAL_QUERY, WARDS_QUERY, ROAD_QUERY */
+/*! exports provided: MUNICIPAL_QUERY, WARDS_QUERY, ROAD_QUERY, TELECOM_QUERY, TRANSFORMER_QUERY */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1032,7 +1202,29 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "MUNICIPAL_QUERY", function() { return MUNICIPAL_QUERY; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "WARDS_QUERY", function() { return WARDS_QUERY; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ROAD_QUERY", function() { return ROAD_QUERY; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "TELECOM_QUERY", function() { return TELECOM_QUERY; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "TRANSFORMER_QUERY", function() { return TRANSFORMER_QUERY; });
 /* harmony import */ var _apollo_client__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @apollo/client */ "./node_modules/@apollo/client/index.js");
+function _templateObject5() {
+  var data = _taggedTemplateLiteral(["\nquery Transformers($mid: String){\n  transformers(mid: $mid){\n    id\n    properties{\n      type\n    }\n    geometry{\n      type\n      coordinates\n    }\n  }\n}\n"]);
+
+  _templateObject5 = function _templateObject5() {
+    return data;
+  };
+
+  return data;
+}
+
+function _templateObject4() {
+  var data = _taggedTemplateLiteral(["\nquery Telecoms($mid: String){\n  telecoms(mid: $mid){\n    id\n    properties{\n      type\n    }\n    geometry{\n      type\n      coordinates\n    }\n  }\n}\n"]);
+
+  _templateObject4 = function _templateObject4() {
+    return data;
+  };
+
+  return data;
+}
+
 function _templateObject3() {
   var data = _taggedTemplateLiteral(["\nquery Roads($mid: String){\n  roads(mid: $mid){\n    id\n    properties{\n      name\n    }\n    geometry{\n      type\n      coordinates\n    }\n  }\n}\n"]);
 
@@ -1069,6 +1261,8 @@ function _taggedTemplateLiteral(strings, raw) { if (!raw) { raw = strings.slice(
 var MUNICIPAL_QUERY = Object(_apollo_client__WEBPACK_IMPORTED_MODULE_0__["gql"])(_templateObject());
 var WARDS_QUERY = Object(_apollo_client__WEBPACK_IMPORTED_MODULE_0__["gql"])(_templateObject2());
 var ROAD_QUERY = Object(_apollo_client__WEBPACK_IMPORTED_MODULE_0__["gql"])(_templateObject3());
+var TELECOM_QUERY = Object(_apollo_client__WEBPACK_IMPORTED_MODULE_0__["gql"])(_templateObject4());
+var TRANSFORMER_QUERY = Object(_apollo_client__WEBPACK_IMPORTED_MODULE_0__["gql"])(_templateObject5());
 
 /***/ }),
 
@@ -1104,7 +1298,7 @@ var PLACES_QUERY = Object(_apollo_client__WEBPACK_IMPORTED_MODULE_0__["gql"])(_t
 /*!******************************************************!*\
   !*** ./frontend/client_src/reducers/action-types.js ***!
   \******************************************************/
-/*! exports provided: ON_ZOOMED, SET_CENTER, TOGGLE_PLACE, TOGGLE_BUILDING, TOGGLE_ROAD */
+/*! exports provided: ON_ZOOMED, SET_CENTER, TOGGLE_PLACE, TOGGLE_BUILDING, TOGGLE_ROAD, TOGGLE_TELECOM, TOGGLE_TRANSFORMER */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1114,11 +1308,15 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "TOGGLE_PLACE", function() { return TOGGLE_PLACE; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "TOGGLE_BUILDING", function() { return TOGGLE_BUILDING; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "TOGGLE_ROAD", function() { return TOGGLE_ROAD; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "TOGGLE_TELECOM", function() { return TOGGLE_TELECOM; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "TOGGLE_TRANSFORMER", function() { return TOGGLE_TRANSFORMER; });
 var ON_ZOOMED = 'ON_ZOOMED';
 var SET_CENTER = 'SET_CENTER';
 var TOGGLE_PLACE = 'TOGGLE_PLACE';
 var TOGGLE_BUILDING = 'TOGGLE_BUILDING';
 var TOGGLE_ROAD = 'TOGGLE_ROAD';
+var TOGGLE_TELECOM = 'TOGGLE_TELECOM';
+var TOGGLE_TRANSFORMER = 'TOGGLE_TRANSFORMER';
 
 /***/ }),
 
@@ -1189,6 +1387,16 @@ var toggleReducer = function toggleReducer(state, action) {
     case _action_types__WEBPACK_IMPORTED_MODULE_0__["TOGGLE_ROAD"]:
       return _objectSpread(_objectSpread({}, state), {}, {
         toggle_road: !state.toggle_road
+      });
+
+    case _action_types__WEBPACK_IMPORTED_MODULE_0__["TOGGLE_TELECOM"]:
+      return _objectSpread(_objectSpread({}, state), {}, {
+        toggle_telecom: !state.toggle_telecom
+      });
+
+    case _action_types__WEBPACK_IMPORTED_MODULE_0__["TOGGLE_TRANSFORMER"]:
+      return _objectSpread(_objectSpread({}, state), {}, {
+        toggle_transformer: !state.toggle_transformer
       });
 
     default:

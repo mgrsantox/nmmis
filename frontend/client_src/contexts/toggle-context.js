@@ -8,6 +8,8 @@ const initialState = {
     toggle_place : false,
     toggle_building:false,
     toggle_road:false,
+    toggle_telecom : false,
+    toggle_transformer : false,
 }
 
 const ToggleContextProvider = (props)=>{
@@ -27,8 +29,18 @@ const ToggleContextProvider = (props)=>{
             type:TYPES.TOGGLE_ROAD
         })
     };
+    const toggleTelecom = () => {
+        dispatch({
+            type:TYPES.TOGGLE_TELECOM
+        })
+    };
+    const toggleTransformer = () => {
+        dispatch({
+            type:TYPES.TOGGLE_TRANSFORMER
+        })
+    };
     return(
-        <ToggleContext.Provider value={{state, togglePlace, toggleBuilding, toggleRoad}}>
+        <ToggleContext.Provider value={{state, togglePlace, toggleBuilding, toggleRoad, toggleTelecom, toggleTransformer}}>
             {props.children}
         </ToggleContext.Provider>
     )

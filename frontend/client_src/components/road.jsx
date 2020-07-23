@@ -2,10 +2,8 @@ import React, { useState, useEffect, useContext } from 'react'
 import { useQuery } from '@apollo/client';
 import { Polyline, Popup } from 'react-leaflet'
 import { ROAD_QUERY } from '../queries/muncipal-query'
-import { ToggleContext } from '../contexts';
 
 const Road = ({ mid }) => {
-    const togglecontext = useContext(ToggleContext);
 
     const { loading, error, data } = useQuery(ROAD_QUERY, {
         variables: { mid },
@@ -18,7 +16,7 @@ const Road = ({ mid }) => {
             setRoadsCrd(data.roads);
         }
     });
-    return togglecontext.state.toggle_road? (
+    return(
         <div>
             {
                 roadsCrd.map(road => {
@@ -32,7 +30,7 @@ const Road = ({ mid }) => {
                 })
             }
         </div>
-    ):''
+    )
 }
 
 export default Road;

@@ -12,6 +12,12 @@ const SideBar = () => {
     const handleChangeRoad = (e)=>{
         togglecontext.toggleRoad()
     }
+    const handleChangeTelecom = (e)=>{
+        togglecontext.toggleTelecom()
+    }
+    const handleChangeTrasformer = (e)=>{
+        togglecontext.toggleTransformer()
+    }
     return (
         <div>
             <input type="checkbox" onChange={handleChangePlace} checked={togglecontext.state.toggle_place} />
@@ -22,6 +28,12 @@ const SideBar = () => {
             <br/>
             <input type="checkbox" onChange={handleChangeRoad} checked={togglecontext.state.toggle_road} />
             <label htmlFor="scales">Road</label>
+            <br/>
+            <input type="checkbox" onChange={handleChangeTelecom} checked={togglecontext.state.toggle_telecom} />
+            <label htmlFor="scales">Telecom</label>
+            <br/>
+            <input type="checkbox" onChange={handleChangeTrasformer} checked={togglecontext.state.toggle_transformer} />
+            <label htmlFor="scales">Trasnformer</label>
         </div>
     )
 }

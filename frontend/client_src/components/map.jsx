@@ -1,11 +1,13 @@
 import React,{useContext} from 'react'
 import { Map, TileLayer, LayersControl } from 'react-leaflet';
-import { ZoomContext, CenterContext } from '../contexts';
+import { ZoomContext, CenterContext, ToggleContext } from '../contexts';
 import Munciple from './munciple';
 import Ward from './ward';
 import Place from './place';
 import Building from './building';
 import Road from './road';
+import Telecom from './telecom';
+import Transformer from './transformer';
 
 
 const { BaseLayer, Overlay } = LayersControl
@@ -14,6 +16,7 @@ const mid = 'iaEL7GVAzOtRL';
 
 const MainMap = () => {
     const zoomcontext = useContext(ZoomContext);
+    const togglecontext = useContext(ToggleContext);
     const centercontext = useContext(CenterContext);
     
     const handleViewPort = (e) => {
@@ -31,9 +34,11 @@ const MainMap = () => {
                     />
                 </BaseLayer>
                 {zoomcontext.state.zoom <=12 ? <Munciple mid={mid}></Munciple> : <Ward mid={mid}></Ward>}
-                <Place mid={mid}></Place>
-                <Building mid={mid}></Building>
-                <Road mid={mid}></Road>
+                {togglecontext.state.toggle_place?<Place mid={mid}></Place>:null}
+                {togglecontext.state.toggle_building?<Building mid={mid}></Building>:null}
+                {togglecontext.state.toggle_road?<Road mid={mid}></Road>:null}
+                {togglecontext.state.toggle_telecom?<Telecom mid={mid}></Telecom>:null}
+                {togglecontext.state.toggle_transformer?<Transformer mid={mid}></Transformer>:null}
             </LayersControl>
         </Map>
     )
