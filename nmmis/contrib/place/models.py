@@ -8,7 +8,7 @@ from django.core.validators import FileExtensionValidator
 
 class Place(TimeStamped):
     """
-    Class that describe the District
+    Class that describe the Place
     """
     id = models.CharField(
         primary_key=True, default=aphnum_random2,
