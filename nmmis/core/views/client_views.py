@@ -4,7 +4,7 @@ from django.contrib.gis.geos import Polygon, GEOSGeometry
 import geopandas as gpd
 from django.contrib.gis.gdal import DataSource
 from nmmis.contrib.province.models import Province
-from nmmis.contrib.municipal.models import Municipal, Ward, Road
+from nmmis.contrib.municipal.models import Municipal, Ward, Road, Telecom, Transformer
 from nmmis.contrib.building.models import Building
 
 from django.contrib.gis.gdal import OGRGeometry
@@ -15,20 +15,28 @@ class Index(TemplateView):
     # Data Load from Splited Boundary
     # d = Building.objects.get(id="5jOSNo4jDrAB")
     df = DataSource(
-        '/home/mgrsantox/Desktop/projects/nmmis/nmmis/core/views/data/road/Road_Network.shp')
+        '/home/mgrsantox/Desktop/projects/nmmis/nmmis/core/views/data/Transformers.shp')
     layer = df[0]
-    for i in layer:
-        # print(i.geom)
-        ward = 'MOjt3Pzr73'
-        if i.get('RD_NAME'):
-            name = i.get('RD_NAME')
-        else:
-            name= "NO Name in file"
-        type = i.get('RDHIER')
-        surface = i.get('RD_SURFACE')
-        length = i.get('Shape_Leng')
-        width = i.get('RD_WIDTH')
-        geom = GEOSGeometry(str(i.geom), srid=4326).transform(3857, clone=True)
+    # Telecom
+    # for i in layer:
+    #     ward = 'MOjt3Pzr73'
+    #     type = i.get('TYPE')
+    #     geom = GEOSGeometry(str(i.geom), srid=4326).transform(3857, clone=True)
+    #     telecom = Transformer(ward_id=ward, type=type, geom=geom)
+        # telecom.save()
+        # print(geom)
+    # for i in layer:
+    #     # print(i.geom)
+    #     ward = 'MOjt3Pzr73'
+    #     if i.get('RD_NAME'):
+    #         name = i.get('RD_NAME')
+    #     else:
+    #         name= "NO Name in file"
+    #     type = i.get('RDHIER')
+    #     surface = i.get('RD_SURFACE')
+    #     length = i.get('Shape_Leng')
+    #     width = i.get('RD_WIDTH')
+    #     geom = GEOSGeometry(str(i.geom), srid=4326).transform(3857, clone=True)
         # try:
         #     road = Road(ward_id=ward, name=name, type=type, surface=surface, length=length, width=width, geom=geom)
         #     # road.save()
