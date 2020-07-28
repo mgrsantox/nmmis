@@ -1,9 +1,10 @@
 import graphene
 # from graphene_django import DjangoObjectType
 import graphql_geojson
+from graphene_django.forms.mutation import DjangoModelFormMutation
 from nmmis.contrib.building.models import Building
 from django.conf import settings
-
+from nmmis.contrib.building.forms import BuildingForm
 
 class BuildingType(graphql_geojson.GeoJSONType):
     class Meta:
@@ -27,3 +28,12 @@ class Query(graphene.ObjectType):
     
     def resolve_building(self, info, buid, *args, **kwargs):
         return Building.objects.get(id=buid)
+
+
+
+
+class addBuilding(DjangoModelFormMutation):
+    building = graphene.Field(BuildingType)
+
+    class Meta:
+        form_class = BuildingForm

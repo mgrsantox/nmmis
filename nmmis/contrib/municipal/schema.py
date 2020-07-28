@@ -1,7 +1,10 @@
 import graphene
 # from graphene_django import DjangoObjectType
+from graphene_django.forms.mutation import DjangoModelFormMutation
 import graphql_geojson
 from nmmis.contrib.municipal.models import Municipal, Ward, Road, Telecom, Transformer
+from nmmis.contrib.municipal.forms import TelecomForm
+from django.contrib.gis.geos import GEOSGeometry
 
 
 class MunicipalType(graphql_geojson.GeoJSONType):
@@ -99,3 +102,23 @@ class Query(graphene.ObjectType):
     
     def resolve_transformer(self, info, wid, *args, **kwargs):
         return Transformer.objects.filter(ward__id=wid)
+
+
+
+
+class addTelecom(graphene.Mutation):
+    telecom = graphene.Field(TelecomType)
+
+    class Arguments:
+        ward = graphene.String()
+        type = graphene.String()
+        geom = graphql_geojson.Geometry()
+
+    def mutate(self,info, *args, **kwargs):
+        print(kwargs['geom'])
+        ward = kwargs['ward']
+        type = kwargs['type']
+        geom = GEOSGeometry(kwargs['geom'], srid=4326).transform(3857, clone=True).ewkt
+        telecom = Telecom(ward_id=ward, type=type, geom=geom)
+        telecom.save()
+        return addTelecom(telecom=telecom)

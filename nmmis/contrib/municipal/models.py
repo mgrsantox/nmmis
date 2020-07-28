@@ -77,6 +77,7 @@ class Road(TimeStamped):
     def __str__(self):
         return self.name
 
+from django.contrib.gis.geos import GEOSGeometry
 
 class Telecom(TimeStamped):
     """
@@ -100,6 +101,14 @@ class Telecom(TimeStamped):
 
     def __str__(self):
         return self.type
+    
+    # def save(self, *args, **kwargs):
+    #     geom = GEOSGeometry(str(self.geom))
+    #     print(geom.transform(3857, clone=True).ewkt)
+    #     geom = geom.transform(3857, clone=True).ewkt
+    #     # print(geom)
+    #     self.geom = geom
+    #     super(Telecom, self).save()
 
 
 class Transformer(TimeStamped):
