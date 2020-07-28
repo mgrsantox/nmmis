@@ -5,6 +5,7 @@ import graphql_geojson
 from nmmis.contrib.municipal.models import Municipal, Ward, Road, Telecom, Transformer
 from nmmis.contrib.municipal.forms import TelecomForm
 from django.contrib.gis.geos import GEOSGeometry
+from django.shortcuts import get_object_or_404
 
 
 class MunicipalType(graphql_geojson.GeoJSONType):
@@ -106,7 +107,7 @@ class Query(graphene.ObjectType):
 
 
 
-class addTelecom(graphene.Mutation):
+class AddTelecom(graphene.Mutation):
     telecom = graphene.Field(TelecomType)
 
     class Arguments:
@@ -122,3 +123,35 @@ class addTelecom(graphene.Mutation):
         telecom = Telecom(ward_id=ward, type=type, geom=geom)
         telecom.save()
         return addTelecom(telecom=telecom)
+
+
+class ChangeTelecom(graphene.Mutation):
+    telecom = graphene.Field(TelecomType)
+
+    class Arguments:
+        id = graphene.String()
+        ward = graphene.String()
+        type = graphene.String()
+        geom = graphql_geojson.Geometry()
+
+    def mutate(self,info, id, *args, **kwargs):
+        telecom = get_object_or_404(Telecom, pk=id)
+        if kwargs['ward']:
+            telecom.ward = kwargs['ward']
+        telecom.type = kwargs['type']
+        telecom.geom = GEOSGeometry(kwargs['geom'], srid=4326).transform(3857, clone=True).ewkt
+        telecom.save()
+        return changeTelecom(telecom=telecom)
+
+
+
+class DeleteTelecom(graphene.Mutation):
+    t_id = graphene.String()
+
+    class Arguments:
+        id = graphene.String()
+
+    def mutate(self, info, id, *args, **kwargs):
+        telecom  = get_object_or_404(Telecom, pk=id)
+        telecom.delete()
+        return DeleteTelecom(t_id=id)
