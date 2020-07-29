@@ -81,6 +81,7 @@ class Query(graphene.ObjectType):
         return Ward.objects.filter(municipal__id=mid)
     
     def resolve_ward(self, info, wid, *args, **kwargs):
+        print("single ward with id {} called".format(wid))
         return Ward.objects.get(id=wid)
     
     def resolve_roads(self, info, mid, *args, **kwargs):
