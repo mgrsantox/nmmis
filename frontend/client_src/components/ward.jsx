@@ -1,11 +1,13 @@
 import React, { useState, useEffect, useContext } from 'react'
-import { Polygon, Popup } from 'react-leaflet'
+import { LayerGroup, Polygon, Popup } from 'react-leaflet'
 import { useQuery } from '@apollo/client'
 import { WARDS_QUERY } from '../queries/muncipal-query'
-import {ZoomContext} from '../contexts'
+import {ZoomContext, ToggleContext} from '../contexts'
+import Road from './road'
 
 const Ward = ({ mid}) => {
     const zoomcontext = useContext(ZoomContext);
+    const togglecontext = useContext(ToggleContext);
     const [wardsCrd, setWardsCrd] = useState([]);
 
     const { loading, error, data } = useQuery(WARDS_QUERY, {
@@ -21,7 +23,8 @@ const Ward = ({ mid}) => {
             {
                 wardsCrd.map(ward => {
                     return (
-                        <Polygon maxZoom={20} key={ward.id} color="purple" positions={ward.geometry.coordinates} >
+                        <LayerGroup  key={ward.id}>
+                        <Polygon maxZoom={20} color="purple" positions={ward.geometry.coordinates} >
                             {zoomcontext.state.zoom<15?<Popup>
                                 <h1>Name: {ward.properties.name}</h1>
                                 <h1>Area: {ward.properties.area} Sqm.</h1>
@@ -30,6 +33,8 @@ const Ward = ({ mid}) => {
                                 <h1>Female: {ward.properties.female}</h1></Popup>
                                 :null}
                         </Polygon>
+                        {togglecontext.state.toggle_road ? <Road wid={ward.id}></Road> : null}
+                        </LayerGroup>
                     )
                 })
             }

@@ -1,22 +1,24 @@
 import React, { useState, useEffect, useContext } from 'react'
 import { useQuery } from '@apollo/client';
 import { Polyline, Popup } from 'react-leaflet'
-import { ROAD_QUERY } from '../queries/muncipal-query'
+import { WARD_ROAD_QUERY } from '../queries/muncipal-query'
+import { ZoomContext } from '../contexts';
 
-const Road = ({ mid }) => {
+const Road = ({ wid }) => {
+    const zoomcontext = useContext(ZoomContext);
 
-    const { loading, error, data } = useQuery(ROAD_QUERY, {
-        variables: { mid },
+    const { loading, error, data } = useQuery(WARD_ROAD_QUERY, {
+        variables: { wid },
     });
 
     const [roadsCrd, setRoadsCrd] = useState([]);
 
     useEffect(() => {
         if (!loading) {
-            setRoadsCrd(data.roads);
+            setRoadsCrd(data.road);
         }
     });
-    return(
+    return zoomcontext.state.zoom > 13? (
         <div>
             {
                 roadsCrd.map(road => {
@@ -30,7 +32,7 @@ const Road = ({ mid }) => {
                 })
             }
         </div>
-    )
+    ):null
 }
 
 export default Road;

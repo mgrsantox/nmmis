@@ -1,5 +1,5 @@
 import React, { useContext } from 'react'
-import { Map, TileLayer, LayersControl } from 'react-leaflet';
+import { Map, TileLayer,LayerGroup, LayersControl } from 'react-leaflet';
 import MeasureControl from 'react-leaflet-measure';
 import { ZoomContext, CenterContext, ToggleContext } from '../contexts';
 import Munciple from './munciple';
@@ -56,12 +56,13 @@ const MainMap = () => {
                         url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"
                     />
                 </BaseLayer>
+                <LayerGroup>
                 {zoomcontext.state.zoom <= 12 ? <Munciple mid={mid}></Munciple> : <Ward mid={mid}></Ward>}
-                {togglecontext.state.toggle_place ? <Place mid={mid}></Place> : null}
-                {togglecontext.state.toggle_building ? <Building mid={mid}></Building> : null}
-                {togglecontext.state.toggle_road ? <Road mid={mid}></Road> : null}
-                {togglecontext.state.toggle_telecom ? <Telecom mid={mid}></Telecom> : null}
-                {togglecontext.state.toggle_transformer ? <Transformer mid={mid}></Transformer> : null}
+                {togglecontext.state.toggle_place && zoomcontext.state.zoom >= 13? <Place mid={mid}></Place> : null}
+                {togglecontext.state.toggle_building && zoomcontext.state.zoom >= 13? <Building mid={mid}></Building> : null}
+                {togglecontext.state.toggle_telecom && zoomcontext.state.zoom >= 13? <Telecom mid={mid}></Telecom> : null}
+                {togglecontext.state.toggle_transformer && zoomcontext.state.zoom >= 13? <Transformer mid={mid}></Transformer> : null}
+                </LayerGroup>
                 <MeasureControl {...measureOptions} />
             </LayersControl>
         </Map>

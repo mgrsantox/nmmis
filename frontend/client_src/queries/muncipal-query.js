@@ -57,6 +57,21 @@ query Roads($mid: String){
 }
 `;
 
+export const WARD_ROAD_QUERY = gql`
+query Road($wid: String){
+  road(wid: $wid){
+    id
+    properties{
+      name
+    }
+    geometry{
+      type
+      coordinates
+    }
+  }
+}
+`;
+
 export const TELECOM_QUERY = gql`
 query Telecoms($mid: String){
   telecoms(mid: $mid){

@@ -386,21 +386,19 @@ var MainMap = function MainMap() {
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_leaflet__WEBPACK_IMPORTED_MODULE_1__["TileLayer"], {
     attribution: "Tiles \xA9 Esri \u2014 Source: Esri, i-cubed, USDA, USGS and the GIS User Community",
     url: "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"
-  })), zoomcontext.state.zoom <= 12 ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_munciple__WEBPACK_IMPORTED_MODULE_4__["default"], {
+  })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_leaflet__WEBPACK_IMPORTED_MODULE_1__["LayerGroup"], null, zoomcontext.state.zoom <= 12 ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_munciple__WEBPACK_IMPORTED_MODULE_4__["default"], {
     mid: mid
   }) : /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_ward__WEBPACK_IMPORTED_MODULE_5__["default"], {
     mid: mid
-  }), togglecontext.state.toggle_place ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_place__WEBPACK_IMPORTED_MODULE_6__["default"], {
+  }), togglecontext.state.toggle_place && zoomcontext.state.zoom >= 13 ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_place__WEBPACK_IMPORTED_MODULE_6__["default"], {
     mid: mid
-  }) : null, togglecontext.state.toggle_building ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_building__WEBPACK_IMPORTED_MODULE_7__["default"], {
+  }) : null, togglecontext.state.toggle_building && zoomcontext.state.zoom >= 13 ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_building__WEBPACK_IMPORTED_MODULE_7__["default"], {
     mid: mid
-  }) : null, togglecontext.state.toggle_road ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_road__WEBPACK_IMPORTED_MODULE_8__["default"], {
+  }) : null, togglecontext.state.toggle_telecom && zoomcontext.state.zoom >= 13 ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_telecom__WEBPACK_IMPORTED_MODULE_9__["default"], {
     mid: mid
-  }) : null, togglecontext.state.toggle_telecom ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_telecom__WEBPACK_IMPORTED_MODULE_9__["default"], {
+  }) : null, togglecontext.state.toggle_transformer && zoomcontext.state.zoom >= 13 ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_transformer__WEBPACK_IMPORTED_MODULE_10__["default"], {
     mid: mid
-  }) : null, togglecontext.state.toggle_transformer ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_transformer__WEBPACK_IMPORTED_MODULE_10__["default"], {
-    mid: mid
-  }) : null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_leaflet_measure__WEBPACK_IMPORTED_MODULE_2___default.a, measureOptions)));
+  }) : null), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_leaflet_measure__WEBPACK_IMPORTED_MODULE_2___default.a, measureOptions)));
 };
 
 /* harmony default export */ __webpack_exports__["default"] = (MainMap);
@@ -661,6 +659,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _apollo_client__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @apollo/client */ "./node_modules/@apollo/client/index.js");
 /* harmony import */ var react_leaflet__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react-leaflet */ "./node_modules/react-leaflet/es/index.js");
 /* harmony import */ var _queries_muncipal_query__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../queries/muncipal-query */ "./frontend/client_src/queries/muncipal-query.js");
+/* harmony import */ var _contexts__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../contexts */ "./frontend/client_src/contexts/index.js");
 function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
 
 function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
@@ -678,12 +677,14 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 
 
-var Road = function Road(_ref) {
-  var mid = _ref.mid;
 
-  var _useQuery = Object(_apollo_client__WEBPACK_IMPORTED_MODULE_1__["useQuery"])(_queries_muncipal_query__WEBPACK_IMPORTED_MODULE_3__["ROAD_QUERY"], {
+var Road = function Road(_ref) {
+  var wid = _ref.wid;
+  var zoomcontext = Object(react__WEBPACK_IMPORTED_MODULE_0__["useContext"])(_contexts__WEBPACK_IMPORTED_MODULE_4__["ZoomContext"]);
+
+  var _useQuery = Object(_apollo_client__WEBPACK_IMPORTED_MODULE_1__["useQuery"])(_queries_muncipal_query__WEBPACK_IMPORTED_MODULE_3__["WARD_ROAD_QUERY"], {
     variables: {
-      mid: mid
+      wid: wid
     }
   }),
       loading = _useQuery.loading,
@@ -697,16 +698,16 @@ var Road = function Road(_ref) {
 
   Object(react__WEBPACK_IMPORTED_MODULE_0__["useEffect"])(function () {
     if (!loading) {
-      setRoadsCrd(data.roads);
+      setRoadsCrd(data.road);
     }
   });
-  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, roadsCrd.map(function (road) {
+  return zoomcontext.state.zoom > 13 ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, roadsCrd.map(function (road) {
     return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_leaflet__WEBPACK_IMPORTED_MODULE_2__["Polyline"], {
       color: "red",
       key: road.id,
       positions: road.geometry.coordinates
     }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_leaflet__WEBPACK_IMPORTED_MODULE_2__["Popup"], null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, road.properties.name)));
-  }));
+  })) : null;
 };
 
 /* harmony default export */ __webpack_exports__["default"] = (Road);
@@ -864,6 +865,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _apollo_client__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @apollo/client */ "./node_modules/@apollo/client/index.js");
 /* harmony import */ var _queries_muncipal_query__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../queries/muncipal-query */ "./frontend/client_src/queries/muncipal-query.js");
 /* harmony import */ var _contexts__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../contexts */ "./frontend/client_src/contexts/index.js");
+/* harmony import */ var _road__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./road */ "./frontend/client_src/components/road.jsx");
 function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
 
 function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
@@ -882,9 +884,11 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 
 
+
 var Ward = function Ward(_ref) {
   var mid = _ref.mid;
   var zoomcontext = Object(react__WEBPACK_IMPORTED_MODULE_0__["useContext"])(_contexts__WEBPACK_IMPORTED_MODULE_4__["ZoomContext"]);
+  var togglecontext = Object(react__WEBPACK_IMPORTED_MODULE_0__["useContext"])(_contexts__WEBPACK_IMPORTED_MODULE_4__["ToggleContext"]);
 
   var _useState = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])([]),
       _useState2 = _slicedToArray(_useState, 2),
@@ -906,12 +910,15 @@ var Ward = function Ward(_ref) {
     }
   });
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, wardsCrd.map(function (ward) {
-    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_leaflet__WEBPACK_IMPORTED_MODULE_1__["Polygon"], {
+    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_leaflet__WEBPACK_IMPORTED_MODULE_1__["LayerGroup"], {
+      key: ward.id
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_leaflet__WEBPACK_IMPORTED_MODULE_1__["Polygon"], {
       maxZoom: 20,
-      key: ward.id,
       color: "purple",
       positions: ward.geometry.coordinates
-    }, zoomcontext.state.zoom < 15 ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_leaflet__WEBPACK_IMPORTED_MODULE_1__["Popup"], null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, "Name: ", ward.properties.name), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, "Area: ", ward.properties.area, " Sqm."), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, "Population: ", ward.properties.total), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, "Male: ", ward.properties.male), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, "Female: ", ward.properties.female)) : null);
+    }, zoomcontext.state.zoom < 15 ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_leaflet__WEBPACK_IMPORTED_MODULE_1__["Popup"], null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, "Name: ", ward.properties.name), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, "Area: ", ward.properties.area, " Sqm."), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, "Population: ", ward.properties.total), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, "Male: ", ward.properties.male), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, "Female: ", ward.properties.female)) : null), togglecontext.state.toggle_road ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_road__WEBPACK_IMPORTED_MODULE_5__["default"], {
+      wid: ward.id
+    }) : null);
   }));
 };
 
@@ -1215,7 +1222,7 @@ var BUILDINGS_QUERY = Object(_apollo_client__WEBPACK_IMPORTED_MODULE_0__["gql"])
 /*!*******************************************************!*\
   !*** ./frontend/client_src/queries/muncipal-query.js ***!
   \*******************************************************/
-/*! exports provided: MUNICIPAL_QUERY, WARDS_QUERY, ROAD_QUERY, TELECOM_QUERY, TRANSFORMER_QUERY */
+/*! exports provided: MUNICIPAL_QUERY, WARDS_QUERY, ROAD_QUERY, WARD_ROAD_QUERY, TELECOM_QUERY, TRANSFORMER_QUERY */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1223,11 +1230,22 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "MUNICIPAL_QUERY", function() { return MUNICIPAL_QUERY; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "WARDS_QUERY", function() { return WARDS_QUERY; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ROAD_QUERY", function() { return ROAD_QUERY; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "WARD_ROAD_QUERY", function() { return WARD_ROAD_QUERY; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "TELECOM_QUERY", function() { return TELECOM_QUERY; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "TRANSFORMER_QUERY", function() { return TRANSFORMER_QUERY; });
 /* harmony import */ var _apollo_client__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @apollo/client */ "./node_modules/@apollo/client/index.js");
-function _templateObject5() {
+function _templateObject6() {
   var data = _taggedTemplateLiteral(["\nquery Transformers($mid: String){\n  transformers(mid: $mid){\n    id\n    properties{\n      type\n    }\n    geometry{\n      type\n      coordinates\n    }\n  }\n}\n"]);
+
+  _templateObject6 = function _templateObject6() {
+    return data;
+  };
+
+  return data;
+}
+
+function _templateObject5() {
+  var data = _taggedTemplateLiteral(["\nquery Telecoms($mid: String){\n  telecoms(mid: $mid){\n    id\n    properties{\n      type\n    }\n    geometry{\n      type\n      coordinates\n    }\n  }\n}\n"]);
 
   _templateObject5 = function _templateObject5() {
     return data;
@@ -1237,7 +1255,7 @@ function _templateObject5() {
 }
 
 function _templateObject4() {
-  var data = _taggedTemplateLiteral(["\nquery Telecoms($mid: String){\n  telecoms(mid: $mid){\n    id\n    properties{\n      type\n    }\n    geometry{\n      type\n      coordinates\n    }\n  }\n}\n"]);
+  var data = _taggedTemplateLiteral(["\nquery Road($wid: String){\n  road(wid: $wid){\n    id\n    properties{\n      name\n    }\n    geometry{\n      type\n      coordinates\n    }\n  }\n}\n"]);
 
   _templateObject4 = function _templateObject4() {
     return data;
@@ -1282,8 +1300,9 @@ function _taggedTemplateLiteral(strings, raw) { if (!raw) { raw = strings.slice(
 var MUNICIPAL_QUERY = Object(_apollo_client__WEBPACK_IMPORTED_MODULE_0__["gql"])(_templateObject());
 var WARDS_QUERY = Object(_apollo_client__WEBPACK_IMPORTED_MODULE_0__["gql"])(_templateObject2());
 var ROAD_QUERY = Object(_apollo_client__WEBPACK_IMPORTED_MODULE_0__["gql"])(_templateObject3());
-var TELECOM_QUERY = Object(_apollo_client__WEBPACK_IMPORTED_MODULE_0__["gql"])(_templateObject4());
-var TRANSFORMER_QUERY = Object(_apollo_client__WEBPACK_IMPORTED_MODULE_0__["gql"])(_templateObject5());
+var WARD_ROAD_QUERY = Object(_apollo_client__WEBPACK_IMPORTED_MODULE_0__["gql"])(_templateObject4());
+var TELECOM_QUERY = Object(_apollo_client__WEBPACK_IMPORTED_MODULE_0__["gql"])(_templateObject5());
+var TRANSFORMER_QUERY = Object(_apollo_client__WEBPACK_IMPORTED_MODULE_0__["gql"])(_templateObject6());
 
 /***/ }),
 
