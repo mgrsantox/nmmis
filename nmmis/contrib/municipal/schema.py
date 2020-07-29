@@ -57,14 +57,14 @@ class Query(graphene.ObjectType):
     ward = graphene.Field(WardType, wid=graphene.String())
 
     roads = graphene.List(RoadType, mid=graphene.String())
-    road = graphene.List(RoadType, wid=graphene.String())
+    wroads = graphene.List(RoadType, wid=graphene.String())
     # road = graphene.Field(RoadType, wid=graphene.String())
 
     telecoms = graphene.List(TelecomType, mid=graphene.String())
-    telecom = graphene.List(TelecomType, wid=graphene.String())
+    wtelecoms = graphene.List(TelecomType, wid=graphene.String())
 
     transformers = graphene.List(TransformerType, mid=graphene.String())
-    transformer = graphene.List(TransformerType, wid=graphene.String())
+    wtransformers = graphene.List(TransformerType, wid=graphene.String())
 
     def resolve_allmunicipals(self, info, *args, **kwargs):
         return Municipal.objects.filter(district__province__country__name="Nepal")
@@ -87,21 +87,21 @@ class Query(graphene.ObjectType):
         print("Road called")
         return Road.objects.filter(ward__municipal__id=mid)
     
-    def resolve_road(self, info, wid, *args, **kwargs):
+    def resolve_wroads(self, info, wid, *args, **kwargs):
         return Road.objects.filter(ward__id=wid)
 
     def resolve_telecoms(self, info, mid, *args, **kwargs):
         print("Telecom called")
         return Telecom.objects.filter(ward__municipal__id=mid)
     
-    def resolve_telecom(self, info, wid, *args, **kwargs):
+    def resolve_wtelecoms(self, info, wid, *args, **kwargs):
         return Telecom.objects.filter(ward__id=wid)
     
     def resolve_transformers(self, info, mid, *args, **kwargs):
         print("Transformer called")
         return Transformer.objects.filter(ward__municipal__id=mid)
     
-    def resolve_transformer(self, info, wid, *args, **kwargs):
+    def resolve_wtransformers(self, info, wid, *args, **kwargs):
         return Transformer.objects.filter(ward__id=wid)
 
 

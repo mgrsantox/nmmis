@@ -19,11 +19,16 @@ class PlaceType(graphql_geojson.GeoJSONType):
 
 class Query(graphene.ObjectType):
     places = graphene.List(PlaceType, mid=graphene.String())
+    wplaces = graphene.List(PlaceType, wid=graphene.String())
     place = graphene.Field(PlaceType, plid=graphene.String())
 
     def resolve_places(self, info, mid, *args, **kwargs):
         print("Place called")
         return Place.objects.filter(ward__municipal__id=mid)
+    
+    def resolve_wplaces(self, info, wid, *args, **kwargs):
+        print("Ward Place called")
+        return Place.objects.filter(ward__id=wid)
     
     def resolve_place(self, info, plid, *args, **kwargs):
         return Place.objects.get(id=plid)

@@ -1,22 +1,25 @@
 import React, { useState, useEffect, useContext } from 'react'
 import { Marker, Popup } from 'react-leaflet'
 import { useQuery } from '@apollo/client';
-import { PLACES_QUERY } from '../queries/place-query'
+import {WPLACES_QUERY} from '../../queries/place-query'
+import { ZoomContext } from '../../contexts';
 
 
-const Place = ({ mid }) => {
+const Place = ({ wid }) => {
+
+    const zoomcontext = useContext(ZoomContext);
     const [placesCrd, setPlacesCrd] = useState([]);
 
-    const { loading, error, data } = useQuery(PLACES_QUERY, {
-        variables: { mid },
+    const { loading, error, data } = useQuery(WPLACES_QUERY, {
+        variables: { wid },
     });
 
     useEffect(() => {
         if (!loading) {
-            setPlacesCrd(data.places);
+            setPlacesCrd(data.wplaces);
         }
     });
-    return(
+    return zoomcontext.state.zoom >= 13? (
         <div>
             {
                 placesCrd.map(place => {
@@ -31,7 +34,7 @@ const Place = ({ mid }) => {
                 })
             }
         </div>
-    )
+    ):null
 }
 
 export default Place;

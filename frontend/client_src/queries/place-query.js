@@ -15,3 +15,19 @@ export const PLACES_QUERY = gql`
         }
     }
 `;
+
+export const WPLACES_QUERY = gql`
+    query WPlaces($wid: String){
+        wplaces(wid: $wid){
+            id
+            properties{
+                name
+                image
+            }
+            geometry{
+                type
+                coordinates
+            }
+        }
+    }
+`;

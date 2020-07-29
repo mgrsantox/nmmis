@@ -1,16 +1,18 @@
 import React, { useState, useEffect, useContext } from 'react'
 import { useQuery } from '@apollo/client';
 import { Marker, Popup } from 'react-leaflet'
-import { BUILDINGS_QUERY } from '../queries/building-query';
-import { schoolIcon, houseIcon, bankIcon } from './icon/building-icon';
+import { WBUILDINGS_QUERY } from '../../queries/building-query';
+import { schoolIcon, houseIcon, bankIcon } from '../icon/building-icon';
+import { ZoomContext } from '../../contexts';
 
-const Building =({mid})=>{
+const Building = ({ wid }) => {
+    const zoomcontext = useContext(ZoomContext)
     const [buildingsCrd, setBuildingsCrd] = useState([]);
 
-    const {loading, error, data} = useQuery(BUILDINGS_QUERY,{
-        variables: { mid },
+    const { loading, error, data } = useQuery(WBUILDINGS_QUERY, {
+        variables: { wid },
     });
-    const handleIcon = (catg)=>{
+    const handleIcon = (catg) => {
         switch (catg) {
             case "School":
                 return schoolIcon
@@ -22,10 +24,10 @@ const Building =({mid})=>{
     }
     useEffect(() => {
         if (!loading) {
-            setBuildingsCrd(data.buildings);
+            setBuildingsCrd(data.wbuildings);
         }
-    },);
-    return(
+    });
+    return zoomcontext.state.zoom >= 13 ? (
         <div>
             {
                 buildingsCrd.map(building => {
@@ -42,16 +44,16 @@ const Building =({mid})=>{
                                 <h4>Roof Type: {building.properties.roofType}</h4>
                                 <h4>Total Floor: {building.properties.floor}</h4>
                                 <h4>Toilet: {building.properties.toilet}</h4>
-                                <h4>Road Acces: {building.properties.roadAccess?'Yes':'No'}</h4>
-                                <h4>Electricity Access: {building.properties.electAccess?'Yes':'No'}</h4>
-                                <img src={building.properties.image} alt="Building Image"/>
-                                </Popup>
+                                <h4>Road Acces: {building.properties.roadAccess ? 'Yes' : 'No'}</h4>
+                                <h4>Electricity Access: {building.properties.electAccess ? 'Yes' : 'No'}</h4>
+                                <img src={building.properties.image} alt="Building Image" />
+                            </Popup>
                         </Marker>
                     )
                 })
             }
         </div>
-    )
+    ) : null
 }
 
 export default Building;

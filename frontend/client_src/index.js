@@ -1,6 +1,7 @@
 import React, { StrictMode } from 'react'
 import ReactDOM from 'react-dom'
 import { ApolloProvider, ApolloClient, InMemoryCache } from '@apollo/client'
+import {BrowserRouter} from "react-router-dom";
 import App from './App.jsx';
 import ZoomContextProvider from './contexts/zoom-context.js';
 import CenterContextProvider from './contexts/center-context.js';
@@ -17,7 +18,9 @@ ReactDOM.render(
 			<ZoomContextProvider>
 				<CenterContextProvider>
 					<ToggleContextProvider>
-						<App />
+						<BrowserRouter>
+							<App />
+						</BrowserRouter>
 					</ToggleContextProvider>
 				</CenterContextProvider>
 			</ZoomContextProvider>

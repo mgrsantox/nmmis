@@ -14,7 +14,7 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 
-from django.urls import include, path
+from django.urls import include, path,re_path
 from django.conf import settings
 from django.conf.urls.static import static
 from nmmis.core.views.client_views import Index
@@ -23,9 +23,11 @@ from nmmis.core.views.client_views import Index
 app_name = 'client'
 
 urlpatterns = [
-    path('', Index.as_view(), name='index')
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
+urlpatterns += [
+    re_path(r'^.*$', Index.as_view(), name='index'),
+]
 if settings.DEBUG:
     urlpatterns += static(settings.STATIC_URL,
                           document_root=settings.STATIC_ROOT)

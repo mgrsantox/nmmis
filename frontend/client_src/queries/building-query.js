@@ -26,3 +26,30 @@ export const BUILDINGS_QUERY = gql`
         }
     }
 `;
+
+export const WBUILDINGS_QUERY = gql`
+    query WBuildings($wid: String){
+        wbuildings(wid: $wid){
+            id
+            properties{
+                name
+                catg
+                image
+                buildingNo
+                subCatg
+                landArea
+                buildArea
+                buildDate
+                roofType
+                floor
+                toilet
+                roadAccess
+                electAccess
+            }
+            geometry{
+                type
+                coordinates
+            }
+        }
+    }
+`;

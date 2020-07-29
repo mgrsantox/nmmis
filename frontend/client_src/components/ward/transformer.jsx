@@ -1,21 +1,23 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useContext } from 'react'
 import { useQuery } from '@apollo/client';
 import { Marker, Popup } from 'react-leaflet'
-import {TRANSFORMER_QUERY } from '../queries/muncipal-query';
+import { WTRANSFORMER_QUERY } from '../../queries/muncipal-query';
+import { ZoomContext } from '../../contexts';
 
-const Transformer = ({mid})=>{
+const Transformer = ({wid})=>{
+    const zoomcontext = useContext(ZoomContext)
     const [transformers, setTransformers] = useState([]);
-    const {loading, error, data} = useQuery(TRANSFORMER_QUERY, {
-        variables: { mid }
+    const {loading, error, data} = useQuery(WTRANSFORMER_QUERY, {
+        variables: { wid }
     })
 
     useEffect(() => {
         if (!loading) {
-            setTransformers(data.transformers);
+            setTransformers(data.wtransformers);
         }
     });
 
-    return(
+    return zoomcontext.state.zoom >=13?(
         <div>
             {
                 transformers.map(transformer => {
@@ -30,7 +32,7 @@ const Transformer = ({mid})=>{
                 })
             }
         </div>
-    )
+    ):null
 }
 
 export default Transformer;
