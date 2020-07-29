@@ -1,5 +1,6 @@
 import React, { useContext } from 'react';
 import { ToggleContext } from '../../contexts';
+import { Link } from 'react-router-dom';
 
 const SideBar = () => {
     const togglecontext = useContext(ToggleContext);
@@ -34,6 +35,8 @@ const SideBar = () => {
             <br/>
             <input type="checkbox" onChange={handleChangeTrasformer} checked={togglecontext.state.toggle_transformer} />
             <label htmlFor="scales">Trasnformer</label>
+            <br/>
+            <Link to="/ward-compare"> Compare</Link>
         </div>
     )
 }

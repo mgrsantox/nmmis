@@ -42,6 +42,18 @@ query Wards($mid: String){
 }
 `;
 
+export const SHORT_WARDS_QUERY = gql`
+query Shorwards($mid: String){
+  wards(mid: $mid){
+    id
+    properties{
+      name
+    }
+  }
+}
+`;
+
+
 
 export const WARD_QUERY = gql`
 query Ward($wid: String){

@@ -67081,12 +67081,22 @@ exports.default = _default;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.WTRANSFORMER_QUERY = exports.TRANSFORMER_QUERY = exports.WTELECOM_QUERY = exports.TELECOM_QUERY = exports.WARD_ROAD_QUERY = exports.ROAD_QUERY = exports.WARD_QUERY = exports.WARDS_QUERY = exports.MUNICIPAL_QUERY = void 0;
+exports.WTRANSFORMER_QUERY = exports.TRANSFORMER_QUERY = exports.WTELECOM_QUERY = exports.TELECOM_QUERY = exports.WARD_ROAD_QUERY = exports.ROAD_QUERY = exports.WARD_QUERY = exports.SHORT_WARDS_QUERY = exports.WARDS_QUERY = exports.MUNICIPAL_QUERY = void 0;
 
 var _client = require("@apollo/client");
 
-function _templateObject9() {
+function _templateObject10() {
   var data = _taggedTemplateLiteral(["\nquery WTransformers($wid: String){\n  wtransformers(wid: $wid){\n    id\n    properties{\n      type\n    }\n    geometry{\n      type\n      coordinates\n    }\n  }\n}\n"]);
+
+  _templateObject10 = function _templateObject10() {
+    return data;
+  };
+
+  return data;
+}
+
+function _templateObject9() {
+  var data = _taggedTemplateLiteral(["\nquery Transformers($mid: String){\n  transformers(mid: $mid){\n    id\n    properties{\n      type\n    }\n    geometry{\n      type\n      coordinates\n    }\n  }\n}\n"]);
 
   _templateObject9 = function _templateObject9() {
     return data;
@@ -67096,7 +67106,7 @@ function _templateObject9() {
 }
 
 function _templateObject8() {
-  var data = _taggedTemplateLiteral(["\nquery Transformers($mid: String){\n  transformers(mid: $mid){\n    id\n    properties{\n      type\n    }\n    geometry{\n      type\n      coordinates\n    }\n  }\n}\n"]);
+  var data = _taggedTemplateLiteral(["\nquery WTelecoms($wid: String){\n  wtelecoms(wid: $wid){\n    id\n    properties{\n      type\n    }\n    geometry{\n      type\n      coordinates\n    }\n  }\n}\n"]);
 
   _templateObject8 = function _templateObject8() {
     return data;
@@ -67106,7 +67116,7 @@ function _templateObject8() {
 }
 
 function _templateObject7() {
-  var data = _taggedTemplateLiteral(["\nquery WTelecoms($wid: String){\n  wtelecoms(wid: $wid){\n    id\n    properties{\n      type\n    }\n    geometry{\n      type\n      coordinates\n    }\n  }\n}\n"]);
+  var data = _taggedTemplateLiteral(["\nquery Telecoms($mid: String){\n  telecoms(mid: $mid){\n    id\n    properties{\n      type\n    }\n    geometry{\n      type\n      coordinates\n    }\n  }\n}\n"]);
 
   _templateObject7 = function _templateObject7() {
     return data;
@@ -67116,7 +67126,7 @@ function _templateObject7() {
 }
 
 function _templateObject6() {
-  var data = _taggedTemplateLiteral(["\nquery Telecoms($mid: String){\n  telecoms(mid: $mid){\n    id\n    properties{\n      type\n    }\n    geometry{\n      type\n      coordinates\n    }\n  }\n}\n"]);
+  var data = _taggedTemplateLiteral(["\nquery WRoads($wid: String){\n  wroads(wid: $wid){\n    id\n    properties{\n      name\n    }\n    geometry{\n      type\n      coordinates\n    }\n  }\n}\n"]);
 
   _templateObject6 = function _templateObject6() {
     return data;
@@ -67126,7 +67136,7 @@ function _templateObject6() {
 }
 
 function _templateObject5() {
-  var data = _taggedTemplateLiteral(["\nquery WRoads($wid: String){\n  wroads(wid: $wid){\n    id\n    properties{\n      name\n    }\n    geometry{\n      type\n      coordinates\n    }\n  }\n}\n"]);
+  var data = _taggedTemplateLiteral(["\nquery Roads($mid: String){\n  roads(mid: $mid){\n    id\n    properties{\n      name\n    }\n    geometry{\n      type\n      coordinates\n    }\n  }\n}\n"]);
 
   _templateObject5 = function _templateObject5() {
     return data;
@@ -67136,7 +67146,7 @@ function _templateObject5() {
 }
 
 function _templateObject4() {
-  var data = _taggedTemplateLiteral(["\nquery Roads($mid: String){\n  roads(mid: $mid){\n    id\n    properties{\n      name\n    }\n    geometry{\n      type\n      coordinates\n    }\n  }\n}\n"]);
+  var data = _taggedTemplateLiteral(["\nquery Ward($wid: String){\n  ward(wid: $wid){\n    id\n    properties{\n      name\n      area\n      total\n      male\n      female\n      hindu\n      muslim\n      buddhist\n      other\n      municipal{\n        properties{\n          name\n          area\n        }\n      }\n      buildingSet{\n        id\n      }\n      roadSet{\n        id\n      }\n      telecomSet{\n        id\n      }\n      transformerSet{\n        id\n      }\n    }\n    geometry{\n      type\n      coordinates\n    }\n  }\n}\n"]);
 
   _templateObject4 = function _templateObject4() {
     return data;
@@ -67146,7 +67156,7 @@ function _templateObject4() {
 }
 
 function _templateObject3() {
-  var data = _taggedTemplateLiteral(["\nquery Ward($wid: String){\n  ward(wid: $wid){\n    id\n    properties{\n      name\n      area\n      total\n      male\n      female\n      hindu\n      muslim\n      buddhist\n      other\n      municipal{\n        properties{\n          name\n          area\n        }\n      }\n      buildingSet{\n        id\n      }\n      roadSet{\n        id\n      }\n      telecomSet{\n        id\n      }\n      transformerSet{\n        id\n      }\n    }\n    geometry{\n      type\n      coordinates\n    }\n  }\n}\n"]);
+  var data = _taggedTemplateLiteral(["\nquery Shorwards($mid: String){\n  wards(mid: $mid){\n    id\n    properties{\n      name\n    }\n  }\n}\n"]);
 
   _templateObject3 = function _templateObject3() {
     return data;
@@ -67181,19 +67191,21 @@ var MUNICIPAL_QUERY = (0, _client.gql)(_templateObject());
 exports.MUNICIPAL_QUERY = MUNICIPAL_QUERY;
 var WARDS_QUERY = (0, _client.gql)(_templateObject2());
 exports.WARDS_QUERY = WARDS_QUERY;
-var WARD_QUERY = (0, _client.gql)(_templateObject3());
+var SHORT_WARDS_QUERY = (0, _client.gql)(_templateObject3());
+exports.SHORT_WARDS_QUERY = SHORT_WARDS_QUERY;
+var WARD_QUERY = (0, _client.gql)(_templateObject4());
 exports.WARD_QUERY = WARD_QUERY;
-var ROAD_QUERY = (0, _client.gql)(_templateObject4());
+var ROAD_QUERY = (0, _client.gql)(_templateObject5());
 exports.ROAD_QUERY = ROAD_QUERY;
-var WARD_ROAD_QUERY = (0, _client.gql)(_templateObject5());
+var WARD_ROAD_QUERY = (0, _client.gql)(_templateObject6());
 exports.WARD_ROAD_QUERY = WARD_ROAD_QUERY;
-var TELECOM_QUERY = (0, _client.gql)(_templateObject6());
+var TELECOM_QUERY = (0, _client.gql)(_templateObject7());
 exports.TELECOM_QUERY = TELECOM_QUERY;
-var WTELECOM_QUERY = (0, _client.gql)(_templateObject7());
+var WTELECOM_QUERY = (0, _client.gql)(_templateObject8());
 exports.WTELECOM_QUERY = WTELECOM_QUERY;
-var TRANSFORMER_QUERY = (0, _client.gql)(_templateObject8());
+var TRANSFORMER_QUERY = (0, _client.gql)(_templateObject9());
 exports.TRANSFORMER_QUERY = TRANSFORMER_QUERY;
-var WTRANSFORMER_QUERY = (0, _client.gql)(_templateObject9());
+var WTRANSFORMER_QUERY = (0, _client.gql)(_templateObject10());
 exports.WTRANSFORMER_QUERY = WTRANSFORMER_QUERY;
 },{"@apollo/client":"../../node_modules/@apollo/client/index.js"}],"components/info-chart/municipal/pop-chart.jsx":[function(require,module,exports) {
 "use strict";
@@ -68020,6 +68032,8 @@ var _react = _interopRequireWildcard(require("react"));
 
 var _contexts = require("../../contexts");
 
+var _reactRouterDom = require("react-router-dom");
+
 function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function () { return cache; }; return cache; }
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
@@ -68077,12 +68091,14 @@ var SideBar = function SideBar() {
     checked: togglecontext.state.toggle_transformer
   }), /*#__PURE__*/_react.default.createElement("label", {
     htmlFor: "scales"
-  }, "Trasnformer"));
+  }, "Trasnformer"), /*#__PURE__*/_react.default.createElement("br", null), /*#__PURE__*/_react.default.createElement(_reactRouterDom.Link, {
+    to: "/ward-compare"
+  }, " Compare"));
 };
 
 var _default = SideBar;
 exports.default = _default;
-},{"react":"../../node_modules/react/index.js","../../contexts":"contexts/index.js"}],"components/ward/ward.jsx":[function(require,module,exports) {
+},{"react":"../../node_modules/react/index.js","../../contexts":"contexts/index.js","react-router-dom":"../../node_modules/react-router-dom/esm/react-router-dom.js"}],"components/ward/ward.jsx":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -68289,7 +68305,171 @@ var WardDetail = function WardDetail(props) {
 
 var _default = WardDetail;
 exports.default = _default;
-},{"react":"../../node_modules/react/index.js","react-leaflet":"../../node_modules/react-leaflet/es/index.js","react-leaflet-measure":"../../node_modules/react-leaflet-measure/dist/react-leaflet-measure.min.js","../contexts":"contexts/index.js","../components/ward/ward":"components/ward/ward.jsx","../components/ward/road":"components/ward/road.jsx","../components/ward/place":"components/ward/place.jsx","../components/ward/building":"components/ward/building.jsx","../components/ward/transformer":"components/ward/transformer.jsx","../components/ward/telecom":"components/ward/telecom.jsx","@apollo/client":"../../node_modules/@apollo/client/index.js","../queries/muncipal-query":"queries/muncipal-query.js","../components/ward/ward-info":"components/ward/ward-info.jsx"}],"App.jsx":[function(require,module,exports) {
+},{"react":"../../node_modules/react/index.js","react-leaflet":"../../node_modules/react-leaflet/es/index.js","react-leaflet-measure":"../../node_modules/react-leaflet-measure/dist/react-leaflet-measure.min.js","../contexts":"contexts/index.js","../components/ward/ward":"components/ward/ward.jsx","../components/ward/road":"components/ward/road.jsx","../components/ward/place":"components/ward/place.jsx","../components/ward/building":"components/ward/building.jsx","../components/ward/transformer":"components/ward/transformer.jsx","../components/ward/telecom":"components/ward/telecom.jsx","@apollo/client":"../../node_modules/@apollo/client/index.js","../queries/muncipal-query":"queries/muncipal-query.js","../components/ward/ward-info":"components/ward/ward-info.jsx"}],"components/ward/ward-compare-card.jsx":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _react = _interopRequireDefault(require("react"));
+
+var _client = require("@apollo/client");
+
+var _muncipalQuery = require("../../queries/muncipal-query");
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var WardCompareCard = function WardCompareCard(_ref) {
+  var wid = _ref.wid;
+
+  var _useQuery = (0, _client.useQuery)(_muncipalQuery.WARD_QUERY, {
+    variables: {
+      wid: wid
+    }
+  }),
+      loading = _useQuery.loading,
+      error = _useQuery.error,
+      data = _useQuery.data;
+
+  return /*#__PURE__*/_react.default.createElement("div", null, /*#__PURE__*/_react.default.createElement("h1", null, "Ward 1"), /*#__PURE__*/_react.default.createElement("h1", null, "\xA0", wid));
+};
+
+var _default = WardCompareCard;
+exports.default = _default;
+},{"react":"../../node_modules/react/index.js","@apollo/client":"../../node_modules/@apollo/client/index.js","../../queries/muncipal-query":"queries/muncipal-query.js"}],"pages/ward-compare.jsx":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _react = _interopRequireWildcard(require("react"));
+
+var _client = require("@apollo/client");
+
+var _muncipalQuery = require("../queries/muncipal-query");
+
+var _wardCompareCard = _interopRequireDefault(require("../components/ward/ward-compare-card"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function () { return cache; }; return cache; }
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+
+function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
+
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
+function _iterableToArrayLimit(arr, i) { if (typeof Symbol === "undefined" || !(Symbol.iterator in Object(arr))) return; var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
+
+function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+
+var mid = 'iaEL7GVAzOtRL';
+
+var WardCompare = function WardCompare() {
+  var _useState = (0, _react.useState)([]),
+      _useState2 = _slicedToArray(_useState, 2),
+      wards = _useState2[0],
+      setWards = _useState2[1];
+
+  var _useState3 = (0, _react.useState)(''),
+      _useState4 = _slicedToArray(_useState3, 2),
+      ward1 = _useState4[0],
+      setWard1 = _useState4[1];
+
+  var _useState5 = (0, _react.useState)(''),
+      _useState6 = _slicedToArray(_useState5, 2),
+      ward2 = _useState6[0],
+      setWard2 = _useState6[1];
+
+  var _useQuery = (0, _client.useQuery)(_muncipalQuery.SHORT_WARDS_QUERY, {
+    variables: {
+      mid: mid
+    }
+  }),
+      loading = _useQuery.loading,
+      error = _useQuery.error,
+      data = _useQuery.data;
+
+  (0, _react.useEffect)(function () {
+    if (!loading && _typeof(data.wards) !== undefined) {
+      setWards(data.wards);
+    }
+  });
+
+  var handleWard1Change = function handleWard1Change(e) {
+    setWard1(e.target.value);
+  };
+
+  var handleWard2Change = function handleWard2Change(e) {
+    setWard2(e.target.value);
+  };
+
+  return /*#__PURE__*/_react.default.createElement("div", null, "Compare page", /*#__PURE__*/_react.default.createElement("div", {
+    style: {
+      display: "flex"
+    }
+  }, /*#__PURE__*/_react.default.createElement("div", {
+    className: "ward1"
+  }, /*#__PURE__*/_react.default.createElement("label", {
+    htmlFor: "ward1"
+  }, "Choose a First Ward:"), /*#__PURE__*/_react.default.createElement("select", {
+    name: "ward1",
+    defaultValue: 'DEFAULT',
+    onChange: function onChange(e) {
+      return handleWard1Change(e);
+    }
+  }, /*#__PURE__*/_react.default.createElement("option", {
+    value: "DEFAULT",
+    disabled: true
+  }, "Choose..."), wards.map(function (ward) {
+    return /*#__PURE__*/_react.default.createElement("option", {
+      key: ward.id,
+      value: ward.id
+    }, ward.properties.name);
+  }))), /*#__PURE__*/_react.default.createElement("div", {
+    className: "ward2"
+  }, /*#__PURE__*/_react.default.createElement("label", {
+    htmlFor: "ward2"
+  }, "Choose a Second Ward:"), /*#__PURE__*/_react.default.createElement("select", {
+    name: "ward2",
+    defaultValue: 'DEFAULT',
+    onChange: function onChange(e) {
+      return handleWard2Change(e);
+    }
+  }, /*#__PURE__*/_react.default.createElement("option", {
+    value: "DEFAULT",
+    disabled: true
+  }, "Choose..."), wards.map(function (ward) {
+    return /*#__PURE__*/_react.default.createElement("option", {
+      key: ward.id,
+      value: ward.id
+    }, ward.properties.name);
+  })))), ward1 !== '' && ward2 !== '' ? /*#__PURE__*/_react.default.createElement("div", {
+    style: {
+      display: "flex",
+      margin: "10px"
+    }
+  }, /*#__PURE__*/_react.default.createElement("div", null, /*#__PURE__*/_react.default.createElement(_wardCompareCard.default, {
+    wid: ward1
+  })), /*#__PURE__*/_react.default.createElement("div", null, /*#__PURE__*/_react.default.createElement(_wardCompareCard.default, {
+    wid: ward2
+  }))) : null);
+};
+
+var _default = WardCompare;
+exports.default = _default;
+},{"react":"../../node_modules/react/index.js","@apollo/client":"../../node_modules/@apollo/client/index.js","../queries/muncipal-query":"queries/muncipal-query.js","../components/ward/ward-compare-card":"components/ward/ward-compare-card.jsx"}],"App.jsx":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -68309,6 +68489,8 @@ var _sidebar = _interopRequireDefault(require("./components/navigation/sidebar")
 
 var _wardDetail = _interopRequireDefault(require("./pages/ward-detail"));
 
+var _wardCompare = _interopRequireDefault(require("./pages/ward-compare"));
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var App = function App() {
@@ -68320,12 +68502,16 @@ var App = function App() {
     path: "/ward/:wid",
     exact: true,
     component: _wardDetail.default
+  }), /*#__PURE__*/_react.default.createElement(_reactRouterDom.Route, {
+    path: "/ward-compare",
+    exact: true,
+    component: _wardCompare.default
   })));
 };
 
 var _default = App;
 exports.default = _default;
-},{"react":"../../node_modules/react/index.js","react-router-dom":"../../node_modules/react-router-dom/esm/react-router-dom.js","./components/map":"components/map.jsx","./components/navigation/navbar":"components/navigation/navbar.jsx","./components/navigation/sidebar":"components/navigation/sidebar.jsx","./pages/ward-detail":"pages/ward-detail.jsx"}],"reducers/action-types.js":[function(require,module,exports) {
+},{"react":"../../node_modules/react/index.js","react-router-dom":"../../node_modules/react-router-dom/esm/react-router-dom.js","./components/map":"components/map.jsx","./components/navigation/navbar":"components/navigation/navbar.jsx","./components/navigation/sidebar":"components/navigation/sidebar.jsx","./pages/ward-detail":"pages/ward-detail.jsx","./pages/ward-compare":"pages/ward-compare.jsx"}],"reducers/action-types.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
