@@ -68305,7 +68305,95 @@ var WardDetail = function WardDetail(props) {
 
 var _default = WardDetail;
 exports.default = _default;
-},{"react":"../../node_modules/react/index.js","react-leaflet":"../../node_modules/react-leaflet/es/index.js","react-leaflet-measure":"../../node_modules/react-leaflet-measure/dist/react-leaflet-measure.min.js","../contexts":"contexts/index.js","../components/ward/ward":"components/ward/ward.jsx","../components/ward/road":"components/ward/road.jsx","../components/ward/place":"components/ward/place.jsx","../components/ward/building":"components/ward/building.jsx","../components/ward/transformer":"components/ward/transformer.jsx","../components/ward/telecom":"components/ward/telecom.jsx","@apollo/client":"../../node_modules/@apollo/client/index.js","../queries/muncipal-query":"queries/muncipal-query.js","../components/ward/ward-info":"components/ward/ward-info.jsx"}],"components/ward/ward-compare-card.jsx":[function(require,module,exports) {
+},{"react":"../../node_modules/react/index.js","react-leaflet":"../../node_modules/react-leaflet/es/index.js","react-leaflet-measure":"../../node_modules/react-leaflet-measure/dist/react-leaflet-measure.min.js","../contexts":"contexts/index.js","../components/ward/ward":"components/ward/ward.jsx","../components/ward/road":"components/ward/road.jsx","../components/ward/place":"components/ward/place.jsx","../components/ward/building":"components/ward/building.jsx","../components/ward/transformer":"components/ward/transformer.jsx","../components/ward/telecom":"components/ward/telecom.jsx","@apollo/client":"../../node_modules/@apollo/client/index.js","../queries/muncipal-query":"queries/muncipal-query.js","../components/ward/ward-info":"components/ward/ward-info.jsx"}],"components/ward/ward-compare-map.jsx":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _react = _interopRequireWildcard(require("react"));
+
+var _reactLeaflet = require("react-leaflet");
+
+var _ward = _interopRequireDefault(require("./ward"));
+
+var _contexts = require("../../contexts");
+
+var _road = _interopRequireDefault(require("./road"));
+
+var _place = _interopRequireDefault(require("./place"));
+
+var _building = _interopRequireDefault(require("./building"));
+
+var _telecom = _interopRequireDefault(require("./telecom"));
+
+var _transformer = _interopRequireDefault(require("./transformer"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function () { return cache; }; return cache; }
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+
+var BaseLayer = _reactLeaflet.LayersControl.BaseLayer,
+    Overlay = _reactLeaflet.LayersControl.Overlay;
+
+var WardCompareMap = function WardCompareMap(_ref) {
+  var wardCrd = _ref.wardCrd,
+      ward = _ref.ward,
+      wid = _ref.wid;
+  var togglecontext = (0, _react.useContext)(_contexts.ToggleContext);
+  var zoomcontext = (0, _react.useContext)(_contexts.ZoomContext);
+
+  var handleViewPort = function handleViewPort(e) {
+    zoomcontext.onZoom(e.target._zoom);
+  };
+
+  return /*#__PURE__*/_react.default.createElement("div", null, /*#__PURE__*/_react.default.createElement(_reactLeaflet.Map, {
+    center: wardCrd[0][0],
+    zoom: 13,
+    minZoom: 12,
+    maxZoom: 19,
+    onZoom: handleViewPort
+  }, /*#__PURE__*/_react.default.createElement(_reactLeaflet.LayersControl, {
+    position: "topright"
+  }, /*#__PURE__*/_react.default.createElement(BaseLayer, {
+    name: "OpenStreetMap.Mapnik"
+  }, /*#__PURE__*/_react.default.createElement(_reactLeaflet.TileLayer, {
+    attribution: "&copy <a href=\"http://osm.org/copyright\">OpenStreetMap</a> contributors",
+    url: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+  })), /*#__PURE__*/_react.default.createElement(BaseLayer, {
+    checked: true,
+    name: "OpenStreetMap.BlackAndWhite"
+  }, /*#__PURE__*/_react.default.createElement(_reactLeaflet.TileLayer, {
+    attribution: "&copy <a href=\"http://osm.org/copyright\">OpenStreetMap</a> contributors",
+    url: "https://tiles.wmflabs.org/bw-mapnik/{z}/{x}/{y}.png"
+  })), /*#__PURE__*/_react.default.createElement(BaseLayer, {
+    name: "Esri.WorldImagery"
+  }, /*#__PURE__*/_react.default.createElement(_reactLeaflet.TileLayer, {
+    attribution: "Tiles \xA9 Esri \u2014 Source: Esri, i-cubed, USDA, USGS and the GIS User Community",
+    url: "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"
+  })), /*#__PURE__*/_react.default.createElement(_ward.default, {
+    wardCrd: wardCrd,
+    ward: ward
+  }), /*#__PURE__*/_react.default.createElement(_reactLeaflet.LayerGroup, null, togglecontext.state.toggle_road ? /*#__PURE__*/_react.default.createElement(_road.default, {
+    wid: wid
+  }) : null, togglecontext.state.toggle_place ? /*#__PURE__*/_react.default.createElement(_place.default, {
+    wid: wid
+  }) : null, togglecontext.state.toggle_building ? /*#__PURE__*/_react.default.createElement(_building.default, {
+    wid: wid
+  }) : null, togglecontext.state.toggle_telecom ? /*#__PURE__*/_react.default.createElement(_telecom.default, {
+    wid: wid
+  }) : null, togglecontext.state.toggle_transformer ? /*#__PURE__*/_react.default.createElement(_transformer.default, {
+    wid: wid
+  }) : null))));
+};
+
+var _default = WardCompareMap;
+exports.default = _default;
+},{"react":"../../node_modules/react/index.js","react-leaflet":"../../node_modules/react-leaflet/es/index.js","./ward":"components/ward/ward.jsx","../../contexts":"contexts/index.js","./road":"components/ward/road.jsx","./place":"components/ward/place.jsx","./building":"components/ward/building.jsx","./telecom":"components/ward/telecom.jsx","./transformer":"components/ward/transformer.jsx"}],"components/ward/ward-compare-card.jsx":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -68318,6 +68406,10 @@ var _react = _interopRequireWildcard(require("react"));
 var _client = require("@apollo/client");
 
 var _muncipalQuery = require("../../queries/muncipal-query");
+
+var _wardCompareMap = _interopRequireDefault(require("./ward-compare-map"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function () { return cache; }; return cache; }
 
@@ -68360,16 +68452,19 @@ var WardCompareCard = function WardCompareCard(_ref) {
   (0, _react.useEffect)(function () {
     if (!loading) {
       setWardCrd(data.ward.geometry.coordinates);
-      setWard(data.ward.properties);
-      console.log(data.ward);
+      setWard(data.ward.properties); // console.log(data.ward)
     }
   });
-  return ward.municipal !== undefined ? /*#__PURE__*/_react.default.createElement("div", null, /*#__PURE__*/_react.default.createElement("h1", null, "Ward 1"), /*#__PURE__*/_react.default.createElement("h1", null, "\xA0", ward.municipal.properties.name), /*#__PURE__*/_react.default.createElement("h1", null, "\xA0", ward.name)) : null;
+  return ward.municipal !== undefined ? /*#__PURE__*/_react.default.createElement("div", null, /*#__PURE__*/_react.default.createElement(_wardCompareMap.default, {
+    wardCrd: wardCrd,
+    ward: ward,
+    wid: wid
+  }), /*#__PURE__*/_react.default.createElement("h1", null, "Ward 1"), /*#__PURE__*/_react.default.createElement("h1", null, "\xA0", ward.municipal.properties.name), /*#__PURE__*/_react.default.createElement("h1", null, "\xA0", ward.name)) : null;
 };
 
 var _default = WardCompareCard;
 exports.default = _default;
-},{"react":"../../node_modules/react/index.js","@apollo/client":"../../node_modules/@apollo/client/index.js","../../queries/muncipal-query":"queries/muncipal-query.js"}],"pages/ward-compare.jsx":[function(require,module,exports) {
+},{"react":"../../node_modules/react/index.js","@apollo/client":"../../node_modules/@apollo/client/index.js","../../queries/muncipal-query":"queries/muncipal-query.js","./ward-compare-map":"components/ward/ward-compare-map.jsx"}],"pages/ward-compare.jsx":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {

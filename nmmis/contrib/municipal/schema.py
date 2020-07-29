@@ -89,6 +89,7 @@ class Query(graphene.ObjectType):
         return Road.objects.filter(ward__municipal__id=mid)
     
     def resolve_wroads(self, info, wid, *args, **kwargs):
+        print("ward Road called")
         return Road.objects.filter(ward__id=wid)
 
     def resolve_telecoms(self, info, mid, *args, **kwargs):
