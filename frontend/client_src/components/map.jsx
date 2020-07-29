@@ -1,5 +1,5 @@
 import React, { useContext } from 'react'
-import { Map, TileLayer,LayerGroup, LayersControl } from 'react-leaflet';
+import { Map, TileLayer, LayerGroup, LayersControl } from 'react-leaflet';
 import MeasureControl from 'react-leaflet-measure';
 import { ZoomContext, CenterContext, ToggleContext } from '../contexts';
 import Munciple from './munciple';
@@ -23,7 +23,7 @@ const measureOptions = {
     secondaryAreaUnit: 'acres',
     activeColor: '#db4a29',
     completedColor: '#9b2d14'
-  };
+};
 
 const MainMap = () => {
     const zoomcontext = useContext(ZoomContext);
@@ -57,11 +57,11 @@ const MainMap = () => {
                     />
                 </BaseLayer>
                 <LayerGroup>
-                {zoomcontext.state.zoom <= 12 ? <Munciple mid={mid}></Munciple> : <Ward mid={mid}></Ward>}
-                {togglecontext.state.toggle_place && zoomcontext.state.zoom >= 13? <Place mid={mid}></Place> : null}
-                {togglecontext.state.toggle_building && zoomcontext.state.zoom >= 13? <Building mid={mid}></Building> : null}
-                {togglecontext.state.toggle_telecom && zoomcontext.state.zoom >= 13? <Telecom mid={mid}></Telecom> : null}
-                {togglecontext.state.toggle_transformer && zoomcontext.state.zoom >= 13? <Transformer mid={mid}></Transformer> : null}
+                    {zoomcontext.state.zoom <= 12 ? <Munciple mid={mid}></Munciple> : <Ward mid={mid}></Ward>}
+                    {togglecontext.state.toggle_place && zoomcontext.state.zoom >= 13 ? <Place mid={mid}></Place> : null}
+                    {togglecontext.state.toggle_building && zoomcontext.state.zoom >= 13 ? <Building mid={mid}></Building> : null}
+                    {togglecontext.state.toggle_telecom && zoomcontext.state.zoom >= 13 ? <Telecom mid={mid}></Telecom> : null}
+                    {togglecontext.state.toggle_transformer && zoomcontext.state.zoom >= 13 ? <Transformer mid={mid}></Transformer> : null}
                 </LayerGroup>
                 <MeasureControl {...measureOptions} />
             </LayersControl>

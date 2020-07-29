@@ -1,5 +1,5 @@
 {
-  "name": "nmis",
+  "name": "nmmis",
   "version": "1.0.0",
   "description": "Nepal Municipal Information System",
   "main": "index.js",
@@ -7,37 +7,34 @@
     "doc": "docs"
   },
   "scripts": {
-    "dev:client": "webpack --mode development ./frontend/client_src/index.js --output ./nmmis/static/client/app.js",
-    "build:client": "webpack --mode production ./frontend/client_src/index.js --output ./nmmis/static/client/app.js",
-    "watchd:client": "webpack --mode development --watch ./frontend/client_src/index.js --output ./nmmis/static/client/app.js",
-    "watchp:client": "webpack --mode production --watch ./frontend/client_src/index.js --output ./nmmis/static/client/app.js"
+    "dev:client": "NODE_ENV=development parcel watch ./frontend/client_src/index.js --out-dir nmmis/static/client/ --no-hmr --no-cache --public-url ./static/client",
+    "pro:client": "NODE_ENV=production parcel watch ./frontend/client_src/index.js --out-dir nmmis/static/client/ --no-hmr --no-cache --public-url ./static/client"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/mgrsantox/nmis.git"
+    "url": "git+https://github.com/mgrsantox/nmmis.git"
   },
-  "author": "Santos Magar",
+  "author": "Santosh Magar",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/mgrsantox/nmis/issues"
+    "url": "https://github.com/mgrsantox/nmmis/issues"
   },
-  "homepage": "https://github.com/mgrsantox/nmis#readme",
-  "devDependencies": {
-    "@babel/core": "^7.10.5",
-    "@babel/preset-env": "^7.10.4",
-    "@babel/preset-react": "^7.10.4",
-    "babel-loader": "^8.1.0",
-    "webpack": "^4.43.0",
-    "webpack-cli": "^3.3.12"
-  },
+  "homepage": "https://github.com/mgrsantox/nmmis#readme",
   "dependencies": {
-    "@apollo/client": "^3.0.0",
+    "@apollo/client": "^3.1.1",
     "graphql": "^15.3.0",
     "leaflet": "^1.6.0",
+    "parcel-bundler": "^1.12.4",
+    "prop-types": "^15.7.2",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-google-charts": "^3.0.15",
     "react-leaflet": "^2.7.0",
-    "react-leaflet-measure": "^2.1.1"
+    "react-leaflet-measure": "^2.1.1",
+    "subscriptions-transport-ws": "^0.9.17"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.10.5",
+    "@babel/preset-react": "^7.10.4"
   }
 }
