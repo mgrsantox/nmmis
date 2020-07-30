@@ -14,13 +14,20 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import include, path
+from django.urls import path, re_path  # include,
 from django.conf import settings
 from django.conf.urls.static import static
+from nmmis.core.views.admin_views import AdminIndex
+
+app_name = 'myadmin'
 
 urlpatterns = [
-    path('', admin.site.urls),
+    path('admin/', admin.site.urls),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+urlpatterns += [
+    re_path(r'^.*$', AdminIndex.as_view(), name='index'),
+]
 
 if settings.DEBUG:
     urlpatterns += static(settings.STATIC_URL,

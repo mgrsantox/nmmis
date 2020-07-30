@@ -7,8 +7,10 @@
     "doc": "docs"
   },
   "scripts": {
-    "dev:client": "NODE_ENV=development parcel watch ./frontend/client_src/index.js --out-dir nmmis/static/client/ --no-hmr --no-cache --public-url ./static/client",
-    "pro:client": "NODE_ENV=production parcel watch ./frontend/client_src/index.js --out-dir nmmis/static/client/ --no-hmr --no-cache --public-url ./static/client"
+    "dev:client": "NODE_ENV=development parcel  watch ./frontend/client_src/index.js --out-dir nmmis/static/client/ --no-hmr --no-cache --public-url ./static/client",
+    "pro:client": "NODE_ENV=production parcel watch ./frontend/client_src/index.js --out-dir nmmis/static/client/ --no-hmr --no-cache --public-url ./static/client",
+    "dev:admin": "NODE_ENV=development parcel  watch ./frontend/admin_src/index.js --out-dir nmmis/static/myadmin/ --no-hmr --no-cache --public-url ./static/myadmin",
+    "pro:admin": "NODE_ENV=production parcel watch ./frontend/admin_src/index.js --out-dir nmmis/static/myadmin/ --no-hmr --no-cache --public-url ./static/myadmin"
   },
   "repository": {
     "type": "git",
