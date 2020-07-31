@@ -48601,7 +48601,312 @@ if ("development" !== "production") {
     style: _propTypes.default.object
   });
 }
-},{"react-router":"../../node_modules/react-router/esm/react-router.js","@babel/runtime/helpers/esm/inheritsLoose":"../../node_modules/@babel/runtime/helpers/esm/inheritsLoose.js","react":"../../node_modules/react/index.js","history":"../../node_modules/history/esm/history.js","prop-types":"../../node_modules/prop-types/index.js","tiny-warning":"../../node_modules/tiny-warning/dist/tiny-warning.esm.js","@babel/runtime/helpers/esm/extends":"../../node_modules/@babel/runtime/helpers/esm/extends.js","@babel/runtime/helpers/esm/objectWithoutPropertiesLoose":"../../node_modules/@babel/runtime/helpers/esm/objectWithoutPropertiesLoose.js","tiny-invariant":"../../node_modules/tiny-invariant/dist/tiny-invariant.esm.js"}],"App.jsx":[function(require,module,exports) {
+},{"react-router":"../../node_modules/react-router/esm/react-router.js","@babel/runtime/helpers/esm/inheritsLoose":"../../node_modules/@babel/runtime/helpers/esm/inheritsLoose.js","react":"../../node_modules/react/index.js","history":"../../node_modules/history/esm/history.js","prop-types":"../../node_modules/prop-types/index.js","tiny-warning":"../../node_modules/tiny-warning/dist/tiny-warning.esm.js","@babel/runtime/helpers/esm/extends":"../../node_modules/@babel/runtime/helpers/esm/extends.js","@babel/runtime/helpers/esm/objectWithoutPropertiesLoose":"../../node_modules/@babel/runtime/helpers/esm/objectWithoutPropertiesLoose.js","tiny-invariant":"../../node_modules/tiny-invariant/dist/tiny-invariant.esm.js"}],"components/navigation/navbar.jsx":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _react = _interopRequireDefault(require("react"));
+
+var _reactRouterDom = require("react-router-dom");
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var NavBar = function NavBar() {
+  return /*#__PURE__*/_react.default.createElement("div", null, /*#__PURE__*/_react.default.createElement("nav", {
+    className: "main-header navbar navbar-expand navbar-success navbar-light"
+  }, /*#__PURE__*/_react.default.createElement("ul", {
+    className: "navbar-nav"
+  }, /*#__PURE__*/_react.default.createElement("li", {
+    className: "nav-item"
+  }, /*#__PURE__*/_react.default.createElement("a", {
+    className: "nav-link",
+    "data-widget": "pushmenu",
+    href: "#",
+    role: "button"
+  }, /*#__PURE__*/_react.default.createElement("i", {
+    className: "fas fa-bars"
+  }))), /*#__PURE__*/_react.default.createElement("li", {
+    className: "nav-item d-none d-sm-inline-block"
+  }, /*#__PURE__*/_react.default.createElement(_reactRouterDom.Link, {
+    to: "/",
+    className: "nav-link"
+  }, "Home")), /*#__PURE__*/_react.default.createElement("li", {
+    className: "nav-item d-none d-sm-inline-block"
+  }, /*#__PURE__*/_react.default.createElement("a", {
+    href: "#",
+    className: "nav-link"
+  }, "Contact"))), /*#__PURE__*/_react.default.createElement("form", {
+    className: "form-inline ml-3"
+  }, /*#__PURE__*/_react.default.createElement("div", {
+    className: "input-group input-group-sm"
+  }, /*#__PURE__*/_react.default.createElement("input", {
+    className: "form-control form-control-navbar",
+    type: "search",
+    placeholder: "Search",
+    "aria-label": "Search"
+  }), /*#__PURE__*/_react.default.createElement("div", {
+    className: "input-group-append"
+  }, /*#__PURE__*/_react.default.createElement("button", {
+    className: "btn btn-navbar",
+    type: "submit"
+  }, /*#__PURE__*/_react.default.createElement("i", {
+    className: "fas fa-search"
+  }))))), /*#__PURE__*/_react.default.createElement("ul", {
+    className: "navbar-nav ml-auto"
+  }, /*#__PURE__*/_react.default.createElement("li", {
+    className: "nav-item dropdown"
+  }, /*#__PURE__*/_react.default.createElement("a", {
+    className: "nav-link",
+    "data-toggle": "dropdown",
+    href: "#"
+  }, /*#__PURE__*/_react.default.createElement("i", {
+    className: "far fa-comments"
+  }), /*#__PURE__*/_react.default.createElement("span", {
+    className: "badge badge-danger navbar-badge"
+  }, "3")), /*#__PURE__*/_react.default.createElement("div", {
+    className: "dropdown-menu dropdown-menu-lg dropdown-menu-right"
+  }, /*#__PURE__*/_react.default.createElement("a", {
+    href: "#",
+    className: "dropdown-item"
+  }, /*#__PURE__*/_react.default.createElement("div", {
+    className: "media"
+  }, /*#__PURE__*/_react.default.createElement("img", {
+    src: "dist/img/user1-128x128.jpg",
+    alt: "User Avatar",
+    className: "img-size-50 mr-3 img-circle"
+  }), /*#__PURE__*/_react.default.createElement("div", {
+    className: "media-body"
+  }, /*#__PURE__*/_react.default.createElement("h3", {
+    className: "dropdown-item-title"
+  }, "Brad Diesel", /*#__PURE__*/_react.default.createElement("span", {
+    className: "float-right text-sm text-danger"
+  }, /*#__PURE__*/_react.default.createElement("i", {
+    className: "fas fa-star"
+  }))), /*#__PURE__*/_react.default.createElement("p", {
+    className: "text-sm"
+  }, "Call me whenever you can..."), /*#__PURE__*/_react.default.createElement("p", {
+    className: "text-sm text-muted"
+  }, /*#__PURE__*/_react.default.createElement("i", {
+    className: "far fa-clock mr-1"
+  }), " 4 Hours Ago")))), /*#__PURE__*/_react.default.createElement("div", {
+    className: "dropdown-divider"
+  }), /*#__PURE__*/_react.default.createElement("a", {
+    href: "#",
+    className: "dropdown-item"
+  }, /*#__PURE__*/_react.default.createElement("div", {
+    className: "media"
+  }, /*#__PURE__*/_react.default.createElement("img", {
+    src: "dist/img/user8-128x128.jpg",
+    alt: "User Avatar",
+    className: "img-size-50 img-circle mr-3"
+  }), /*#__PURE__*/_react.default.createElement("div", {
+    className: "media-body"
+  }, /*#__PURE__*/_react.default.createElement("h3", {
+    className: "dropdown-item-title"
+  }, "John Pierce", /*#__PURE__*/_react.default.createElement("span", {
+    className: "float-right text-sm text-muted"
+  }, /*#__PURE__*/_react.default.createElement("i", {
+    className: "fas fa-star"
+  }))), /*#__PURE__*/_react.default.createElement("p", {
+    className: "text-sm"
+  }, "I got your message bro"), /*#__PURE__*/_react.default.createElement("p", {
+    className: "text-sm text-muted"
+  }, /*#__PURE__*/_react.default.createElement("i", {
+    className: "far fa-clock mr-1"
+  }), " 4 Hours Ago")))), /*#__PURE__*/_react.default.createElement("div", {
+    className: "dropdown-divider"
+  }), /*#__PURE__*/_react.default.createElement("a", {
+    href: "#",
+    className: "dropdown-item"
+  }, /*#__PURE__*/_react.default.createElement("div", {
+    className: "media"
+  }, /*#__PURE__*/_react.default.createElement("img", {
+    src: "dist/img/user3-128x128.jpg",
+    alt: "User Avatar",
+    className: "img-size-50 img-circle mr-3"
+  }), /*#__PURE__*/_react.default.createElement("div", {
+    className: "media-body"
+  }, /*#__PURE__*/_react.default.createElement("h3", {
+    className: "dropdown-item-title"
+  }, "Nora Silvester", /*#__PURE__*/_react.default.createElement("span", {
+    className: "float-right text-sm text-warning"
+  }, /*#__PURE__*/_react.default.createElement("i", {
+    className: "fas fa-star"
+  }))), /*#__PURE__*/_react.default.createElement("p", {
+    className: "text-sm"
+  }, "The subject goes here"), /*#__PURE__*/_react.default.createElement("p", {
+    className: "text-sm text-muted"
+  }, /*#__PURE__*/_react.default.createElement("i", {
+    className: "far fa-clock mr-1"
+  }), " 4 Hours Ago")))), /*#__PURE__*/_react.default.createElement("div", {
+    className: "dropdown-divider"
+  }), /*#__PURE__*/_react.default.createElement("a", {
+    href: "#",
+    className: "dropdown-item dropdown-footer"
+  }, "See All Messages"))), /*#__PURE__*/_react.default.createElement("li", {
+    className: "nav-item dropdown"
+  }, /*#__PURE__*/_react.default.createElement("a", {
+    className: "nav-link",
+    "data-toggle": "dropdown",
+    href: "#"
+  }, /*#__PURE__*/_react.default.createElement("i", {
+    className: "far fa-bell"
+  }), /*#__PURE__*/_react.default.createElement("span", {
+    className: "badge badge-warning navbar-badge"
+  }, "15")), /*#__PURE__*/_react.default.createElement("div", {
+    className: "dropdown-menu dropdown-menu-lg dropdown-menu-right"
+  }, /*#__PURE__*/_react.default.createElement("span", {
+    className: "dropdown-header"
+  }, "15 Notifications"), /*#__PURE__*/_react.default.createElement("div", {
+    className: "dropdown-divider"
+  }), /*#__PURE__*/_react.default.createElement("a", {
+    href: "#",
+    className: "dropdown-item"
+  }, /*#__PURE__*/_react.default.createElement("i", {
+    className: "fas fa-envelope mr-2"
+  }), " 4 new messages", /*#__PURE__*/_react.default.createElement("span", {
+    className: "float-right text-muted text-sm"
+  }, "3 mins")), /*#__PURE__*/_react.default.createElement("div", {
+    className: "dropdown-divider"
+  }), /*#__PURE__*/_react.default.createElement("a", {
+    href: "#",
+    className: "dropdown-item"
+  }, /*#__PURE__*/_react.default.createElement("i", {
+    className: "fas fa-users mr-2"
+  }), " 8 friend requests", /*#__PURE__*/_react.default.createElement("span", {
+    className: "float-right text-muted text-sm"
+  }, "12 hours")), /*#__PURE__*/_react.default.createElement("div", {
+    className: "dropdown-divider"
+  }), /*#__PURE__*/_react.default.createElement("a", {
+    href: "#",
+    className: "dropdown-item"
+  }, /*#__PURE__*/_react.default.createElement("i", {
+    className: "fas fa-file mr-2"
+  }), " 3 new reports", /*#__PURE__*/_react.default.createElement("span", {
+    className: "float-right text-muted text-sm"
+  }, "2 days")), /*#__PURE__*/_react.default.createElement("div", {
+    className: "dropdown-divider"
+  }), /*#__PURE__*/_react.default.createElement("a", {
+    href: "#",
+    className: "dropdown-item dropdown-footer"
+  }, "See All Notifications"))), /*#__PURE__*/_react.default.createElement("li", {
+    className: "nav-item"
+  }, /*#__PURE__*/_react.default.createElement("a", {
+    className: "nav-link",
+    "data-widget": "control-sidebar",
+    "data-slide": "true",
+    href: "#",
+    role: "button"
+  }, /*#__PURE__*/_react.default.createElement("i", {
+    className: "fas fa-th-large"
+  }))))));
+};
+
+var _default = NavBar;
+exports.default = _default;
+},{"react":"../../node_modules/react/index.js","react-router-dom":"../../node_modules/react-router-dom/esm/react-router-dom.js"}],"assets/logo.png":[function(require,module,exports) {
+module.exports = "static/myadmin/logo.e9a9c890.png";
+},{}],"assets/user.jpg":[function(require,module,exports) {
+module.exports = "static/myadmin/user.f506df24.jpg";
+},{}],"components/navigation/sidebar.jsx":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _react = _interopRequireDefault(require("react"));
+
+var _logo = _interopRequireDefault(require("../../assets/logo.png"));
+
+var _user = _interopRequireDefault(require("../../assets/user.jpg"));
+
+var _reactRouterDom = require("react-router-dom");
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var SideBar = function SideBar() {
+  return /*#__PURE__*/_react.default.createElement("aside", {
+    className: "main-sidebar sidebar-light-success elevation-4"
+  }, /*#__PURE__*/_react.default.createElement("a", {
+    href: "index3.html",
+    className: "brand-link"
+  }, /*#__PURE__*/_react.default.createElement("img", {
+    src: _logo.default,
+    alt: "Logo",
+    className: "brand-image img-circle elevation-3",
+    style: {
+      "opacity": 0.8
+    }
+  }), /*#__PURE__*/_react.default.createElement("span", {
+    className: "brand-text font-weight-light"
+  }, "NMMIS V1")), /*#__PURE__*/_react.default.createElement("div", {
+    className: "sidebar"
+  }, /*#__PURE__*/_react.default.createElement("div", {
+    className: "user-panel mt-3 pb-3 mb-3 d-flex"
+  }, /*#__PURE__*/_react.default.createElement("div", {
+    className: "image"
+  }, /*#__PURE__*/_react.default.createElement("img", {
+    src: _user.default,
+    className: "img-circle elevation-2",
+    alt: "User Image"
+  })), /*#__PURE__*/_react.default.createElement("div", {
+    className: "info"
+  }, /*#__PURE__*/_react.default.createElement("a", {
+    href: "#",
+    className: "d-block"
+  }, "Santosh Magar"))), /*#__PURE__*/_react.default.createElement("nav", {
+    className: "mt-2"
+  }, /*#__PURE__*/_react.default.createElement("ul", {
+    className: "nav nav-pills nav-sidebar flex-column",
+    "data-widget": "treeview",
+    role: "menu",
+    "data-accordion": "false"
+  }, /*#__PURE__*/_react.default.createElement("li", {
+    className: "nav-item has-treeview menu-open"
+  }, /*#__PURE__*/_react.default.createElement("a", {
+    href: "#",
+    className: "nav-link active"
+  }, /*#__PURE__*/_react.default.createElement("i", {
+    className: "nav-icon fas fa-tachometer-alt"
+  }), /*#__PURE__*/_react.default.createElement("p", null, "Municipal", /*#__PURE__*/_react.default.createElement("i", {
+    className: "right fas fa-angle-left"
+  }))), /*#__PURE__*/_react.default.createElement("ul", {
+    className: "nav nav-treeview"
+  }, /*#__PURE__*/_react.default.createElement("li", {
+    className: "nav-item"
+  }, /*#__PURE__*/_react.default.createElement(_reactRouterDom.Link, {
+    to: "/municipals",
+    className: "nav-link active"
+  }, /*#__PURE__*/_react.default.createElement("i", {
+    className: "far fa-circle nav-icon"
+  }), /*#__PURE__*/_react.default.createElement("p", null, "Municipals"))), /*#__PURE__*/_react.default.createElement("li", {
+    className: "nav-item"
+  }, /*#__PURE__*/_react.default.createElement(_reactRouterDom.Link, {
+    to: "/add-municipal",
+    className: "nav-link"
+  }, /*#__PURE__*/_react.default.createElement("i", {
+    className: "far fa-circle nav-icon"
+  }), /*#__PURE__*/_react.default.createElement("p", null, "Add Municipal"))))), /*#__PURE__*/_react.default.createElement("li", {
+    className: "nav-item"
+  }, /*#__PURE__*/_react.default.createElement("a", {
+    href: "#",
+    className: "nav-link"
+  }, /*#__PURE__*/_react.default.createElement("i", {
+    className: "nav-icon fas fa-th"
+  }), /*#__PURE__*/_react.default.createElement("p", null, "Simple Link", /*#__PURE__*/_react.default.createElement("span", {
+    className: "right badge badge-danger"
+  }, "New"))))))));
+};
+
+var _default = SideBar;
+exports.default = _default;
+},{"react":"../../node_modules/react/index.js","../../assets/logo.png":"assets/logo.png","../../assets/user.jpg":"assets/user.jpg","react-router-dom":"../../node_modules/react-router-dom/esm/react-router-dom.js"}],"components/navigation/footer.jsx":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -48613,13 +48918,123 @@ var _react = _interopRequireDefault(require("react"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+var Footer = function Footer() {
+  return /*#__PURE__*/_react.default.createElement("div", null, /*#__PURE__*/_react.default.createElement("footer", {
+    className: "main-footer"
+  }, /*#__PURE__*/_react.default.createElement("div", {
+    className: "float-right d-none d-sm-inline"
+  }, "Anything you want"), /*#__PURE__*/_react.default.createElement("strong", null, "Copyright \xA9 2014-2019 ", /*#__PURE__*/_react.default.createElement("a", {
+    href: "https://adminlte.io"
+  }, "AdminLTE.io"), "."), " All rights reserved."));
+};
+
+var _default = Footer;
+exports.default = _default;
+},{"react":"../../node_modules/react/index.js"}],"pages/home.jsx":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _react = _interopRequireDefault(require("react"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var Home = function Home() {
+  return /*#__PURE__*/_react.default.createElement("div", null, "Contetnt");
+};
+
+var _default = Home;
+exports.default = _default;
+},{"react":"../../node_modules/react/index.js"}],"pages/municipal/add-municipal.jsx":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _react = _interopRequireDefault(require("react"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var AddMunicipal = function AddMunicipal() {
+  return /*#__PURE__*/_react.default.createElement("div", null, "New Municipal");
+};
+
+var _default = AddMunicipal;
+exports.default = _default;
+},{"react":"../../node_modules/react/index.js"}],"pages/municipal/list-municipal.jsx":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _react = _interopRequireDefault(require("react"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var ListMunicipal = function ListMunicipal() {
+  return /*#__PURE__*/_react.default.createElement("div", null, "List of Municipal");
+};
+
+var _default = ListMunicipal;
+exports.default = _default;
+},{"react":"../../node_modules/react/index.js"}],"App.jsx":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _react = _interopRequireDefault(require("react"));
+
+var _navbar = _interopRequireDefault(require("./components/navigation/navbar"));
+
+var _sidebar = _interopRequireDefault(require("./components/navigation/sidebar"));
+
+var _footer = _interopRequireDefault(require("./components/navigation/footer"));
+
+var _reactRouterDom = require("react-router-dom");
+
+var _home = _interopRequireDefault(require("./pages/home"));
+
+var _addMunicipal = _interopRequireDefault(require("./pages/municipal/add-municipal"));
+
+var _listMunicipal = _interopRequireDefault(require("./pages/municipal/list-municipal"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 var App = function App() {
-  return /*#__PURE__*/_react.default.createElement("div", null, "Hello from React");
+  return /*#__PURE__*/_react.default.createElement("div", null, /*#__PURE__*/_react.default.createElement(_navbar.default, null), /*#__PURE__*/_react.default.createElement(_sidebar.default, null), /*#__PURE__*/_react.default.createElement("div", {
+    className: "content-wrapper"
+  }, /*#__PURE__*/_react.default.createElement("div", {
+    className: "content"
+  }, /*#__PURE__*/_react.default.createElement("div", {
+    className: "container-fluid"
+  }, /*#__PURE__*/_react.default.createElement(_reactRouterDom.Switch, null, /*#__PURE__*/_react.default.createElement(_reactRouterDom.Route, {
+    path: "/",
+    exact: true,
+    component: _home.default
+  }), /*#__PURE__*/_react.default.createElement(_reactRouterDom.Route, {
+    path: "/municipals",
+    exact: true,
+    component: _listMunicipal.default
+  }), /*#__PURE__*/_react.default.createElement(_reactRouterDom.Route, {
+    path: "/add-municipal",
+    exact: true,
+    component: _addMunicipal.default
+  }))))), /*#__PURE__*/_react.default.createElement(_footer.default, null));
 };
 
 var _default = App;
 exports.default = _default;
-},{"react":"../../node_modules/react/index.js"}],"index.js":[function(require,module,exports) {
+},{"react":"../../node_modules/react/index.js","./components/navigation/navbar":"components/navigation/navbar.jsx","./components/navigation/sidebar":"components/navigation/sidebar.jsx","./components/navigation/footer":"components/navigation/footer.jsx","react-router-dom":"../../node_modules/react-router-dom/esm/react-router-dom.js","./pages/home":"pages/home.jsx","./pages/municipal/add-municipal":"pages/municipal/add-municipal.jsx","./pages/municipal/list-municipal":"pages/municipal/list-municipal.jsx"}],"index.js":[function(require,module,exports) {
 "use strict";
 
 var _react = _interopRequireWildcard(require("react"));

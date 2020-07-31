@@ -6,6 +6,7 @@ from nmmis.contrib.municipal.models import Municipal, Ward, Road, Telecom, Trans
 from nmmis.contrib.municipal.forms import TelecomForm
 from django.contrib.gis.geos import GEOSGeometry
 from django.shortcuts import get_object_or_404
+from django.conf import settings
 
 
 class MunicipalType(graphql_geojson.GeoJSONType):
@@ -13,15 +14,18 @@ class MunicipalType(graphql_geojson.GeoJSONType):
         model = Municipal
         geojson_field = 'geom'
 
+
 class WardType(graphql_geojson.GeoJSONType):
     class Meta:
         model = Ward
         geojson_field = 'geom'
 
+
 class RoadType(graphql_geojson.GeoJSONType):
     class Meta:
         model = Road
         geojson_field = 'geom'
+
 
 class TelecomType(graphql_geojson.GeoJSONType):
     class Meta:
@@ -34,18 +38,17 @@ class TelecomType(graphql_geojson.GeoJSONType):
         else:
             return ""
 
+
 class TransformerType(graphql_geojson.GeoJSONType):
     class Meta:
         model = Transformer
         geojson_field = 'geom'
-        
+
     def resolve_image(self, *_):
         if self.image:
             return '{}{}'.format(settings.MEDIA_URL, self.image)
         else:
             return ""
-
-
 
 
 class Query(graphene.ObjectType):
@@ -71,23 +74,23 @@ class Query(graphene.ObjectType):
 
     def resolve_municipals(self, info, did, *args, **kwargs):
         return Municipal.objects.filter(district__id=did)
-    
+
     def resolve_municipal(self, info, mid, *args, **kwargs):
         print("Municipal callled")
         return Municipal.objects.get(id=mid)
 
     def resolve_wards(self, info, mid, *args, **kwargs):
-        print("Ward called");
+        print("Ward called")
         return Ward.objects.filter(municipal__id=mid)
-    
+
     def resolve_ward(self, info, wid, *args, **kwargs):
         print("single ward with id {} called".format(wid))
         return Ward.objects.get(id=wid)
-    
+
     def resolve_roads(self, info, mid, *args, **kwargs):
         print("Road called")
         return Road.objects.filter(ward__municipal__id=mid)
-    
+
     def resolve_wroads(self, info, wid, *args, **kwargs):
         print("ward Road called")
         return Road.objects.filter(ward__id=wid)
@@ -95,18 +98,16 @@ class Query(graphene.ObjectType):
     def resolve_telecoms(self, info, mid, *args, **kwargs):
         print("Telecom called")
         return Telecom.objects.filter(ward__municipal__id=mid)
-    
+
     def resolve_wtelecoms(self, info, wid, *args, **kwargs):
         return Telecom.objects.filter(ward__id=wid)
-    
+
     def resolve_transformers(self, info, mid, *args, **kwargs):
         print("Transformer called")
         return Transformer.objects.filter(ward__municipal__id=mid)
-    
+
     def resolve_wtransformers(self, info, wid, *args, **kwargs):
         return Transformer.objects.filter(ward__id=wid)
-
-
 
 
 class AddTelecom(graphene.Mutation):
@@ -117,11 +118,12 @@ class AddTelecom(graphene.Mutation):
         type = graphene.String()
         geom = graphql_geojson.Geometry()
 
-    def mutate(self,info, *args, **kwargs):
+    def mutate(self, info, *args, **kwargs):
         print(kwargs['geom'])
         ward = kwargs['ward']
         type = kwargs['type']
-        geom = GEOSGeometry(kwargs['geom'], srid=4326).transform(3857, clone=True).ewkt
+        geom = GEOSGeometry(kwargs['geom'], srid=4326).transform(
+            3857, clone=True).ewkt
         telecom = Telecom(ward_id=ward, type=type, geom=geom)
         telecom.save()
         return addTelecom(telecom=telecom)
@@ -136,15 +138,15 @@ class ChangeTelecom(graphene.Mutation):
         type = graphene.String()
         geom = graphql_geojson.Geometry()
 
-    def mutate(self,info, id, *args, **kwargs):
+    def mutate(self, info, id, *args, **kwargs):
         telecom = get_object_or_404(Telecom, pk=id)
         if kwargs['ward']:
             telecom.ward = kwargs['ward']
         telecom.type = kwargs['type']
-        telecom.geom = GEOSGeometry(kwargs['geom'], srid=4326).transform(3857, clone=True).ewkt
+        telecom.geom = GEOSGeometry(
+            kwargs['geom'], srid=4326).transform(3857, clone=True).ewkt
         telecom.save()
         return changeTelecom(telecom=telecom)
-
 
 
 class DeleteTelecom(graphene.Mutation):
@@ -154,6 +156,6 @@ class DeleteTelecom(graphene.Mutation):
         id = graphene.String()
 
     def mutate(self, info, id, *args, **kwargs):
-        telecom  = get_object_or_404(Telecom, pk=id)
+        telecom = get_object_or_404(Telecom, pk=id)
         telecom.delete()
         return DeleteTelecom(t_id=id)
