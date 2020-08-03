@@ -28,7 +28,7 @@ const SideBar = () => {
                                 <i className="nav-icon fas fa-tachometer-alt"></i>
                                 <p>
                                     Municipal
-                <i className="right fas fa-angle-left"></i>
+                                <i className="right fas fa-angle-left"></i>
                                 </p>
                             </a>
                             <ul className="nav nav-treeview">
@@ -46,6 +46,30 @@ const SideBar = () => {
                                 </li>
                             </ul>
                         </li>
+                        <li className="nav-item has-treeview">
+                            <a href="#" className="nav-link">
+                                <i className="nav-icon fas fa-tachometer-alt"></i>
+                                <p>
+                                    Ward
+                                <i className="right fas fa-angle-left"></i>
+                                </p>
+                            </a>
+                            <ul className="nav nav-treeview">
+                                <li className="nav-item">
+                                <Link to="/wards" className="nav-link">
+                                <i className="far fa-circle nav-icon"></i>
+                                        <p>Wards</p>
+                                </Link>
+                                </li>
+                                <li className="nav-item">
+                                    <Link to="/add-ward" className="nav-link">
+                                         <i className="far fa-circle nav-icon"></i>
+                                        <p>Add Ward</p>
+                                    </Link>
+                                </li>
+                            </ul>
+                        </li>
+
                         <li className="nav-item">
                             <a href="#" className="nav-link">
                                 <i className="nav-icon fas fa-th"></i>

@@ -6,6 +6,7 @@ import { Switch, Route } from 'react-router-dom'
 import Home from './pages/home'
 import AddMunicipal from './pages/municipal/add-municipal';
 import ListMunicipal from './pages/municipal/list-municipal'
+import AddWard from './pages/ward/add-ward';
 
 
 const App = () => {
@@ -21,6 +22,7 @@ const App = () => {
                             <Route path="/" exact component={Home} />
                             <Route path="/municipals" exact component={ListMunicipal} />
                             <Route path="/add-municipal" exact component={AddMunicipal} />
+                            <Route path="/add-ward" exact component={AddWard} />
                         </Switch>
                     </div>
                 </div>

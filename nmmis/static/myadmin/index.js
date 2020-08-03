@@ -49143,6 +49143,31 @@ var SideBar = function SideBar() {
   }, /*#__PURE__*/_react.default.createElement("i", {
     className: "far fa-circle nav-icon"
   }), /*#__PURE__*/_react.default.createElement("p", null, "Add Municipal"))))), /*#__PURE__*/_react.default.createElement("li", {
+    className: "nav-item has-treeview"
+  }, /*#__PURE__*/_react.default.createElement("a", {
+    href: "#",
+    className: "nav-link"
+  }, /*#__PURE__*/_react.default.createElement("i", {
+    className: "nav-icon fas fa-tachometer-alt"
+  }), /*#__PURE__*/_react.default.createElement("p", null, "Ward", /*#__PURE__*/_react.default.createElement("i", {
+    className: "right fas fa-angle-left"
+  }))), /*#__PURE__*/_react.default.createElement("ul", {
+    className: "nav nav-treeview"
+  }, /*#__PURE__*/_react.default.createElement("li", {
+    className: "nav-item"
+  }, /*#__PURE__*/_react.default.createElement(_reactRouterDom.Link, {
+    to: "/wards",
+    className: "nav-link"
+  }, /*#__PURE__*/_react.default.createElement("i", {
+    className: "far fa-circle nav-icon"
+  }), /*#__PURE__*/_react.default.createElement("p", null, "Wards"))), /*#__PURE__*/_react.default.createElement("li", {
+    className: "nav-item"
+  }, /*#__PURE__*/_react.default.createElement(_reactRouterDom.Link, {
+    to: "/add-ward",
+    className: "nav-link"
+  }, /*#__PURE__*/_react.default.createElement("i", {
+    className: "far fa-circle nav-icon"
+  }), /*#__PURE__*/_react.default.createElement("p", null, "Add Ward"))))), /*#__PURE__*/_react.default.createElement("li", {
     className: "nav-item"
   }, /*#__PURE__*/_react.default.createElement("a", {
     href: "#",
@@ -50800,9 +50825,19 @@ exports.default = _default;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.ADDMUNICIPAL_QUERY = void 0;
+exports.ADDWARD_QUERY = exports.ADDMUNICIPAL_QUERY = void 0;
 
 var _client = require("@apollo/client");
+
+function _templateObject2() {
+  var data = _taggedTemplateLiteral(["\n    mutation addWard($name: String, $headquarter: String, $area: Int, $total: Int, $male: Int, $female: Int, $hindu: Int, $muslim: Int, $buddhist: Int, $other: Int, $file:Upload ){\n        addWard(name:$name, headquarter:$headquarter, area:$area,total:$total, male:$male, female:$female, hindu:$hindu, muslim:$muslim, buddhist:$buddhist, other:$other, file:$file){\n            ward{\n            id\n            properties{\n              name\n              area\n            }\n        } \n        }\n    }\n"]);
+
+  _templateObject2 = function _templateObject2() {
+    return data;
+  };
+
+  return data;
+}
 
 function _templateObject() {
   var data = _taggedTemplateLiteral(["\n    mutation addMunicipal($name: String, $headquarter: String, $area: Int, $total: Int, $male: Int, $female: Int, $hindu: Int, $muslim: Int, $buddhist: Int, $other: Int, $file:Upload ){\n        addMunicipal(name:$name, headquarter:$headquarter, area:$area,total:$total, male:$male, female:$female, hindu:$hindu, muslim:$muslim, buddhist:$buddhist, other:$other, file:$file){\n            municipal{\n      \t\t\tid\n      \t\t\tproperties{\n      \t\t\t\tname\n      \t\t\t\tarea\n      \t\t\t}\n    \t\t} \n        }\n    }\n"]);
@@ -50818,6 +50853,8 @@ function _taggedTemplateLiteral(strings, raw) { if (!raw) { raw = strings.slice(
 
 var ADDMUNICIPAL_QUERY = (0, _client.gql)(_templateObject());
 exports.ADDMUNICIPAL_QUERY = ADDMUNICIPAL_QUERY;
+var ADDWARD_QUERY = (0, _client.gql)(_templateObject2());
+exports.ADDWARD_QUERY = ADDWARD_QUERY;
 },{"@apollo/client":"../../node_modules/@apollo/client/index.js"}],"../../node_modules/file-selector/dist/es5/file.js":[function(require,module,exports) {
 "use strict";
 
@@ -52588,7 +52625,7 @@ var AddMunicipal = function AddMunicipal() {
     className: "container"
   }, /*#__PURE__*/_react.default.createElement("div", getRootProps({
     className: 'dropzone'
-  }), /*#__PURE__*/_react.default.createElement("input", getInputProps()), /*#__PURE__*/_react.default.createElement("p", null, "Drag 'n' drop some files here, or click to select files")), /*#__PURE__*/_react.default.createElement("aside", null, /*#__PURE__*/_react.default.createElement("h4", null, "Files"), /*#__PURE__*/_react.default.createElement("ul", null, files))), /*#__PURE__*/_react.default.createElement(_Button.default, {
+  }), /*#__PURE__*/_react.default.createElement("input", getInputProps()), /*#__PURE__*/_react.default.createElement("p", null, "Drag 'n' drop shapefile files here, or click to select files")), /*#__PURE__*/_react.default.createElement("aside", null, /*#__PURE__*/_react.default.createElement("h4", null, "Files"), /*#__PURE__*/_react.default.createElement("ul", null, files))), /*#__PURE__*/_react.default.createElement(_Button.default, {
     variant: "primary",
     type: "submit"
   }, "Submit")));
@@ -52614,7 +52651,229 @@ var ListMunicipal = function ListMunicipal() {
 
 var _default = ListMunicipal;
 exports.default = _default;
-},{"react":"../../node_modules/react/index.js"}],"App.jsx":[function(require,module,exports) {
+},{"react":"../../node_modules/react/index.js"}],"pages/ward/add-ward.jsx":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _react = _interopRequireWildcard(require("react"));
+
+var _Form = _interopRequireDefault(require("react-bootstrap/Form"));
+
+var _Button = _interopRequireDefault(require("react-bootstrap/Button"));
+
+var _Row = _interopRequireDefault(require("react-bootstrap/Row"));
+
+var _Col = _interopRequireDefault(require("react-bootstrap/Col"));
+
+var _useForm2 = _interopRequireDefault(require("../../hooks/use-form"));
+
+var _client = require("@apollo/client");
+
+var _municipalQuery = require("../../queries/municipal-query");
+
+var _reactDropzone = require("react-dropzone");
+
+var _sweetalert = _interopRequireDefault(require("sweetalert"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function () { return cache; }; return cache; }
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+
+function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
+
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
+function _iterableToArrayLimit(arr, i) { if (typeof Symbol === "undefined" || !(Symbol.iterator in Object(arr))) return; var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
+
+function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+
+var initialState = {
+  name: '',
+  headquarter: '',
+  area: '',
+  total: '',
+  male: '',
+  female: '',
+  hindu: '',
+  muslim: '',
+  buddhist: '',
+  other: '',
+  file: ''
+};
+
+var AddWard = function AddWard() {
+  var _useMutation = (0, _client.useMutation)(_municipalQuery.ADDWARD_QUERY),
+      _useMutation2 = _slicedToArray(_useMutation, 2),
+      addWard = _useMutation2[0],
+      _useMutation2$ = _useMutation2[1],
+      data = _useMutation2$.data,
+      error = _useMutation2$.error;
+
+  var _useForm = (0, _useForm2.default)(addwardCallback, initialState),
+      onChange = _useForm.onChange,
+      onSubmit = _useForm.onSubmit,
+      values = _useForm.values;
+
+  var _useDropzone = (0, _reactDropzone.useDropzone)(),
+      acceptedFiles = _useDropzone.acceptedFiles,
+      getRootProps = _useDropzone.getRootProps,
+      getInputProps = _useDropzone.getInputProps;
+
+  var files = acceptedFiles.map(function (file) {
+    return /*#__PURE__*/_react.default.createElement("li", {
+      key: file.path
+    }, file.path, " - ", file.size, " bytes");
+  });
+
+  function addwardCallback() {
+    addWard({
+      variables: values
+    }).then(function () {
+      (0, _sweetalert.default)("New Ward!", "Create successfully!", "success");
+    }).catch(function (e) {
+      alert(e); // swal("New Ward Error!", e, "error");
+    });
+  }
+
+  if (acceptedFiles.length !== 0) {
+    values.file = acceptedFiles;
+  }
+
+  return /*#__PURE__*/_react.default.createElement("div", null, /*#__PURE__*/_react.default.createElement(_Form.default, {
+    onSubmit: onSubmit
+  }, /*#__PURE__*/_react.default.createElement(_Row.default, null, /*#__PURE__*/_react.default.createElement(_Col.default, {
+    sm: 12,
+    md: 6
+  }, /*#__PURE__*/_react.default.createElement(_Form.default.Group, {
+    controlId: "municipalName"
+  }, /*#__PURE__*/_react.default.createElement(_Form.default.Label, null, " Ward Name"), /*#__PURE__*/_react.default.createElement(_Form.default.Control, {
+    type: "text",
+    name: "name",
+    onChange: onChange,
+    value: values.name,
+    placeholder: "Enter Ward Name"
+  }))), /*#__PURE__*/_react.default.createElement(_Col.default, {
+    sm: 12,
+    md: 6
+  }, /*#__PURE__*/_react.default.createElement(_Form.default.Group, {
+    controlId: "municipalHeadquarter"
+  }, /*#__PURE__*/_react.default.createElement(_Form.default.Label, null, " Ward Headquarter"), /*#__PURE__*/_react.default.createElement(_Form.default.Control, {
+    type: "text",
+    name: "headquarter",
+    onChange: onChange,
+    value: values.headquarter,
+    placeholder: "Enter Ward Headquarter"
+  }))), /*#__PURE__*/_react.default.createElement(_Col.default, {
+    sm: 12,
+    md: 3
+  }, /*#__PURE__*/_react.default.createElement(_Form.default.Group, {
+    controlId: "municipalArea"
+  }, /*#__PURE__*/_react.default.createElement(_Form.default.Label, null, " Ward Area"), /*#__PURE__*/_react.default.createElement(_Form.default.Control, {
+    type: "number",
+    name: "area",
+    onChange: onChange,
+    value: values.area,
+    placeholder: "Enter Ward Area"
+  }))), /*#__PURE__*/_react.default.createElement(_Col.default, {
+    sm: 12,
+    md: 3
+  }, /*#__PURE__*/_react.default.createElement(_Form.default.Group, {
+    controlId: "municipalTotal"
+  }, /*#__PURE__*/_react.default.createElement(_Form.default.Label, null, " Ward Total Population"), /*#__PURE__*/_react.default.createElement(_Form.default.Control, {
+    type: "number",
+    name: "total",
+    onChange: onChange,
+    value: values.total,
+    placeholder: "Enter Ward Total Population"
+  }))), /*#__PURE__*/_react.default.createElement(_Col.default, {
+    sm: 12,
+    md: 3
+  }, /*#__PURE__*/_react.default.createElement(_Form.default.Group, {
+    controlId: "municipalMale"
+  }, /*#__PURE__*/_react.default.createElement(_Form.default.Label, null, " Ward Total Male"), /*#__PURE__*/_react.default.createElement(_Form.default.Control, {
+    type: "number",
+    name: "male",
+    onChange: onChange,
+    value: values.male,
+    placeholder: "Enter Ward Total Male"
+  }))), /*#__PURE__*/_react.default.createElement(_Col.default, {
+    sm: 12,
+    md: 3
+  }, /*#__PURE__*/_react.default.createElement(_Form.default.Group, {
+    controlId: "municipalFemale"
+  }, /*#__PURE__*/_react.default.createElement(_Form.default.Label, null, " Ward Total Female"), /*#__PURE__*/_react.default.createElement(_Form.default.Control, {
+    type: "number",
+    name: "female",
+    onChange: onChange,
+    value: values.female,
+    placeholder: "Enter Ward Total Female"
+  }))), /*#__PURE__*/_react.default.createElement(_Col.default, {
+    sm: 12,
+    md: 3
+  }, /*#__PURE__*/_react.default.createElement(_Form.default.Group, {
+    controlId: "municipalHindu"
+  }, /*#__PURE__*/_react.default.createElement(_Form.default.Label, null, " Ward Total Hindu"), /*#__PURE__*/_react.default.createElement(_Form.default.Control, {
+    type: "number",
+    name: "hindu",
+    onChange: onChange,
+    value: values.hindu,
+    placeholder: "Enter Ward Total Hindu"
+  }))), /*#__PURE__*/_react.default.createElement(_Col.default, {
+    sm: 12,
+    md: 3
+  }, /*#__PURE__*/_react.default.createElement(_Form.default.Group, {
+    controlId: "municipalMuslim"
+  }, /*#__PURE__*/_react.default.createElement(_Form.default.Label, null, " Ward Total Muslim"), /*#__PURE__*/_react.default.createElement(_Form.default.Control, {
+    type: "number",
+    name: "muslim",
+    onChange: onChange,
+    value: values.muslim,
+    placeholder: "Enter Ward Total Muslim"
+  }))), /*#__PURE__*/_react.default.createElement(_Col.default, {
+    sm: 12,
+    md: 3
+  }, /*#__PURE__*/_react.default.createElement(_Form.default.Group, {
+    controlId: "municipalMuslim"
+  }, /*#__PURE__*/_react.default.createElement(_Form.default.Label, null, " Ward Total Buddhist"), /*#__PURE__*/_react.default.createElement(_Form.default.Control, {
+    type: "number",
+    name: "buddhist",
+    onChange: onChange,
+    value: values.buddhist,
+    placeholder: "Enter Ward Total Buddhist"
+  }))), /*#__PURE__*/_react.default.createElement(_Col.default, {
+    sm: 12,
+    md: 3
+  }, /*#__PURE__*/_react.default.createElement(_Form.default.Group, {
+    controlId: "municipalOther"
+  }, /*#__PURE__*/_react.default.createElement(_Form.default.Label, null, " Ward Total Other"), /*#__PURE__*/_react.default.createElement(_Form.default.Control, {
+    type: "number",
+    name: "other",
+    onChange: onChange,
+    value: values.other,
+    placeholder: "Enter Ward Total Other"
+  })))), /*#__PURE__*/_react.default.createElement("section", {
+    className: "container"
+  }, /*#__PURE__*/_react.default.createElement("div", getRootProps({
+    className: 'dropzone'
+  }), /*#__PURE__*/_react.default.createElement("input", getInputProps()), /*#__PURE__*/_react.default.createElement("p", null, "Drag 'n' drop shapefile files here, or click to select files")), /*#__PURE__*/_react.default.createElement("aside", null, /*#__PURE__*/_react.default.createElement("h4", null, "Files"), /*#__PURE__*/_react.default.createElement("ul", null, files))), /*#__PURE__*/_react.default.createElement(_Button.default, {
+    variant: "primary",
+    type: "submit"
+  }, "Submit")));
+};
+
+var _default = AddWard;
+exports.default = _default;
+},{"react":"../../node_modules/react/index.js","react-bootstrap/Form":"../../node_modules/react-bootstrap/esm/Form.js","react-bootstrap/Button":"../../node_modules/react-bootstrap/esm/Button.js","react-bootstrap/Row":"../../node_modules/react-bootstrap/esm/Row.js","react-bootstrap/Col":"../../node_modules/react-bootstrap/esm/Col.js","../../hooks/use-form":"hooks/use-form.js","@apollo/client":"../../node_modules/@apollo/client/index.js","../../queries/municipal-query":"queries/municipal-query.js","react-dropzone":"../../node_modules/react-dropzone/dist/es/index.js","sweetalert":"../../node_modules/sweetalert/dist/sweetalert.min.js"}],"App.jsx":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -52638,6 +52897,8 @@ var _addMunicipal = _interopRequireDefault(require("./pages/municipal/add-munici
 
 var _listMunicipal = _interopRequireDefault(require("./pages/municipal/list-municipal"));
 
+var _addWard = _interopRequireDefault(require("./pages/ward/add-ward"));
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var App = function App() {
@@ -52659,12 +52920,16 @@ var App = function App() {
     path: "/add-municipal",
     exact: true,
     component: _addMunicipal.default
+  }), /*#__PURE__*/_react.default.createElement(_reactRouterDom.Route, {
+    path: "/add-ward",
+    exact: true,
+    component: _addWard.default
   }))))), /*#__PURE__*/_react.default.createElement(_footer.default, null));
 };
 
 var _default = App;
 exports.default = _default;
-},{"react":"../../node_modules/react/index.js","./components/navigation/navbar":"components/navigation/navbar.jsx","./components/navigation/sidebar":"components/navigation/sidebar.jsx","./components/navigation/footer":"components/navigation/footer.jsx","react-router-dom":"../../node_modules/react-router-dom/esm/react-router-dom.js","./pages/home":"pages/home.jsx","./pages/municipal/add-municipal":"pages/municipal/add-municipal.jsx","./pages/municipal/list-municipal":"pages/municipal/list-municipal.jsx"}],"index.js":[function(require,module,exports) {
+},{"react":"../../node_modules/react/index.js","./components/navigation/navbar":"components/navigation/navbar.jsx","./components/navigation/sidebar":"components/navigation/sidebar.jsx","./components/navigation/footer":"components/navigation/footer.jsx","react-router-dom":"../../node_modules/react-router-dom/esm/react-router-dom.js","./pages/home":"pages/home.jsx","./pages/municipal/add-municipal":"pages/municipal/add-municipal.jsx","./pages/municipal/list-municipal":"pages/municipal/list-municipal.jsx","./pages/ward/add-ward":"pages/ward/add-ward.jsx"}],"index.js":[function(require,module,exports) {
 "use strict";
 
 var _react = _interopRequireWildcard(require("react"));
