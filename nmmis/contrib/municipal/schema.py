@@ -7,6 +7,10 @@ from nmmis.contrib.municipal.forms import TelecomForm
 from django.contrib.gis.geos import GEOSGeometry
 from django.shortcuts import get_object_or_404
 from django.conf import settings
+from graphene_file_upload.scalars import Upload
+from nmmis.utils.generators import get_uploaded_file, aphnum_random3
+import shutil
+from django.contrib.gis.gdal import DataSource
 
 
 class MunicipalType(graphql_geojson.GeoJSONType):
@@ -110,6 +114,58 @@ class Query(graphene.ObjectType):
         return Transformer.objects.filter(ward__id=wid)
 
 
+class AddMunicipal(graphene.Mutation):
+    municipal = graphene.Field(MunicipalType)
+
+    class Arguments:
+        # ward = graphene.String()
+        name = graphene.String()
+        headquarter = graphene.String()
+        area = graphene.Int()
+        total = graphene.Int()
+        male = graphene.Int()
+        female = graphene.Int()
+        hindu = graphene.Int()
+        muslim = graphene.Int()
+        buddhist = graphene.Int()
+        other = graphene.Int()
+        file = Upload()
+
+    def mutate(self, info, *args, **kwargs):
+        print("!!!request Arrived!!!")
+        folder_name = aphnum_random3()
+        file_name = ''
+        for _file in kwargs['file']:
+            get_uploaded_file(_file, folder_name)
+            if _file.name.split('.')[-1] == 'shp':
+                file_name = _file.name
+        folder_location = settings.SHAPE_DATA_ROOT + '/' + folder_name
+        file_location = folder_location + '/' + file_name
+        try:
+            df = DataSource(file_location)
+            layer = df[0]
+            geom = GEOSGeometry(str(layer[0].geom), srid=4326).transform(
+                3857, clone=True).ewkt
+            name = kwargs['name']
+            headquarter = kwargs['headquarter']
+            area = kwargs['area']
+            total = kwargs['total']
+            male = kwargs['male']
+            female = kwargs['female']
+            hindu = kwargs['hindu']
+            muslim = kwargs['muslim']
+            buddhist = kwargs['buddhist']
+            other = kwargs['other']
+            municipal = Municipal(district_id="v7N9VM8tEQVg", name=name, headquarter=headquarter,
+                                  area=area, total=total, male=male, female=female, hindu=hindu,
+                                  muslim=muslim, buddhist=buddhist, other=other,geom=geom)
+            municipal.save()
+        except Exception as e:
+            raise e
+        shutil.rmtree(folder_location, ignore_errors=True)
+        return AddMunicipal(municipal=municipal)
+
+
 class AddTelecom(graphene.Mutation):
     telecom = graphene.Field(TelecomType)
 
@@ -126,7 +182,7 @@ class AddTelecom(graphene.Mutation):
             3857, clone=True).ewkt
         telecom = Telecom(ward_id=ward, type=type, geom=geom)
         telecom.save()
-        return addTelecom(telecom=telecom)
+        return AddTelecom(telecom=telecom)
 
 
 class ChangeTelecom(graphene.Mutation):
@@ -146,7 +202,7 @@ class ChangeTelecom(graphene.Mutation):
         telecom.geom = GEOSGeometry(
             kwargs['geom'], srid=4326).transform(3857, clone=True).ewkt
         telecom.save()
-        return changeTelecom(telecom=telecom)
+        return ChangeTelecom(telecom=telecom)
 
 
 class DeleteTelecom(graphene.Mutation):

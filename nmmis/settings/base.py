@@ -137,3 +137,5 @@ CORS_ORIGIN_WHITELIST = (
     'http://api.localhost',
     'http://api.localhost:8000'
 )
+
+SHAPE_DATA_ROOT = str(BASE_DIR('data'))

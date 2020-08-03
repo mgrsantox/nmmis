@@ -44630,7 +44630,257 @@ Object.keys(_index2).forEach(function (key) {
     }
   });
 });
-},{"./core/index.js":"../../node_modules/@apollo/client/core/index.js","./react/index.js":"../../node_modules/@apollo/client/react/index.js"}],"../../node_modules/@babel/runtime/helpers/esm/inheritsLoose.js":[function(require,module,exports) {
+},{"./core/index.js":"../../node_modules/@apollo/client/core/index.js","./react/index.js":"../../node_modules/@apollo/client/react/index.js"}],"../../node_modules/@babel/runtime/helpers/extends.js":[function(require,module,exports) {
+function _extends() {
+  module.exports = _extends = Object.assign || function (target) {
+    for (var i = 1; i < arguments.length; i++) {
+      var source = arguments[i];
+
+      for (var key in source) {
+        if (Object.prototype.hasOwnProperty.call(source, key)) {
+          target[key] = source[key];
+        }
+      }
+    }
+
+    return target;
+  };
+
+  return _extends.apply(this, arguments);
+}
+
+module.exports = _extends;
+},{}],"../../node_modules/extract-files/public/ReactNativeFile.js":[function(require,module,exports) {
+'use strict';
+
+module.exports = function ReactNativeFile(_ref) {
+  var uri = _ref.uri,
+      name = _ref.name,
+      type = _ref.type;
+  this.uri = uri;
+  this.name = name;
+  this.type = type;
+};
+},{}],"../../node_modules/extract-files/public/isExtractableFile.js":[function(require,module,exports) {
+'use strict';
+
+var ReactNativeFile = require('./ReactNativeFile');
+
+module.exports = function isExtractableFile(value) {
+  return typeof File !== 'undefined' && value instanceof File || typeof Blob !== 'undefined' && value instanceof Blob || value instanceof ReactNativeFile;
+};
+},{"./ReactNativeFile":"../../node_modules/extract-files/public/ReactNativeFile.js"}],"../../node_modules/extract-files/public/extractFiles.js":[function(require,module,exports) {
+'use strict';
+
+var defaultIsExtractableFile = require('./isExtractableFile');
+
+module.exports = function extractFiles(value, path, isExtractableFile) {
+  if (path === void 0) {
+    path = '';
+  }
+
+  if (isExtractableFile === void 0) {
+    isExtractableFile = defaultIsExtractableFile;
+  }
+
+  var clone;
+  var files = new Map();
+
+  function addFile(paths, file) {
+    var storedPaths = files.get(file);
+    if (storedPaths) storedPaths.push.apply(storedPaths, paths);else files.set(file, paths);
+  }
+
+  if (isExtractableFile(value)) {
+    clone = null;
+    addFile([path], value);
+  } else {
+    var prefix = path ? path + '.' : '';
+    if (typeof FileList !== 'undefined' && value instanceof FileList) clone = Array.prototype.map.call(value, function (file, i) {
+      addFile(['' + prefix + i], file);
+      return null;
+    });else if (Array.isArray(value)) clone = value.map(function (child, i) {
+      var result = extractFiles(child, '' + prefix + i, isExtractableFile);
+      result.files.forEach(addFile);
+      return result.clone;
+    });else if (value && value.constructor === Object) {
+      clone = {};
+
+      for (var i in value) {
+        var result = extractFiles(value[i], '' + prefix + i, isExtractableFile);
+        result.files.forEach(addFile);
+        clone[i] = result.clone;
+      }
+    } else clone = value;
+  }
+
+  return {
+    clone: clone,
+    files: files
+  };
+};
+},{"./isExtractableFile":"../../node_modules/extract-files/public/isExtractableFile.js"}],"../../node_modules/apollo-upload-client/public/formDataAppendFile.js":[function(require,module,exports) {
+'use strict';
+
+module.exports = function formDataAppendFile(formData, fieldName, file) {
+  formData.append(fieldName, file, file.name);
+};
+},{}],"../../node_modules/apollo-upload-client/public/isExtractableFile.js":[function(require,module,exports) {
+'use strict';
+
+module.exports = require('extract-files/public/isExtractableFile');
+},{"extract-files/public/isExtractableFile":"../../node_modules/extract-files/public/isExtractableFile.js"}],"../../node_modules/apollo-upload-client/public/createUploadLink.js":[function(require,module,exports) {
+'use strict';
+
+var _extends = require('@babel/runtime/helpers/extends');
+
+var _require = require('@apollo/client/core'),
+    ApolloLink = _require.ApolloLink,
+    Observable = _require.Observable;
+
+var _require2 = require('@apollo/client/link/http'),
+    createSignalIfSupported = _require2.createSignalIfSupported,
+    fallbackHttpConfig = _require2.fallbackHttpConfig,
+    parseAndCheckHttpResponse = _require2.parseAndCheckHttpResponse,
+    rewriteURIForGET = _require2.rewriteURIForGET,
+    selectHttpOptionsAndBody = _require2.selectHttpOptionsAndBody,
+    selectURI = _require2.selectURI,
+    serializeFetchParameter = _require2.serializeFetchParameter;
+
+var extractFiles = require('extract-files/public/extractFiles');
+
+var formDataAppendFile = require('./formDataAppendFile');
+
+var isExtractableFile = require('./isExtractableFile');
+
+module.exports = function createUploadLink(_temp) {
+  var _ref = _temp === void 0 ? {} : _temp,
+      _ref$uri = _ref.uri,
+      fetchUri = _ref$uri === void 0 ? '/graphql' : _ref$uri,
+      useGETForQueries = _ref.useGETForQueries,
+      _ref$isExtractableFil = _ref.isExtractableFile,
+      customIsExtractableFile = _ref$isExtractableFil === void 0 ? isExtractableFile : _ref$isExtractableFil,
+      CustomFormData = _ref.FormData,
+      _ref$formDataAppendFi = _ref.formDataAppendFile,
+      customFormDataAppendFile = _ref$formDataAppendFi === void 0 ? formDataAppendFile : _ref$formDataAppendFi,
+      customFetch = _ref.fetch,
+      fetchOptions = _ref.fetchOptions,
+      credentials = _ref.credentials,
+      headers = _ref.headers,
+      includeExtensions = _ref.includeExtensions;
+
+  var linkConfig = {
+    http: {
+      includeExtensions: includeExtensions
+    },
+    options: fetchOptions,
+    credentials: credentials,
+    headers: headers
+  };
+  return new ApolloLink(function (operation) {
+    var context = operation.getContext();
+    var _context$clientAwaren = context.clientAwareness;
+    _context$clientAwaren = _context$clientAwaren === void 0 ? {} : _context$clientAwaren;
+    var name = _context$clientAwaren.name,
+        version = _context$clientAwaren.version,
+        headers = context.headers;
+    var contextConfig = {
+      http: context.http,
+      options: context.fetchOptions,
+      credentials: context.credentials,
+      headers: _extends({}, name && {
+        'apollographql-client-name': name
+      }, version && {
+        'apollographql-client-version': version
+      }, headers)
+    };
+
+    var _selectHttpOptionsAnd = selectHttpOptionsAndBody(operation, fallbackHttpConfig, linkConfig, contextConfig),
+        options = _selectHttpOptionsAnd.options,
+        body = _selectHttpOptionsAnd.body;
+
+    var _extractFiles = extractFiles(body, '', customIsExtractableFile),
+        clone = _extractFiles.clone,
+        files = _extractFiles.files;
+
+    var uri = selectURI(operation, fetchUri);
+
+    if (files.size) {
+      delete options.headers['content-type'];
+      var RuntimeFormData = CustomFormData || FormData;
+      var form = new RuntimeFormData();
+      form.append('operations', serializeFetchParameter(clone, 'Payload'));
+      var map = {};
+      var i = 0;
+      files.forEach(function (paths) {
+        map[++i] = paths;
+      });
+      form.append('map', JSON.stringify(map));
+      i = 0;
+      files.forEach(function (paths, file) {
+        customFormDataAppendFile(form, ++i, file);
+      });
+      options.body = form;
+    } else {
+      if (useGETForQueries && !operation.query.definitions.some(function (definition) {
+        return definition.kind === 'OperationDefinition' && definition.operation === 'mutation';
+      })) options.method = 'GET';
+
+      if (options.method === 'GET') {
+        var _rewriteURIForGET = rewriteURIForGET(uri, body),
+            newURI = _rewriteURIForGET.newURI,
+            parseError = _rewriteURIForGET.parseError;
+
+        if (parseError) return new Observable(function (observer) {
+          observer.error(parseError);
+        });
+        uri = newURI;
+      } else options.body = serializeFetchParameter(clone, 'Payload');
+    }
+
+    var _createSignalIfSuppor = createSignalIfSupported(),
+        controller = _createSignalIfSuppor.controller;
+
+    if (controller) {
+      if (options.signal) options.signal.addEventListener('abort', function () {
+        controller.abort();
+      });
+      options.signal = controller.signal;
+    }
+
+    var runtimeFetch = customFetch || fetch;
+    return new Observable(function (observer) {
+      var cleaningUp;
+      runtimeFetch(uri, options).then(function (response) {
+        operation.setContext({
+          response: response
+        });
+        return response;
+      }).then(parseAndCheckHttpResponse(operation)).then(function (result) {
+        observer.next(result);
+        observer.complete();
+      }).catch(function (error) {
+        if (!cleaningUp) error.result && error.result.errors && error.result.data ? observer.next(error.result) : observer.error(error);
+      });
+      return function () {
+        cleaningUp = true;
+        if (controller) controller.abort();
+      };
+    });
+  });
+};
+},{"@babel/runtime/helpers/extends":"../../node_modules/@babel/runtime/helpers/extends.js","@apollo/client/core":"../../node_modules/@apollo/client/core/index.js","@apollo/client/link/http":"../../node_modules/@apollo/client/link/http/index.js","extract-files/public/extractFiles":"../../node_modules/extract-files/public/extractFiles.js","./formDataAppendFile":"../../node_modules/apollo-upload-client/public/formDataAppendFile.js","./isExtractableFile":"../../node_modules/apollo-upload-client/public/isExtractableFile.js"}],"../../node_modules/apollo-upload-client/public/ReactNativeFile.js":[function(require,module,exports) {
+'use strict';
+
+module.exports = require('extract-files/public/ReactNativeFile');
+},{"extract-files/public/ReactNativeFile":"../../node_modules/extract-files/public/ReactNativeFile.js"}],"../../node_modules/apollo-upload-client/public/index.js":[function(require,module,exports) {
+'use strict';
+
+exports.createUploadLink = require('./createUploadLink');
+exports.formDataAppendFile = require('./formDataAppendFile');
+exports.isExtractableFile = require('./isExtractableFile');
+exports.ReactNativeFile = require('./ReactNativeFile');
+},{"./createUploadLink":"../../node_modules/apollo-upload-client/public/createUploadLink.js","./formDataAppendFile":"../../node_modules/apollo-upload-client/public/formDataAppendFile.js","./isExtractableFile":"../../node_modules/apollo-upload-client/public/isExtractableFile.js","./ReactNativeFile":"../../node_modules/apollo-upload-client/public/ReactNativeFile.js"}],"../../node_modules/@babel/runtime/helpers/esm/inheritsLoose.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -48948,7 +49198,202 @@ var Home = function Home() {
 
 var _default = Home;
 exports.default = _default;
-},{"react":"../../node_modules/react/index.js"}],"pages/municipal/add-municipal.jsx":[function(require,module,exports) {
+},{"react":"../../node_modules/react/index.js"}],"../../node_modules/classnames/index.js":[function(require,module,exports) {
+var define;
+/*!
+  Copyright (c) 2017 Jed Watson.
+  Licensed under the MIT License (MIT), see
+  http://jedwatson.github.io/classnames
+*/
+/* global define */
+
+(function () {
+	'use strict';
+
+	var hasOwn = {}.hasOwnProperty;
+
+	function classNames () {
+		var classes = [];
+
+		for (var i = 0; i < arguments.length; i++) {
+			var arg = arguments[i];
+			if (!arg) continue;
+
+			var argType = typeof arg;
+
+			if (argType === 'string' || argType === 'number') {
+				classes.push(arg);
+			} else if (Array.isArray(arg) && arg.length) {
+				var inner = classNames.apply(null, arg);
+				if (inner) {
+					classes.push(inner);
+				}
+			} else if (argType === 'object') {
+				for (var key in arg) {
+					if (hasOwn.call(arg, key) && arg[key]) {
+						classes.push(key);
+					}
+				}
+			}
+		}
+
+		return classes.join(' ');
+	}
+
+	if (typeof module !== 'undefined' && module.exports) {
+		classNames.default = classNames;
+		module.exports = classNames;
+	} else if (typeof define === 'function' && typeof define.amd === 'object' && define.amd) {
+		// register as 'classnames', consistent with npm package name
+		define('classnames', [], function () {
+			return classNames;
+		});
+	} else {
+		window.classNames = classNames;
+	}
+}());
+
+},{}],"../../node_modules/prop-types-extra/lib/utils/createChainableTypeChecker.js":[function(require,module,exports) {
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = createChainableTypeChecker;
+/**
+ * Copyright 2013-present, Facebook, Inc.
+ * All rights reserved.
+ *
+ * This source code is licensed under the BSD-style license found in the
+ * LICENSE file in the root directory of this source tree. An additional grant
+ * of patent rights can be found in the PATENTS file in the same directory.
+ */
+
+// Mostly taken from ReactPropTypes.
+
+function createChainableTypeChecker(validate) {
+  function checkType(isRequired, props, propName, componentName, location, propFullName) {
+    var componentNameSafe = componentName || '<<anonymous>>';
+    var propFullNameSafe = propFullName || propName;
+
+    if (props[propName] == null) {
+      if (isRequired) {
+        return new Error('Required ' + location + ' `' + propFullNameSafe + '` was not specified ' + ('in `' + componentNameSafe + '`.'));
+      }
+
+      return null;
+    }
+
+    for (var _len = arguments.length, args = Array(_len > 6 ? _len - 6 : 0), _key = 6; _key < _len; _key++) {
+      args[_key - 6] = arguments[_key];
+    }
+
+    return validate.apply(undefined, [props, propName, componentNameSafe, location, propFullNameSafe].concat(args));
+  }
+
+  var chainedCheckType = checkType.bind(null, false);
+  chainedCheckType.isRequired = checkType.bind(null, true);
+
+  return chainedCheckType;
+}
+module.exports = exports['default'];
+},{}],"../../node_modules/prop-types-extra/lib/all.js":[function(require,module,exports) {
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = all;
+
+var _createChainableTypeChecker = require('./utils/createChainableTypeChecker');
+
+var _createChainableTypeChecker2 = _interopRequireDefault(_createChainableTypeChecker);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function all() {
+  for (var _len = arguments.length, validators = Array(_len), _key = 0; _key < _len; _key++) {
+    validators[_key] = arguments[_key];
+  }
+
+  function allPropTypes() {
+    for (var _len2 = arguments.length, args = Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
+      args[_key2] = arguments[_key2];
+    }
+
+    var error = null;
+
+    validators.forEach(function (validator) {
+      if (error != null) {
+        return;
+      }
+
+      var result = validator.apply(undefined, args);
+      if (result != null) {
+        error = result;
+      }
+    });
+
+    return error;
+  }
+
+  return (0, _createChainableTypeChecker2.default)(allPropTypes);
+}
+module.exports = exports['default'];
+},{"./utils/createChainableTypeChecker":"../../node_modules/prop-types-extra/lib/utils/createChainableTypeChecker.js"}],"../../node_modules/react-bootstrap/esm/Feedback.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _extends2 = _interopRequireDefault(require("@babel/runtime/helpers/esm/extends"));
+
+var _objectWithoutPropertiesLoose2 = _interopRequireDefault(require("@babel/runtime/helpers/esm/objectWithoutPropertiesLoose"));
+
+var _classnames = _interopRequireDefault(require("classnames"));
+
+var _react = _interopRequireDefault(require("react"));
+
+var _propTypes = _interopRequireDefault(require("prop-types"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var propTypes = {
+  /**
+   * Specify whether the feedback is for valid or invalid fields
+   *
+   * @type {('valid'|'invalid')}
+   */
+  type: _propTypes.default.string,
+
+  /** Display feedback as a tooltip. */
+  tooltip: _propTypes.default.bool,
+  as: _propTypes.default.elementType
+};
+
+var Feedback = _react.default.forwardRef( // Need to define the default "as" during prop destructuring to be compatible with styled-components github.com/react-bootstrap/react-bootstrap/issues/3595
+function (_ref, ref) {
+  var _ref$as = _ref.as,
+      Component = _ref$as === void 0 ? 'div' : _ref$as,
+      className = _ref.className,
+      _ref$type = _ref.type,
+      type = _ref$type === void 0 ? 'valid' : _ref$type,
+      _ref$tooltip = _ref.tooltip,
+      tooltip = _ref$tooltip === void 0 ? false : _ref$tooltip,
+      props = (0, _objectWithoutPropertiesLoose2.default)(_ref, ["as", "className", "type", "tooltip"]);
+  return /*#__PURE__*/_react.default.createElement(Component, (0, _extends2.default)({}, props, {
+    ref: ref,
+    className: (0, _classnames.default)(className, type + "-" + (tooltip ? 'tooltip' : 'feedback'))
+  }));
+});
+
+Feedback.displayName = 'Feedback';
+Feedback.propTypes = propTypes;
+var _default = Feedback;
+exports.default = _default;
+},{"@babel/runtime/helpers/esm/extends":"../../node_modules/@babel/runtime/helpers/esm/extends.js","@babel/runtime/helpers/esm/objectWithoutPropertiesLoose":"../../node_modules/@babel/runtime/helpers/esm/objectWithoutPropertiesLoose.js","classnames":"../../node_modules/classnames/index.js","react":"../../node_modules/react/index.js","prop-types":"../../node_modules/prop-types/index.js"}],"../../node_modules/react-bootstrap/esm/FormContext.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -48960,13 +49405,3198 @@ var _react = _interopRequireDefault(require("react"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+// TODO
+var FormContext = _react.default.createContext({
+  controlId: undefined
+});
+
+var _default = FormContext;
+exports.default = _default;
+},{"react":"../../node_modules/react/index.js"}],"../../node_modules/react-bootstrap/esm/ThemeProvider.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.useBootstrapPrefix = useBootstrapPrefix;
+exports.createBootstrapComponent = createBootstrapComponent;
+exports.default = exports.ThemeConsumer = void 0;
+
+var _extends2 = _interopRequireDefault(require("@babel/runtime/helpers/esm/extends"));
+
+var _react = _interopRequireWildcard(require("react"));
+
+function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function () { return cache; }; return cache; }
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var ThemeContext = _react.default.createContext({});
+
+var Consumer = ThemeContext.Consumer,
+    Provider = ThemeContext.Provider;
+exports.ThemeConsumer = Consumer;
+
+function ThemeProvider(_ref) {
+  var prefixes = _ref.prefixes,
+      children = _ref.children;
+  var copiedPrefixes = (0, _react.useMemo)(function () {
+    return (0, _extends2.default)({}, prefixes);
+  }, [prefixes]);
+  return /*#__PURE__*/_react.default.createElement(Provider, {
+    value: copiedPrefixes
+  }, children);
+}
+
+function useBootstrapPrefix(prefix, defaultPrefix) {
+  var prefixes = (0, _react.useContext)(ThemeContext);
+  return prefix || prefixes[defaultPrefix] || defaultPrefix;
+}
+
+function createBootstrapComponent(Component, opts) {
+  if (typeof opts === 'string') opts = {
+    prefix: opts
+  };
+  var isClassy = Component.prototype && Component.prototype.isReactComponent; // If it's a functional component make sure we don't break it with a ref
+
+  var _opts = opts,
+      prefix = _opts.prefix,
+      _opts$forwardRefAs = _opts.forwardRefAs,
+      forwardRefAs = _opts$forwardRefAs === void 0 ? isClassy ? 'ref' : 'innerRef' : _opts$forwardRefAs;
+
+  var Wrapped = _react.default.forwardRef(function (_ref2, ref) {
+    var props = (0, _extends2.default)({}, _ref2);
+    props[forwardRefAs] = ref;
+    var bsPrefix = useBootstrapPrefix(props.bsPrefix, prefix);
+    return /*#__PURE__*/_react.default.createElement(Component, (0, _extends2.default)({}, props, {
+      bsPrefix: bsPrefix
+    }));
+  });
+
+  Wrapped.displayName = "Bootstrap(" + (Component.displayName || Component.name) + ")";
+  return Wrapped;
+}
+
+var _default = ThemeProvider;
+exports.default = _default;
+},{"@babel/runtime/helpers/esm/extends":"../../node_modules/@babel/runtime/helpers/esm/extends.js","react":"../../node_modules/react/index.js"}],"../../node_modules/react-bootstrap/esm/FormCheckInput.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _extends2 = _interopRequireDefault(require("@babel/runtime/helpers/esm/extends"));
+
+var _objectWithoutPropertiesLoose2 = _interopRequireDefault(require("@babel/runtime/helpers/esm/objectWithoutPropertiesLoose"));
+
+var _classnames = _interopRequireDefault(require("classnames"));
+
+var _react = _interopRequireWildcard(require("react"));
+
+var _FormContext = _interopRequireDefault(require("./FormContext"));
+
+var _ThemeProvider = require("./ThemeProvider");
+
+function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function () { return cache; }; return cache; }
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var FormCheckInput = _react.default.forwardRef(function (_ref, ref) {
+  var id = _ref.id,
+      bsPrefix = _ref.bsPrefix,
+      bsCustomPrefix = _ref.bsCustomPrefix,
+      className = _ref.className,
+      _ref$type = _ref.type,
+      type = _ref$type === void 0 ? 'checkbox' : _ref$type,
+      _ref$isValid = _ref.isValid,
+      isValid = _ref$isValid === void 0 ? false : _ref$isValid,
+      _ref$isInvalid = _ref.isInvalid,
+      isInvalid = _ref$isInvalid === void 0 ? false : _ref$isInvalid,
+      isStatic = _ref.isStatic,
+      _ref$as = _ref.as,
+      Component = _ref$as === void 0 ? 'input' : _ref$as,
+      props = (0, _objectWithoutPropertiesLoose2.default)(_ref, ["id", "bsPrefix", "bsCustomPrefix", "className", "type", "isValid", "isInvalid", "isStatic", "as"]);
+
+  var _useContext = (0, _react.useContext)(_FormContext.default),
+      controlId = _useContext.controlId,
+      custom = _useContext.custom;
+
+  var _ref2 = custom ? [bsCustomPrefix, 'custom-control-input'] : [bsPrefix, 'form-check-input'],
+      prefix = _ref2[0],
+      defaultPrefix = _ref2[1];
+
+  bsPrefix = (0, _ThemeProvider.useBootstrapPrefix)(prefix, defaultPrefix);
+  return /*#__PURE__*/_react.default.createElement(Component, (0, _extends2.default)({}, props, {
+    ref: ref,
+    type: type,
+    id: id || controlId,
+    className: (0, _classnames.default)(className, bsPrefix, isValid && 'is-valid', isInvalid && 'is-invalid', isStatic && 'position-static')
+  }));
+});
+
+FormCheckInput.displayName = 'FormCheckInput';
+var _default = FormCheckInput;
+exports.default = _default;
+},{"@babel/runtime/helpers/esm/extends":"../../node_modules/@babel/runtime/helpers/esm/extends.js","@babel/runtime/helpers/esm/objectWithoutPropertiesLoose":"../../node_modules/@babel/runtime/helpers/esm/objectWithoutPropertiesLoose.js","classnames":"../../node_modules/classnames/index.js","react":"../../node_modules/react/index.js","./FormContext":"../../node_modules/react-bootstrap/esm/FormContext.js","./ThemeProvider":"../../node_modules/react-bootstrap/esm/ThemeProvider.js"}],"../../node_modules/react-bootstrap/esm/FormCheckLabel.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _extends2 = _interopRequireDefault(require("@babel/runtime/helpers/esm/extends"));
+
+var _objectWithoutPropertiesLoose2 = _interopRequireDefault(require("@babel/runtime/helpers/esm/objectWithoutPropertiesLoose"));
+
+var _classnames = _interopRequireDefault(require("classnames"));
+
+var _react = _interopRequireWildcard(require("react"));
+
+var _FormContext = _interopRequireDefault(require("./FormContext"));
+
+var _ThemeProvider = require("./ThemeProvider");
+
+function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function () { return cache; }; return cache; }
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var FormCheckLabel = _react.default.forwardRef(function (_ref, ref) {
+  var bsPrefix = _ref.bsPrefix,
+      bsCustomPrefix = _ref.bsCustomPrefix,
+      className = _ref.className,
+      htmlFor = _ref.htmlFor,
+      props = (0, _objectWithoutPropertiesLoose2.default)(_ref, ["bsPrefix", "bsCustomPrefix", "className", "htmlFor"]);
+
+  var _useContext = (0, _react.useContext)(_FormContext.default),
+      controlId = _useContext.controlId,
+      custom = _useContext.custom;
+
+  var _ref2 = custom ? [bsCustomPrefix, 'custom-control-label'] : [bsPrefix, 'form-check-label'],
+      prefix = _ref2[0],
+      defaultPrefix = _ref2[1];
+
+  bsPrefix = (0, _ThemeProvider.useBootstrapPrefix)(prefix, defaultPrefix);
+  return /*#__PURE__*/_react.default.createElement("label", (0, _extends2.default)({}, props, {
+    ref: ref,
+    htmlFor: htmlFor || controlId,
+    className: (0, _classnames.default)(className, bsPrefix)
+  }));
+});
+
+FormCheckLabel.displayName = 'FormCheckLabel';
+var _default = FormCheckLabel;
+exports.default = _default;
+},{"@babel/runtime/helpers/esm/extends":"../../node_modules/@babel/runtime/helpers/esm/extends.js","@babel/runtime/helpers/esm/objectWithoutPropertiesLoose":"../../node_modules/@babel/runtime/helpers/esm/objectWithoutPropertiesLoose.js","classnames":"../../node_modules/classnames/index.js","react":"../../node_modules/react/index.js","./FormContext":"../../node_modules/react-bootstrap/esm/FormContext.js","./ThemeProvider":"../../node_modules/react-bootstrap/esm/ThemeProvider.js"}],"../../node_modules/react-bootstrap/esm/FormCheck.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _extends2 = _interopRequireDefault(require("@babel/runtime/helpers/esm/extends"));
+
+var _objectWithoutPropertiesLoose2 = _interopRequireDefault(require("@babel/runtime/helpers/esm/objectWithoutPropertiesLoose"));
+
+var _classnames = _interopRequireDefault(require("classnames"));
+
+var _all = _interopRequireDefault(require("prop-types-extra/lib/all"));
+
+var _react = _interopRequireWildcard(require("react"));
+
+var _Feedback = _interopRequireDefault(require("./Feedback"));
+
+var _FormCheckInput = _interopRequireDefault(require("./FormCheckInput"));
+
+var _FormCheckLabel = _interopRequireDefault(require("./FormCheckLabel"));
+
+var _FormContext = _interopRequireDefault(require("./FormContext"));
+
+var _ThemeProvider = require("./ThemeProvider");
+
+function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function () { return cache; }; return cache; }
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var FormCheck = _react.default.forwardRef(function (_ref, ref) {
+  var id = _ref.id,
+      bsPrefix = _ref.bsPrefix,
+      bsCustomPrefix = _ref.bsCustomPrefix,
+      _ref$inline = _ref.inline,
+      inline = _ref$inline === void 0 ? false : _ref$inline,
+      _ref$disabled = _ref.disabled,
+      disabled = _ref$disabled === void 0 ? false : _ref$disabled,
+      _ref$isValid = _ref.isValid,
+      isValid = _ref$isValid === void 0 ? false : _ref$isValid,
+      _ref$isInvalid = _ref.isInvalid,
+      isInvalid = _ref$isInvalid === void 0 ? false : _ref$isInvalid,
+      _ref$feedbackTooltip = _ref.feedbackTooltip,
+      feedbackTooltip = _ref$feedbackTooltip === void 0 ? false : _ref$feedbackTooltip,
+      feedback = _ref.feedback,
+      className = _ref.className,
+      style = _ref.style,
+      _ref$title = _ref.title,
+      title = _ref$title === void 0 ? '' : _ref$title,
+      _ref$type = _ref.type,
+      type = _ref$type === void 0 ? 'checkbox' : _ref$type,
+      label = _ref.label,
+      children = _ref.children,
+      propCustom = _ref.custom,
+      _ref$as = _ref.as,
+      as = _ref$as === void 0 ? 'input' : _ref$as,
+      props = (0, _objectWithoutPropertiesLoose2.default)(_ref, ["id", "bsPrefix", "bsCustomPrefix", "inline", "disabled", "isValid", "isInvalid", "feedbackTooltip", "feedback", "className", "style", "title", "type", "label", "children", "custom", "as"]);
+  var custom = type === 'switch' ? true : propCustom;
+
+  var _ref2 = custom ? [bsCustomPrefix, 'custom-control'] : [bsPrefix, 'form-check'],
+      prefix = _ref2[0],
+      defaultPrefix = _ref2[1];
+
+  bsPrefix = (0, _ThemeProvider.useBootstrapPrefix)(prefix, defaultPrefix);
+
+  var _useContext = (0, _react.useContext)(_FormContext.default),
+      controlId = _useContext.controlId;
+
+  var innerFormContext = (0, _react.useMemo)(function () {
+    return {
+      controlId: id || controlId,
+      custom: custom
+    };
+  }, [controlId, custom, id]);
+  var hasLabel = label != null && label !== false && !children;
+
+  var input = /*#__PURE__*/_react.default.createElement(_FormCheckInput.default, (0, _extends2.default)({}, props, {
+    type: type === 'switch' ? 'checkbox' : type,
+    ref: ref,
+    isValid: isValid,
+    isInvalid: isInvalid,
+    isStatic: !hasLabel,
+    disabled: disabled,
+    as: as
+  }));
+
+  return /*#__PURE__*/_react.default.createElement(_FormContext.default.Provider, {
+    value: innerFormContext
+  }, /*#__PURE__*/_react.default.createElement("div", {
+    style: style,
+    className: (0, _classnames.default)(className, bsPrefix, custom && "custom-" + type, inline && bsPrefix + "-inline")
+  }, children || /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, input, hasLabel && /*#__PURE__*/_react.default.createElement(_FormCheckLabel.default, {
+    title: title
+  }, label), (isValid || isInvalid) && /*#__PURE__*/_react.default.createElement(_Feedback.default, {
+    type: isValid ? 'valid' : 'invalid',
+    tooltip: feedbackTooltip
+  }, feedback))));
+});
+
+FormCheck.displayName = 'FormCheck';
+FormCheck.Input = _FormCheckInput.default;
+FormCheck.Label = _FormCheckLabel.default;
+var _default = FormCheck;
+exports.default = _default;
+},{"@babel/runtime/helpers/esm/extends":"../../node_modules/@babel/runtime/helpers/esm/extends.js","@babel/runtime/helpers/esm/objectWithoutPropertiesLoose":"../../node_modules/@babel/runtime/helpers/esm/objectWithoutPropertiesLoose.js","classnames":"../../node_modules/classnames/index.js","prop-types-extra/lib/all":"../../node_modules/prop-types-extra/lib/all.js","react":"../../node_modules/react/index.js","./Feedback":"../../node_modules/react-bootstrap/esm/Feedback.js","./FormCheckInput":"../../node_modules/react-bootstrap/esm/FormCheckInput.js","./FormCheckLabel":"../../node_modules/react-bootstrap/esm/FormCheckLabel.js","./FormContext":"../../node_modules/react-bootstrap/esm/FormContext.js","./ThemeProvider":"../../node_modules/react-bootstrap/esm/ThemeProvider.js"}],"../../node_modules/react-bootstrap/esm/FormFileInput.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _extends2 = _interopRequireDefault(require("@babel/runtime/helpers/esm/extends"));
+
+var _objectWithoutPropertiesLoose2 = _interopRequireDefault(require("@babel/runtime/helpers/esm/objectWithoutPropertiesLoose"));
+
+var _classnames = _interopRequireDefault(require("classnames"));
+
+var _react = _interopRequireWildcard(require("react"));
+
+var _FormContext = _interopRequireDefault(require("./FormContext"));
+
+var _ThemeProvider = require("./ThemeProvider");
+
+function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function () { return cache; }; return cache; }
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var FormFileInput = _react.default.forwardRef(function (_ref, ref) {
+  var id = _ref.id,
+      bsPrefix = _ref.bsPrefix,
+      bsCustomPrefix = _ref.bsCustomPrefix,
+      className = _ref.className,
+      isValid = _ref.isValid,
+      isInvalid = _ref.isInvalid,
+      lang = _ref.lang,
+      _ref$as = _ref.as,
+      Component = _ref$as === void 0 ? 'input' : _ref$as,
+      props = (0, _objectWithoutPropertiesLoose2.default)(_ref, ["id", "bsPrefix", "bsCustomPrefix", "className", "isValid", "isInvalid", "lang", "as"]);
+
+  var _useContext = (0, _react.useContext)(_FormContext.default),
+      controlId = _useContext.controlId,
+      custom = _useContext.custom;
+
+  var type = 'file';
+
+  var _ref2 = custom ? [bsCustomPrefix, 'custom-file-input'] : [bsPrefix, 'form-control-file'],
+      prefix = _ref2[0],
+      defaultPrefix = _ref2[1];
+
+  bsPrefix = (0, _ThemeProvider.useBootstrapPrefix)(prefix, defaultPrefix);
+  return /*#__PURE__*/_react.default.createElement(Component, (0, _extends2.default)({}, props, {
+    ref: ref,
+    id: id || controlId,
+    type: type,
+    lang: lang,
+    className: (0, _classnames.default)(className, bsPrefix, isValid && 'is-valid', isInvalid && 'is-invalid')
+  }));
+});
+
+FormFileInput.displayName = 'FormFileInput';
+var _default = FormFileInput;
+exports.default = _default;
+},{"@babel/runtime/helpers/esm/extends":"../../node_modules/@babel/runtime/helpers/esm/extends.js","@babel/runtime/helpers/esm/objectWithoutPropertiesLoose":"../../node_modules/@babel/runtime/helpers/esm/objectWithoutPropertiesLoose.js","classnames":"../../node_modules/classnames/index.js","react":"../../node_modules/react/index.js","./FormContext":"../../node_modules/react-bootstrap/esm/FormContext.js","./ThemeProvider":"../../node_modules/react-bootstrap/esm/ThemeProvider.js"}],"../../node_modules/react-bootstrap/esm/FormFileLabel.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _extends2 = _interopRequireDefault(require("@babel/runtime/helpers/esm/extends"));
+
+var _objectWithoutPropertiesLoose2 = _interopRequireDefault(require("@babel/runtime/helpers/esm/objectWithoutPropertiesLoose"));
+
+var _classnames = _interopRequireDefault(require("classnames"));
+
+var _react = _interopRequireWildcard(require("react"));
+
+var _FormContext = _interopRequireDefault(require("./FormContext"));
+
+var _ThemeProvider = require("./ThemeProvider");
+
+function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function () { return cache; }; return cache; }
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var FormFileLabel = _react.default.forwardRef(function (_ref, ref) {
+  var bsPrefix = _ref.bsPrefix,
+      bsCustomPrefix = _ref.bsCustomPrefix,
+      className = _ref.className,
+      htmlFor = _ref.htmlFor,
+      props = (0, _objectWithoutPropertiesLoose2.default)(_ref, ["bsPrefix", "bsCustomPrefix", "className", "htmlFor"]);
+
+  var _useContext = (0, _react.useContext)(_FormContext.default),
+      controlId = _useContext.controlId,
+      custom = _useContext.custom;
+
+  var _ref2 = custom ? [bsCustomPrefix, 'custom-file-label'] : [bsPrefix, 'form-file-label'],
+      prefix = _ref2[0],
+      defaultPrefix = _ref2[1];
+
+  bsPrefix = (0, _ThemeProvider.useBootstrapPrefix)(prefix, defaultPrefix);
+  return /*#__PURE__*/_react.default.createElement("label", (0, _extends2.default)({}, props, {
+    ref: ref,
+    htmlFor: htmlFor || controlId,
+    className: (0, _classnames.default)(className, bsPrefix),
+    "data-browse": props['data-browse']
+  }));
+});
+
+FormFileLabel.displayName = 'FormFileLabel';
+var _default = FormFileLabel;
+exports.default = _default;
+},{"@babel/runtime/helpers/esm/extends":"../../node_modules/@babel/runtime/helpers/esm/extends.js","@babel/runtime/helpers/esm/objectWithoutPropertiesLoose":"../../node_modules/@babel/runtime/helpers/esm/objectWithoutPropertiesLoose.js","classnames":"../../node_modules/classnames/index.js","react":"../../node_modules/react/index.js","./FormContext":"../../node_modules/react-bootstrap/esm/FormContext.js","./ThemeProvider":"../../node_modules/react-bootstrap/esm/ThemeProvider.js"}],"../../node_modules/react-bootstrap/esm/FormFile.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _extends2 = _interopRequireDefault(require("@babel/runtime/helpers/esm/extends"));
+
+var _objectWithoutPropertiesLoose2 = _interopRequireDefault(require("@babel/runtime/helpers/esm/objectWithoutPropertiesLoose"));
+
+var _classnames = _interopRequireDefault(require("classnames"));
+
+var _react = _interopRequireWildcard(require("react"));
+
+var _all = _interopRequireDefault(require("prop-types-extra/lib/all"));
+
+var _Feedback = _interopRequireDefault(require("./Feedback"));
+
+var _FormFileInput = _interopRequireDefault(require("./FormFileInput"));
+
+var _FormFileLabel = _interopRequireDefault(require("./FormFileLabel"));
+
+var _FormContext = _interopRequireDefault(require("./FormContext"));
+
+var _ThemeProvider = require("./ThemeProvider");
+
+function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function () { return cache; }; return cache; }
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var FormFile = _react.default.forwardRef(function (_ref, ref) {
+  var id = _ref.id,
+      bsPrefix = _ref.bsPrefix,
+      bsCustomPrefix = _ref.bsCustomPrefix,
+      _ref$disabled = _ref.disabled,
+      disabled = _ref$disabled === void 0 ? false : _ref$disabled,
+      _ref$isValid = _ref.isValid,
+      isValid = _ref$isValid === void 0 ? false : _ref$isValid,
+      _ref$isInvalid = _ref.isInvalid,
+      isInvalid = _ref$isInvalid === void 0 ? false : _ref$isInvalid,
+      _ref$feedbackTooltip = _ref.feedbackTooltip,
+      feedbackTooltip = _ref$feedbackTooltip === void 0 ? false : _ref$feedbackTooltip,
+      feedback = _ref.feedback,
+      className = _ref.className,
+      style = _ref.style,
+      label = _ref.label,
+      children = _ref.children,
+      custom = _ref.custom,
+      lang = _ref.lang,
+      dataBrowse = _ref['data-browse'],
+      _ref$as = _ref.as,
+      Component = _ref$as === void 0 ? 'div' : _ref$as,
+      _ref$inputAs = _ref.inputAs,
+      inputAs = _ref$inputAs === void 0 ? 'input' : _ref$inputAs,
+      props = (0, _objectWithoutPropertiesLoose2.default)(_ref, ["id", "bsPrefix", "bsCustomPrefix", "disabled", "isValid", "isInvalid", "feedbackTooltip", "feedback", "className", "style", "label", "children", "custom", "lang", "data-browse", "as", "inputAs"]);
+
+  var _ref2 = custom ? [bsCustomPrefix, 'custom'] : [bsPrefix, 'form-file'],
+      prefix = _ref2[0],
+      defaultPrefix = _ref2[1];
+
+  bsPrefix = (0, _ThemeProvider.useBootstrapPrefix)(prefix, defaultPrefix);
+  var type = 'file';
+
+  var _useContext = (0, _react.useContext)(_FormContext.default),
+      controlId = _useContext.controlId;
+
+  var innerFormContext = (0, _react.useMemo)(function () {
+    return {
+      controlId: id || controlId,
+      custom: custom
+    };
+  }, [controlId, custom, id]);
+  var hasLabel = label != null && label !== false && !children;
+
+  var input = /*#__PURE__*/_react.default.createElement(_FormFileInput.default, (0, _extends2.default)({}, props, {
+    ref: ref,
+    isValid: isValid,
+    isInvalid: isInvalid,
+    disabled: disabled,
+    as: inputAs,
+    lang: lang
+  }));
+
+  return /*#__PURE__*/_react.default.createElement(_FormContext.default.Provider, {
+    value: innerFormContext
+  }, /*#__PURE__*/_react.default.createElement(Component, {
+    style: style,
+    className: (0, _classnames.default)(className, bsPrefix, custom && "custom-" + type)
+  }, children || /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, custom ? /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, input, hasLabel && /*#__PURE__*/_react.default.createElement(_FormFileLabel.default, {
+    "data-browse": dataBrowse
+  }, label)) : /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, hasLabel && /*#__PURE__*/_react.default.createElement(_FormFileLabel.default, null, label), input), (isValid || isInvalid) && /*#__PURE__*/_react.default.createElement(_Feedback.default, {
+    type: isValid ? 'valid' : 'invalid',
+    tooltip: feedbackTooltip
+  }, feedback))));
+});
+
+FormFile.displayName = 'FormFile';
+FormFile.Input = _FormFileInput.default;
+FormFile.Label = _FormFileLabel.default;
+var _default = FormFile;
+exports.default = _default;
+},{"@babel/runtime/helpers/esm/extends":"../../node_modules/@babel/runtime/helpers/esm/extends.js","@babel/runtime/helpers/esm/objectWithoutPropertiesLoose":"../../node_modules/@babel/runtime/helpers/esm/objectWithoutPropertiesLoose.js","classnames":"../../node_modules/classnames/index.js","react":"../../node_modules/react/index.js","prop-types-extra/lib/all":"../../node_modules/prop-types-extra/lib/all.js","./Feedback":"../../node_modules/react-bootstrap/esm/Feedback.js","./FormFileInput":"../../node_modules/react-bootstrap/esm/FormFileInput.js","./FormFileLabel":"../../node_modules/react-bootstrap/esm/FormFileLabel.js","./FormContext":"../../node_modules/react-bootstrap/esm/FormContext.js","./ThemeProvider":"../../node_modules/react-bootstrap/esm/ThemeProvider.js"}],"../../node_modules/warning/warning.js":[function(require,module,exports) {
+/**
+ * Copyright (c) 2014-present, Facebook, Inc.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ */
+'use strict';
+/**
+ * Similar to invariant but only logs a warning if the condition is not met.
+ * This can be used to log issues in development environments in critical
+ * paths. Removing the logging code for production environments will keep the
+ * same logic and follow the same code paths.
+ */
+
+var __DEV__ = "development" !== 'production';
+
+var warning = function () {};
+
+if (__DEV__) {
+  var printWarning = function printWarning(format, args) {
+    var len = arguments.length;
+    args = new Array(len > 1 ? len - 1 : 0);
+
+    for (var key = 1; key < len; key++) {
+      args[key - 1] = arguments[key];
+    }
+
+    var argIndex = 0;
+    var message = 'Warning: ' + format.replace(/%s/g, function () {
+      return args[argIndex++];
+    });
+
+    if (typeof console !== 'undefined') {
+      console.error(message);
+    }
+
+    try {
+      // --- Welcome to debugging React ---
+      // This error was thrown as a convenience so that you can use this stack
+      // to find the callsite that caused this warning to fire.
+      throw new Error(message);
+    } catch (x) {}
+  };
+
+  warning = function (condition, format, args) {
+    var len = arguments.length;
+    args = new Array(len > 2 ? len - 2 : 0);
+
+    for (var key = 2; key < len; key++) {
+      args[key - 2] = arguments[key];
+    }
+
+    if (format === undefined) {
+      throw new Error('`warning(condition, format, ...args)` requires a warning ' + 'message argument');
+    }
+
+    if (!condition) {
+      printWarning.apply(null, [format].concat(args));
+    }
+  };
+}
+
+module.exports = warning;
+},{}],"../../node_modules/react-bootstrap/esm/FormControl.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _extends2 = _interopRequireDefault(require("@babel/runtime/helpers/esm/extends"));
+
+var _objectWithoutPropertiesLoose2 = _interopRequireDefault(require("@babel/runtime/helpers/esm/objectWithoutPropertiesLoose"));
+
+var _classnames = _interopRequireDefault(require("classnames"));
+
+var _all = _interopRequireDefault(require("prop-types-extra/lib/all"));
+
+var _react = _interopRequireWildcard(require("react"));
+
+var _warning = _interopRequireDefault(require("warning"));
+
+var _Feedback = _interopRequireDefault(require("./Feedback"));
+
+var _FormContext = _interopRequireDefault(require("./FormContext"));
+
+var _ThemeProvider = require("./ThemeProvider");
+
+function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function () { return cache; }; return cache; }
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var FormControl = _react.default.forwardRef(function (_ref, ref) {
+  var bsPrefix = _ref.bsPrefix,
+      bsCustomPrefix = _ref.bsCustomPrefix,
+      type = _ref.type,
+      size = _ref.size,
+      htmlSize = _ref.htmlSize,
+      id = _ref.id,
+      className = _ref.className,
+      _ref$isValid = _ref.isValid,
+      isValid = _ref$isValid === void 0 ? false : _ref$isValid,
+      _ref$isInvalid = _ref.isInvalid,
+      isInvalid = _ref$isInvalid === void 0 ? false : _ref$isInvalid,
+      plaintext = _ref.plaintext,
+      readOnly = _ref.readOnly,
+      custom = _ref.custom,
+      _ref$as = _ref.as,
+      Component = _ref$as === void 0 ? 'input' : _ref$as,
+      props = (0, _objectWithoutPropertiesLoose2.default)(_ref, ["bsPrefix", "bsCustomPrefix", "type", "size", "htmlSize", "id", "className", "isValid", "isInvalid", "plaintext", "readOnly", "custom", "as"]);
+
+  var _useContext = (0, _react.useContext)(_FormContext.default),
+      controlId = _useContext.controlId;
+
+  var _ref2 = custom ? [bsCustomPrefix, 'custom'] : [bsPrefix, 'form-control'],
+      prefix = _ref2[0],
+      defaultPrefix = _ref2[1];
+
+  bsPrefix = (0, _ThemeProvider.useBootstrapPrefix)(prefix, defaultPrefix);
+  var classes;
+
+  if (plaintext) {
+    var _classes;
+
+    classes = (_classes = {}, _classes[bsPrefix + "-plaintext"] = true, _classes);
+  } else if (type === 'file') {
+    var _classes2;
+
+    classes = (_classes2 = {}, _classes2[bsPrefix + "-file"] = true, _classes2);
+  } else if (type === 'range') {
+    var _classes3;
+
+    classes = (_classes3 = {}, _classes3[bsPrefix + "-range"] = true, _classes3);
+  } else if (Component === 'select' && custom) {
+    var _classes4;
+
+    classes = (_classes4 = {}, _classes4[bsPrefix + "-select"] = true, _classes4[bsPrefix + "-select-" + size] = size, _classes4);
+  } else {
+    var _classes5;
+
+    classes = (_classes5 = {}, _classes5[bsPrefix] = true, _classes5[bsPrefix + "-" + size] = size, _classes5);
+  }
+
+  "development" !== "production" ? (0, _warning.default)(controlId == null || !id, '`controlId` is ignored on `<FormControl>` when `id` is specified.') : void 0;
+  return /*#__PURE__*/_react.default.createElement(Component, (0, _extends2.default)({}, props, {
+    type: type,
+    size: htmlSize,
+    ref: ref,
+    readOnly: readOnly,
+    id: id || controlId,
+    className: (0, _classnames.default)(className, classes, isValid && "is-valid", isInvalid && "is-invalid")
+  }));
+});
+
+FormControl.displayName = 'FormControl';
+
+var _default = Object.assign(FormControl, {
+  Feedback: _Feedback.default
+});
+
+exports.default = _default;
+},{"@babel/runtime/helpers/esm/extends":"../../node_modules/@babel/runtime/helpers/esm/extends.js","@babel/runtime/helpers/esm/objectWithoutPropertiesLoose":"../../node_modules/@babel/runtime/helpers/esm/objectWithoutPropertiesLoose.js","classnames":"../../node_modules/classnames/index.js","prop-types-extra/lib/all":"../../node_modules/prop-types-extra/lib/all.js","react":"../../node_modules/react/index.js","warning":"../../node_modules/warning/warning.js","./Feedback":"../../node_modules/react-bootstrap/esm/Feedback.js","./FormContext":"../../node_modules/react-bootstrap/esm/FormContext.js","./ThemeProvider":"../../node_modules/react-bootstrap/esm/ThemeProvider.js"}],"../../node_modules/react-bootstrap/esm/FormGroup.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _extends2 = _interopRequireDefault(require("@babel/runtime/helpers/esm/extends"));
+
+var _objectWithoutPropertiesLoose2 = _interopRequireDefault(require("@babel/runtime/helpers/esm/objectWithoutPropertiesLoose"));
+
+var _classnames = _interopRequireDefault(require("classnames"));
+
+var _react = _interopRequireWildcard(require("react"));
+
+var _FormContext = _interopRequireDefault(require("./FormContext"));
+
+var _ThemeProvider = require("./ThemeProvider");
+
+function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function () { return cache; }; return cache; }
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var FormGroup = _react.default.forwardRef(function (_ref, ref) {
+  var bsPrefix = _ref.bsPrefix,
+      className = _ref.className,
+      children = _ref.children,
+      controlId = _ref.controlId,
+      _ref$as = _ref.as,
+      Component = _ref$as === void 0 ? 'div' : _ref$as,
+      props = (0, _objectWithoutPropertiesLoose2.default)(_ref, ["bsPrefix", "className", "children", "controlId", "as"]);
+  bsPrefix = (0, _ThemeProvider.useBootstrapPrefix)(bsPrefix, 'form-group');
+  var context = (0, _react.useMemo)(function () {
+    return {
+      controlId: controlId
+    };
+  }, [controlId]);
+  return /*#__PURE__*/_react.default.createElement(_FormContext.default.Provider, {
+    value: context
+  }, /*#__PURE__*/_react.default.createElement(Component, (0, _extends2.default)({}, props, {
+    ref: ref,
+    className: (0, _classnames.default)(className, bsPrefix)
+  }), children));
+});
+
+FormGroup.displayName = 'FormGroup';
+var _default = FormGroup;
+exports.default = _default;
+},{"@babel/runtime/helpers/esm/extends":"../../node_modules/@babel/runtime/helpers/esm/extends.js","@babel/runtime/helpers/esm/objectWithoutPropertiesLoose":"../../node_modules/@babel/runtime/helpers/esm/objectWithoutPropertiesLoose.js","classnames":"../../node_modules/classnames/index.js","react":"../../node_modules/react/index.js","./FormContext":"../../node_modules/react-bootstrap/esm/FormContext.js","./ThemeProvider":"../../node_modules/react-bootstrap/esm/ThemeProvider.js"}],"../../node_modules/react-bootstrap/esm/Col.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _extends2 = _interopRequireDefault(require("@babel/runtime/helpers/esm/extends"));
+
+var _objectWithoutPropertiesLoose2 = _interopRequireDefault(require("@babel/runtime/helpers/esm/objectWithoutPropertiesLoose"));
+
+var _classnames = _interopRequireDefault(require("classnames"));
+
+var _react = _interopRequireDefault(require("react"));
+
+var _ThemeProvider = require("./ThemeProvider");
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var DEVICE_SIZES = ['xl', 'lg', 'md', 'sm', 'xs'];
+
+var Col = _react.default.forwardRef( // Need to define the default "as" during prop destructuring to be compatible with styled-components github.com/react-bootstrap/react-bootstrap/issues/3595
+function (_ref, ref) {
+  var bsPrefix = _ref.bsPrefix,
+      className = _ref.className,
+      _ref$as = _ref.as,
+      Component = _ref$as === void 0 ? 'div' : _ref$as,
+      props = (0, _objectWithoutPropertiesLoose2.default)(_ref, ["bsPrefix", "className", "as"]);
+  var prefix = (0, _ThemeProvider.useBootstrapPrefix)(bsPrefix, 'col');
+  var spans = [];
+  var classes = [];
+  DEVICE_SIZES.forEach(function (brkPoint) {
+    var propValue = props[brkPoint];
+    delete props[brkPoint];
+    var span;
+    var offset;
+    var order;
+
+    if (typeof propValue === 'object' && propValue != null) {
+      var _propValue$span = propValue.span;
+      span = _propValue$span === void 0 ? true : _propValue$span;
+      offset = propValue.offset;
+      order = propValue.order;
+    } else {
+      span = propValue;
+    }
+
+    var infix = brkPoint !== 'xs' ? "-" + brkPoint : '';
+    if (span) spans.push(span === true ? "" + prefix + infix : "" + prefix + infix + "-" + span);
+    if (order != null) classes.push("order" + infix + "-" + order);
+    if (offset != null) classes.push("offset" + infix + "-" + offset);
+  });
+
+  if (!spans.length) {
+    spans.push(prefix); // plain 'col'
+  }
+
+  return /*#__PURE__*/_react.default.createElement(Component, (0, _extends2.default)({}, props, {
+    ref: ref,
+    className: _classnames.default.apply(void 0, [className].concat(spans, classes))
+  }));
+});
+
+Col.displayName = 'Col';
+var _default = Col;
+exports.default = _default;
+},{"@babel/runtime/helpers/esm/extends":"../../node_modules/@babel/runtime/helpers/esm/extends.js","@babel/runtime/helpers/esm/objectWithoutPropertiesLoose":"../../node_modules/@babel/runtime/helpers/esm/objectWithoutPropertiesLoose.js","classnames":"../../node_modules/classnames/index.js","react":"../../node_modules/react/index.js","./ThemeProvider":"../../node_modules/react-bootstrap/esm/ThemeProvider.js"}],"../../node_modules/react-bootstrap/esm/FormLabel.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _extends2 = _interopRequireDefault(require("@babel/runtime/helpers/esm/extends"));
+
+var _objectWithoutPropertiesLoose2 = _interopRequireDefault(require("@babel/runtime/helpers/esm/objectWithoutPropertiesLoose"));
+
+var _classnames = _interopRequireDefault(require("classnames"));
+
+var _react = _interopRequireWildcard(require("react"));
+
+var _warning = _interopRequireDefault(require("warning"));
+
+var _Col = _interopRequireDefault(require("./Col"));
+
+var _FormContext = _interopRequireDefault(require("./FormContext"));
+
+var _ThemeProvider = require("./ThemeProvider");
+
+function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function () { return cache; }; return cache; }
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var defaultProps = {
+  column: false,
+  srOnly: false
+};
+
+var FormLabel = _react.default.forwardRef(function (_ref, ref) {
+  var _ref$as = _ref.as,
+      Component = _ref$as === void 0 ? 'label' : _ref$as,
+      bsPrefix = _ref.bsPrefix,
+      column = _ref.column,
+      srOnly = _ref.srOnly,
+      className = _ref.className,
+      htmlFor = _ref.htmlFor,
+      props = (0, _objectWithoutPropertiesLoose2.default)(_ref, ["as", "bsPrefix", "column", "srOnly", "className", "htmlFor"]);
+
+  var _useContext = (0, _react.useContext)(_FormContext.default),
+      controlId = _useContext.controlId;
+
+  bsPrefix = (0, _ThemeProvider.useBootstrapPrefix)(bsPrefix, 'form-label');
+  var columnClass = 'col-form-label';
+  if (typeof column === 'string') columnClass = columnClass + "-" + column;
+  var classes = (0, _classnames.default)(className, bsPrefix, srOnly && 'sr-only', column && columnClass);
+  "development" !== "production" ? (0, _warning.default)(controlId == null || !htmlFor, '`controlId` is ignored on `<FormLabel>` when `htmlFor` is specified.') : void 0;
+  htmlFor = htmlFor || controlId;
+  if (column) return /*#__PURE__*/_react.default.createElement(_Col.default, (0, _extends2.default)({
+    as: "label",
+    className: classes,
+    htmlFor: htmlFor
+  }, props));
+  return (
+    /*#__PURE__*/
+    // eslint-disable-next-line jsx-a11y/label-has-for, jsx-a11y/label-has-associated-control
+    _react.default.createElement(Component, (0, _extends2.default)({
+      ref: ref,
+      className: classes,
+      htmlFor: htmlFor
+    }, props))
+  );
+});
+
+FormLabel.displayName = 'FormLabel';
+FormLabel.defaultProps = defaultProps;
+var _default = FormLabel;
+exports.default = _default;
+},{"@babel/runtime/helpers/esm/extends":"../../node_modules/@babel/runtime/helpers/esm/extends.js","@babel/runtime/helpers/esm/objectWithoutPropertiesLoose":"../../node_modules/@babel/runtime/helpers/esm/objectWithoutPropertiesLoose.js","classnames":"../../node_modules/classnames/index.js","react":"../../node_modules/react/index.js","warning":"../../node_modules/warning/warning.js","./Col":"../../node_modules/react-bootstrap/esm/Col.js","./FormContext":"../../node_modules/react-bootstrap/esm/FormContext.js","./ThemeProvider":"../../node_modules/react-bootstrap/esm/ThemeProvider.js"}],"../../node_modules/react-bootstrap/esm/FormText.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _extends2 = _interopRequireDefault(require("@babel/runtime/helpers/esm/extends"));
+
+var _objectWithoutPropertiesLoose2 = _interopRequireDefault(require("@babel/runtime/helpers/esm/objectWithoutPropertiesLoose"));
+
+var _classnames = _interopRequireDefault(require("classnames"));
+
+var _react = _interopRequireDefault(require("react"));
+
+var _ThemeProvider = require("./ThemeProvider");
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var FormText = _react.default.forwardRef( // Need to define the default "as" during prop destructuring to be compatible with styled-components github.com/react-bootstrap/react-bootstrap/issues/3595
+function (_ref, ref) {
+  var bsPrefix = _ref.bsPrefix,
+      className = _ref.className,
+      _ref$as = _ref.as,
+      Component = _ref$as === void 0 ? 'small' : _ref$as,
+      muted = _ref.muted,
+      props = (0, _objectWithoutPropertiesLoose2.default)(_ref, ["bsPrefix", "className", "as", "muted"]);
+  bsPrefix = (0, _ThemeProvider.useBootstrapPrefix)(bsPrefix, 'form-text');
+  return /*#__PURE__*/_react.default.createElement(Component, (0, _extends2.default)({}, props, {
+    ref: ref,
+    className: (0, _classnames.default)(className, bsPrefix, muted && 'text-muted')
+  }));
+});
+
+FormText.displayName = 'FormText';
+var _default = FormText;
+exports.default = _default;
+},{"@babel/runtime/helpers/esm/extends":"../../node_modules/@babel/runtime/helpers/esm/extends.js","@babel/runtime/helpers/esm/objectWithoutPropertiesLoose":"../../node_modules/@babel/runtime/helpers/esm/objectWithoutPropertiesLoose.js","classnames":"../../node_modules/classnames/index.js","react":"../../node_modules/react/index.js","./ThemeProvider":"../../node_modules/react-bootstrap/esm/ThemeProvider.js"}],"../../node_modules/react-bootstrap/esm/Switch.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _extends2 = _interopRequireDefault(require("@babel/runtime/helpers/esm/extends"));
+
+var _react = _interopRequireDefault(require("react"));
+
+var _FormCheck = _interopRequireDefault(require("./FormCheck"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var Switch = _react.default.forwardRef(function (props, ref) {
+  return /*#__PURE__*/_react.default.createElement(_FormCheck.default, (0, _extends2.default)({}, props, {
+    ref: ref,
+    type: "switch"
+  }));
+});
+
+Switch.displayName = 'Switch';
+Switch.Input = _FormCheck.default.Input;
+Switch.Label = _FormCheck.default.Label;
+var _default = Switch;
+exports.default = _default;
+},{"@babel/runtime/helpers/esm/extends":"../../node_modules/@babel/runtime/helpers/esm/extends.js","react":"../../node_modules/react/index.js","./FormCheck":"../../node_modules/react-bootstrap/esm/FormCheck.js"}],"../../node_modules/dom-helpers/esm/camelize.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = camelize;
+var rHyphen = /-(.)/g;
+
+function camelize(string) {
+  return string.replace(rHyphen, function (_, chr) {
+    return chr.toUpperCase();
+  });
+}
+},{}],"../../node_modules/react-bootstrap/esm/createWithBsPrefix.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = createWithBsPrefix;
+
+var _extends2 = _interopRequireDefault(require("@babel/runtime/helpers/esm/extends"));
+
+var _objectWithoutPropertiesLoose2 = _interopRequireDefault(require("@babel/runtime/helpers/esm/objectWithoutPropertiesLoose"));
+
+var _classnames = _interopRequireDefault(require("classnames"));
+
+var _camelize = _interopRequireDefault(require("dom-helpers/camelize"));
+
+var _react = _interopRequireDefault(require("react"));
+
+var _ThemeProvider = require("./ThemeProvider");
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var pascalCase = function pascalCase(str) {
+  return str[0].toUpperCase() + (0, _camelize.default)(str).slice(1);
+}; // TODO: emstricten & fix the typing here! `createWithBsPrefix<TElementType>...`
+
+
+function createWithBsPrefix(prefix, _temp) {
+  var _ref = _temp === void 0 ? {} : _temp,
+      _ref$displayName = _ref.displayName,
+      displayName = _ref$displayName === void 0 ? pascalCase(prefix) : _ref$displayName,
+      Component = _ref.Component,
+      defaultProps = _ref.defaultProps;
+
+  var BsComponent = _react.default.forwardRef(function (_ref2, ref) {
+    var className = _ref2.className,
+        bsPrefix = _ref2.bsPrefix,
+        _ref2$as = _ref2.as,
+        Tag = _ref2$as === void 0 ? Component || 'div' : _ref2$as,
+        props = (0, _objectWithoutPropertiesLoose2.default)(_ref2, ["className", "bsPrefix", "as"]);
+    var resolvedPrefix = (0, _ThemeProvider.useBootstrapPrefix)(bsPrefix, prefix);
+    return /*#__PURE__*/_react.default.createElement(Tag, (0, _extends2.default)({
+      ref: ref,
+      className: (0, _classnames.default)(className, resolvedPrefix)
+    }, props));
+  });
+
+  BsComponent.defaultProps = defaultProps;
+  BsComponent.displayName = displayName;
+  return BsComponent;
+}
+},{"@babel/runtime/helpers/esm/extends":"../../node_modules/@babel/runtime/helpers/esm/extends.js","@babel/runtime/helpers/esm/objectWithoutPropertiesLoose":"../../node_modules/@babel/runtime/helpers/esm/objectWithoutPropertiesLoose.js","classnames":"../../node_modules/classnames/index.js","dom-helpers/camelize":"../../node_modules/dom-helpers/esm/camelize.js","react":"../../node_modules/react/index.js","./ThemeProvider":"../../node_modules/react-bootstrap/esm/ThemeProvider.js"}],"../../node_modules/react-bootstrap/esm/Form.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _extends2 = _interopRequireDefault(require("@babel/runtime/helpers/esm/extends"));
+
+var _objectWithoutPropertiesLoose2 = _interopRequireDefault(require("@babel/runtime/helpers/esm/objectWithoutPropertiesLoose"));
+
+var _classnames = _interopRequireDefault(require("classnames"));
+
+var _react = _interopRequireDefault(require("react"));
+
+var _FormCheck = _interopRequireDefault(require("./FormCheck"));
+
+var _FormFile = _interopRequireDefault(require("./FormFile"));
+
+var _FormControl = _interopRequireDefault(require("./FormControl"));
+
+var _FormGroup = _interopRequireDefault(require("./FormGroup"));
+
+var _FormLabel = _interopRequireDefault(require("./FormLabel"));
+
+var _FormText = _interopRequireDefault(require("./FormText"));
+
+var _Switch = _interopRequireDefault(require("./Switch"));
+
+var _ThemeProvider = require("./ThemeProvider");
+
+var _createWithBsPrefix = _interopRequireDefault(require("./createWithBsPrefix"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var FormRow = (0, _createWithBsPrefix.default)('form-row');
+var defaultProps = {
+  inline: false
+};
+
+var FormImpl = _react.default.forwardRef(function (_ref, ref) {
+  var bsPrefix = _ref.bsPrefix,
+      inline = _ref.inline,
+      className = _ref.className,
+      validated = _ref.validated,
+      _ref$as = _ref.as,
+      Component = _ref$as === void 0 ? 'form' : _ref$as,
+      props = (0, _objectWithoutPropertiesLoose2.default)(_ref, ["bsPrefix", "inline", "className", "validated", "as"]);
+  bsPrefix = (0, _ThemeProvider.useBootstrapPrefix)(bsPrefix, 'form');
+  return /*#__PURE__*/_react.default.createElement(Component, (0, _extends2.default)({}, props, {
+    ref: ref,
+    className: (0, _classnames.default)(className, validated && 'was-validated', inline && bsPrefix + "-inline")
+  }));
+});
+
+FormImpl.displayName = 'Form';
+FormImpl.defaultProps = defaultProps;
+FormImpl.Row = FormRow;
+FormImpl.Group = _FormGroup.default;
+FormImpl.Control = _FormControl.default;
+FormImpl.Check = _FormCheck.default;
+FormImpl.File = _FormFile.default;
+FormImpl.Switch = _Switch.default;
+FormImpl.Label = _FormLabel.default;
+FormImpl.Text = _FormText.default;
+var _default = FormImpl;
+exports.default = _default;
+},{"@babel/runtime/helpers/esm/extends":"../../node_modules/@babel/runtime/helpers/esm/extends.js","@babel/runtime/helpers/esm/objectWithoutPropertiesLoose":"../../node_modules/@babel/runtime/helpers/esm/objectWithoutPropertiesLoose.js","classnames":"../../node_modules/classnames/index.js","react":"../../node_modules/react/index.js","./FormCheck":"../../node_modules/react-bootstrap/esm/FormCheck.js","./FormFile":"../../node_modules/react-bootstrap/esm/FormFile.js","./FormControl":"../../node_modules/react-bootstrap/esm/FormControl.js","./FormGroup":"../../node_modules/react-bootstrap/esm/FormGroup.js","./FormLabel":"../../node_modules/react-bootstrap/esm/FormLabel.js","./FormText":"../../node_modules/react-bootstrap/esm/FormText.js","./Switch":"../../node_modules/react-bootstrap/esm/Switch.js","./ThemeProvider":"../../node_modules/react-bootstrap/esm/ThemeProvider.js","./createWithBsPrefix":"../../node_modules/react-bootstrap/esm/createWithBsPrefix.js"}],"../../node_modules/react-bootstrap/esm/createChainedFunction.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+/**
+ * Safe chained function
+ *
+ * Will only create a new function if needed,
+ * otherwise will pass back existing functions or null.
+ *
+ * @param {function} functions to chain
+ * @returns {function|null}
+ */
+function createChainedFunction() {
+  for (var _len = arguments.length, funcs = new Array(_len), _key = 0; _key < _len; _key++) {
+    funcs[_key] = arguments[_key];
+  }
+
+  return funcs.filter(function (f) {
+    return f != null;
+  }).reduce(function (acc, f) {
+    if (typeof f !== 'function') {
+      throw new Error('Invalid Argument Type, must only provide functions, undefined, or null.');
+    }
+
+    if (acc === null) return f;
+    return function chainedFunction() {
+      for (var _len2 = arguments.length, args = new Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
+        args[_key2] = arguments[_key2];
+      } // @ts-ignore
+
+
+      acc.apply(this, args); // @ts-ignore
+
+      f.apply(this, args);
+    };
+  }, null);
+}
+
+var _default = createChainedFunction;
+exports.default = _default;
+},{}],"../../node_modules/react-bootstrap/esm/SafeAnchor.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _extends2 = _interopRequireDefault(require("@babel/runtime/helpers/esm/extends"));
+
+var _objectWithoutPropertiesLoose2 = _interopRequireDefault(require("@babel/runtime/helpers/esm/objectWithoutPropertiesLoose"));
+
+var _react = _interopRequireDefault(require("react"));
+
+var _createChainedFunction = _interopRequireDefault(require("./createChainedFunction"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function isTrivialHref(href) {
+  return !href || href.trim() === '#';
+}
+/**
+ * There are situations due to browser quirks or Bootstrap CSS where
+ * an anchor tag is needed, when semantically a button tag is the
+ * better choice. SafeAnchor ensures that when an anchor is used like a
+ * button its accessible. It also emulates input `disabled` behavior for
+ * links, which is usually desirable for Buttons, NavItems, DropdownItems, etc.
+ */
+
+
+var SafeAnchor = _react.default.forwardRef(function (_ref, ref) {
+  var _ref$as = _ref.as,
+      Component = _ref$as === void 0 ? 'a' : _ref$as,
+      disabled = _ref.disabled,
+      onKeyDown = _ref.onKeyDown,
+      props = (0, _objectWithoutPropertiesLoose2.default)(_ref, ["as", "disabled", "onKeyDown"]);
+
+  var handleClick = function handleClick(event) {
+    var href = props.href,
+        onClick = props.onClick;
+
+    if (disabled || isTrivialHref(href)) {
+      event.preventDefault();
+    }
+
+    if (disabled) {
+      event.stopPropagation();
+      return;
+    }
+
+    if (onClick) {
+      onClick(event);
+    }
+  };
+
+  var handleKeyDown = function handleKeyDown(event) {
+    if (event.key === ' ') {
+      event.preventDefault();
+      handleClick(event);
+    }
+  };
+
+  if (isTrivialHref(props.href)) {
+    props.role = props.role || 'button'; // we want to make sure there is a href attribute on the node
+    // otherwise, the cursor incorrectly styled (except with role='button')
+
+    props.href = props.href || '#';
+  }
+
+  if (disabled) {
+    props.tabIndex = -1;
+    props['aria-disabled'] = true;
+  }
+
+  return /*#__PURE__*/_react.default.createElement(Component, (0, _extends2.default)({
+    ref: ref
+  }, props, {
+    onClick: handleClick,
+    onKeyDown: (0, _createChainedFunction.default)(handleKeyDown, onKeyDown)
+  }));
+});
+
+SafeAnchor.displayName = 'SafeAnchor';
+var _default = SafeAnchor;
+exports.default = _default;
+},{"@babel/runtime/helpers/esm/extends":"../../node_modules/@babel/runtime/helpers/esm/extends.js","@babel/runtime/helpers/esm/objectWithoutPropertiesLoose":"../../node_modules/@babel/runtime/helpers/esm/objectWithoutPropertiesLoose.js","react":"../../node_modules/react/index.js","./createChainedFunction":"../../node_modules/react-bootstrap/esm/createChainedFunction.js"}],"../../node_modules/react-bootstrap/esm/Button.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _extends2 = _interopRequireDefault(require("@babel/runtime/helpers/esm/extends"));
+
+var _objectWithoutPropertiesLoose2 = _interopRequireDefault(require("@babel/runtime/helpers/esm/objectWithoutPropertiesLoose"));
+
+var _classnames = _interopRequireDefault(require("classnames"));
+
+var _react = _interopRequireDefault(require("react"));
+
+var _ThemeProvider = require("./ThemeProvider");
+
+var _SafeAnchor = _interopRequireDefault(require("./SafeAnchor"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var defaultProps = {
+  variant: 'primary',
+  active: false,
+  disabled: false
+};
+
+var Button = _react.default.forwardRef(function (_ref, ref) {
+  var bsPrefix = _ref.bsPrefix,
+      variant = _ref.variant,
+      size = _ref.size,
+      active = _ref.active,
+      className = _ref.className,
+      block = _ref.block,
+      type = _ref.type,
+      as = _ref.as,
+      props = (0, _objectWithoutPropertiesLoose2.default)(_ref, ["bsPrefix", "variant", "size", "active", "className", "block", "type", "as"]);
+  var prefix = (0, _ThemeProvider.useBootstrapPrefix)(bsPrefix, 'btn');
+  var classes = (0, _classnames.default)(className, prefix, active && 'active', prefix + "-" + variant, block && prefix + "-block", size && prefix + "-" + size);
+
+  if (props.href) {
+    return /*#__PURE__*/_react.default.createElement(_SafeAnchor.default, (0, _extends2.default)({}, props, {
+      as: as,
+      ref: ref,
+      className: (0, _classnames.default)(classes, props.disabled && 'disabled')
+    }));
+  }
+
+  if (ref) {
+    props.ref = ref;
+  }
+
+  if (type) {
+    props.type = type;
+  } else if (!as) {
+    props.type = 'button';
+  }
+
+  var Component = as || 'button';
+  return /*#__PURE__*/_react.default.createElement(Component, (0, _extends2.default)({}, props, {
+    className: classes
+  }));
+});
+
+Button.displayName = 'Button';
+Button.defaultProps = defaultProps;
+var _default = Button;
+exports.default = _default;
+},{"@babel/runtime/helpers/esm/extends":"../../node_modules/@babel/runtime/helpers/esm/extends.js","@babel/runtime/helpers/esm/objectWithoutPropertiesLoose":"../../node_modules/@babel/runtime/helpers/esm/objectWithoutPropertiesLoose.js","classnames":"../../node_modules/classnames/index.js","react":"../../node_modules/react/index.js","./ThemeProvider":"../../node_modules/react-bootstrap/esm/ThemeProvider.js","./SafeAnchor":"../../node_modules/react-bootstrap/esm/SafeAnchor.js"}],"../../node_modules/react-bootstrap/esm/Row.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _extends2 = _interopRequireDefault(require("@babel/runtime/helpers/esm/extends"));
+
+var _objectWithoutPropertiesLoose2 = _interopRequireDefault(require("@babel/runtime/helpers/esm/objectWithoutPropertiesLoose"));
+
+var _classnames = _interopRequireDefault(require("classnames"));
+
+var _react = _interopRequireDefault(require("react"));
+
+var _ThemeProvider = require("./ThemeProvider");
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var DEVICE_SIZES = ['xl', 'lg', 'md', 'sm', 'xs'];
+var defaultProps = {
+  noGutters: false
+};
+
+var Row = _react.default.forwardRef(function (_ref, ref) {
+  var bsPrefix = _ref.bsPrefix,
+      className = _ref.className,
+      noGutters = _ref.noGutters,
+      _ref$as = _ref.as,
+      Component = _ref$as === void 0 ? 'div' : _ref$as,
+      props = (0, _objectWithoutPropertiesLoose2.default)(_ref, ["bsPrefix", "className", "noGutters", "as"]);
+  var decoratedBsPrefix = (0, _ThemeProvider.useBootstrapPrefix)(bsPrefix, 'row');
+  var sizePrefix = decoratedBsPrefix + "-cols";
+  var classes = [];
+  DEVICE_SIZES.forEach(function (brkPoint) {
+    var propValue = props[brkPoint];
+    delete props[brkPoint];
+    var cols;
+
+    if (propValue != null && typeof propValue === 'object') {
+      cols = propValue.cols;
+    } else {
+      cols = propValue;
+    }
+
+    var infix = brkPoint !== 'xs' ? "-" + brkPoint : '';
+    if (cols != null) classes.push("" + sizePrefix + infix + "-" + cols);
+  });
+  return /*#__PURE__*/_react.default.createElement(Component, (0, _extends2.default)({
+    ref: ref
+  }, props, {
+    className: _classnames.default.apply(void 0, [className, decoratedBsPrefix, noGutters && 'no-gutters'].concat(classes))
+  }));
+});
+
+Row.displayName = 'Row';
+Row.defaultProps = defaultProps;
+var _default = Row;
+exports.default = _default;
+},{"@babel/runtime/helpers/esm/extends":"../../node_modules/@babel/runtime/helpers/esm/extends.js","@babel/runtime/helpers/esm/objectWithoutPropertiesLoose":"../../node_modules/@babel/runtime/helpers/esm/objectWithoutPropertiesLoose.js","classnames":"../../node_modules/classnames/index.js","react":"../../node_modules/react/index.js","./ThemeProvider":"../../node_modules/react-bootstrap/esm/ThemeProvider.js"}],"hooks/use-form.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _react = require("react");
+
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
+
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
+function _iterableToArrayLimit(arr, i) { if (typeof Symbol === "undefined" || !(Symbol.iterator in Object(arr))) return; var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
+
+function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+
+var useForm = function useForm(callback) {
+  var initialState = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+
+  var _useState = (0, _react.useState)(initialState),
+      _useState2 = _slicedToArray(_useState, 2),
+      values = _useState2[0],
+      setValues = _useState2[1];
+
+  var onChange = function onChange(e) {
+    var _e$target = e.target,
+        name = _e$target.name,
+        value = _e$target.value;
+    setValues(_objectSpread(_objectSpread({}, values), {}, _defineProperty({}, name, value)));
+  };
+
+  var onSubmit = function onSubmit(e) {
+    e.preventDefault();
+    callback();
+    setValues(initialState); // console.log(e.target)
+  };
+
+  return {
+    onChange: onChange,
+    onSubmit: onSubmit,
+    values: values
+  };
+};
+
+var _default = useForm;
+exports.default = _default;
+},{"react":"../../node_modules/react/index.js"}],"queries/municipal-query.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.ADDMUNICIPAL_QUERY = void 0;
+
+var _client = require("@apollo/client");
+
+function _templateObject() {
+  var data = _taggedTemplateLiteral(["\n    mutation addMunicipal($name: String, $headquarter: String, $area: Int, $total: Int, $male: Int, $female: Int, $hindu: Int, $muslim: Int, $buddhist: Int, $other: Int, $file:Upload ){\n        addMunicipal(name:$name, headquarter:$headquarter, area:$area,total:$total, male:$male, female:$female, hindu:$hindu, muslim:$muslim, buddhist:$buddhist, other:$other, file:$file){\n            municipal{\n      \t\t\tid\n      \t\t\tproperties{\n      \t\t\t\tname\n      \t\t\t\tarea\n      \t\t\t}\n    \t\t} \n        }\n    }\n"]);
+
+  _templateObject = function _templateObject() {
+    return data;
+  };
+
+  return data;
+}
+
+function _taggedTemplateLiteral(strings, raw) { if (!raw) { raw = strings.slice(0); } return Object.freeze(Object.defineProperties(strings, { raw: { value: Object.freeze(raw) } })); }
+
+var ADDMUNICIPAL_QUERY = (0, _client.gql)(_templateObject());
+exports.ADDMUNICIPAL_QUERY = ADDMUNICIPAL_QUERY;
+},{"@apollo/client":"../../node_modules/@apollo/client/index.js"}],"../../node_modules/file-selector/dist/es5/file.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.toFileWithPath = toFileWithPath;
+exports.COMMON_MIME_TYPES = void 0;
+var COMMON_MIME_TYPES = new Map([['avi', 'video/avi'], ['gif', 'image/gif'], ['ico', 'image/x-icon'], ['jpeg', 'image/jpeg'], ['jpg', 'image/jpeg'], ['mkv', 'video/x-matroska'], ['mov', 'video/quicktime'], ['mp4', 'video/mp4'], ['pdf', 'application/pdf'], ['png', 'image/png'], ['zip', 'application/zip'], ['doc', 'application/msword'], ['docx', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document']]);
+exports.COMMON_MIME_TYPES = COMMON_MIME_TYPES;
+
+function toFileWithPath(file, path) {
+  var f = withMimeType(file);
+
+  if (typeof f.path !== 'string') {
+    // on electron, path is already set to the absolute path
+    var webkitRelativePath = file.webkitRelativePath;
+    Object.defineProperty(f, 'path', {
+      value: typeof path === 'string' ? path // If <input webkitdirectory> is set,
+      // the File will have a {webkitRelativePath} property
+      // https://developer.mozilla.org/en-US/docs/Web/API/HTMLInputElement/webkitdirectory
+      : typeof webkitRelativePath === 'string' && webkitRelativePath.length > 0 ? webkitRelativePath : file.name,
+      writable: false,
+      configurable: false,
+      enumerable: true
+    });
+  }
+
+  return f;
+}
+
+function withMimeType(file) {
+  var name = file.name;
+  var hasExtension = name && name.lastIndexOf('.') !== -1;
+
+  if (hasExtension && !file.type) {
+    var ext = name.split('.').pop().toLowerCase();
+    var type = COMMON_MIME_TYPES.get(ext);
+
+    if (type) {
+      Object.defineProperty(file, 'type', {
+        value: type,
+        writable: false,
+        configurable: false,
+        enumerable: true
+      });
+    }
+  }
+
+  return file;
+}
+},{}],"../../node_modules/file-selector/dist/es5/file-selector.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.fromEvent = fromEvent;
+
+var tslib_1 = _interopRequireWildcard(require("tslib"));
+
+var _file = require("./file");
+
+function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function () { return cache; }; return cache; }
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+
+var FILES_TO_IGNORE = [// Thumbnail cache files for macOS and Windows
+'.DS_Store', 'Thumbs.db' // Windows
+];
+/**
+ * Convert a DragEvent's DataTrasfer object to a list of File objects
+ * NOTE: If some of the items are folders,
+ * everything will be flattened and placed in the same list but the paths will be kept as a {path} property.
+ * @param evt
+ */
+
+function fromEvent(evt) {
+  return tslib_1.__awaiter(this, void 0, void 0, function () {
+    return tslib_1.__generator(this, function (_a) {
+      return [2
+      /*return*/
+      , isDragEvt(evt) && evt.dataTransfer ? getDataTransferFiles(evt.dataTransfer, evt.type) : getInputFiles(evt)];
+    });
+  });
+}
+
+function isDragEvt(value) {
+  return !!value.dataTransfer;
+}
+
+function getInputFiles(evt) {
+  var files = isInput(evt.target) ? evt.target.files ? fromList(evt.target.files) : [] : [];
+  return files.map(function (file) {
+    return (0, _file.toFileWithPath)(file);
+  });
+}
+
+function isInput(value) {
+  return value !== null;
+}
+
+function getDataTransferFiles(dt, type) {
+  return tslib_1.__awaiter(this, void 0, void 0, function () {
+    var items, files;
+    return tslib_1.__generator(this, function (_a) {
+      switch (_a.label) {
+        case 0:
+          if (!dt.items) return [3
+          /*break*/
+          , 2];
+          items = fromList(dt.items).filter(function (item) {
+            return item.kind === 'file';
+          }); // According to https://html.spec.whatwg.org/multipage/dnd.html#dndevents,
+          // only 'dragstart' and 'drop' has access to the data (source node)
+
+          if (type !== 'drop') {
+            return [2
+            /*return*/
+            , items];
+          }
+
+          return [4
+          /*yield*/
+          , Promise.all(items.map(toFilePromises))];
+
+        case 1:
+          files = _a.sent();
+          return [2
+          /*return*/
+          , noIgnoredFiles(flatten(files))];
+
+        case 2:
+          return [2
+          /*return*/
+          , noIgnoredFiles(fromList(dt.files).map(function (file) {
+            return (0, _file.toFileWithPath)(file);
+          }))];
+      }
+    });
+  });
+}
+
+function noIgnoredFiles(files) {
+  return files.filter(function (file) {
+    return FILES_TO_IGNORE.indexOf(file.name) === -1;
+  });
+} // IE11 does not support Array.from()
+// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/from#Browser_compatibility
+// https://developer.mozilla.org/en-US/docs/Web/API/FileList
+// https://developer.mozilla.org/en-US/docs/Web/API/DataTransferItemList
+
+
+function fromList(items) {
+  var files = []; // tslint:disable: prefer-for-of
+
+  for (var i = 0; i < items.length; i++) {
+    var file = items[i];
+    files.push(file);
+  }
+
+  return files;
+} // https://developer.mozilla.org/en-US/docs/Web/API/DataTransferItem
+
+
+function toFilePromises(item) {
+  if (typeof item.webkitGetAsEntry !== 'function') {
+    return fromDataTransferItem(item);
+  }
+
+  var entry = item.webkitGetAsEntry(); // Safari supports dropping an image node from a different window and can be retrieved using
+  // the DataTransferItem.getAsFile() API
+  // NOTE: FileSystemEntry.file() throws if trying to get the file
+
+  if (entry && entry.isDirectory) {
+    return fromDirEntry(entry);
+  }
+
+  return fromDataTransferItem(item);
+}
+
+function flatten(items) {
+  return items.reduce(function (acc, files) {
+    return tslib_1.__spread(acc, Array.isArray(files) ? flatten(files) : [files]);
+  }, []);
+}
+
+function fromDataTransferItem(item) {
+  var file = item.getAsFile();
+
+  if (!file) {
+    return Promise.reject(item + " is not a File");
+  }
+
+  var fwp = (0, _file.toFileWithPath)(file);
+  return Promise.resolve(fwp);
+} // https://developer.mozilla.org/en-US/docs/Web/API/FileSystemEntry
+
+
+function fromEntry(entry) {
+  return tslib_1.__awaiter(this, void 0, void 0, function () {
+    return tslib_1.__generator(this, function (_a) {
+      return [2
+      /*return*/
+      , entry.isDirectory ? fromDirEntry(entry) : fromFileEntry(entry)];
+    });
+  });
+} // https://developer.mozilla.org/en-US/docs/Web/API/FileSystemDirectoryEntry
+
+
+function fromDirEntry(entry) {
+  var reader = entry.createReader();
+  return new Promise(function (resolve, reject) {
+    var entries = [];
+
+    function readEntries() {
+      var _this = this; // https://developer.mozilla.org/en-US/docs/Web/API/FileSystemDirectoryEntry/createReader
+      // https://developer.mozilla.org/en-US/docs/Web/API/FileSystemDirectoryReader/readEntries
+
+
+      reader.readEntries(function (batch) {
+        return tslib_1.__awaiter(_this, void 0, void 0, function () {
+          var files, err_1, items;
+          return tslib_1.__generator(this, function (_a) {
+            switch (_a.label) {
+              case 0:
+                if (!!batch.length) return [3
+                /*break*/
+                , 5];
+                _a.label = 1;
+
+              case 1:
+                _a.trys.push([1, 3,, 4]);
+
+                return [4
+                /*yield*/
+                , Promise.all(entries)];
+
+              case 2:
+                files = _a.sent();
+                resolve(files);
+                return [3
+                /*break*/
+                , 4];
+
+              case 3:
+                err_1 = _a.sent();
+                reject(err_1);
+                return [3
+                /*break*/
+                , 4];
+
+              case 4:
+                return [3
+                /*break*/
+                , 6];
+
+              case 5:
+                items = Promise.all(batch.map(fromEntry));
+                entries.push(items); // Continue reading
+
+                readEntries();
+                _a.label = 6;
+
+              case 6:
+                return [2
+                /*return*/
+                ];
+            }
+          });
+        });
+      }, function (err) {
+        reject(err);
+      });
+    }
+
+    readEntries();
+  });
+} // https://developer.mozilla.org/en-US/docs/Web/API/FileSystemFileEntry
+
+
+function fromFileEntry(entry) {
+  return tslib_1.__awaiter(this, void 0, void 0, function () {
+    return tslib_1.__generator(this, function (_a) {
+      return [2
+      /*return*/
+      , new Promise(function (resolve, reject) {
+        entry.file(function (file) {
+          var fwp = (0, _file.toFileWithPath)(file, entry.fullPath);
+          resolve(fwp);
+        }, function (err) {
+          reject(err);
+        });
+      })];
+    });
+  });
+}
+},{"tslib":"../../node_modules/tslib/tslib.es6.js","./file":"../../node_modules/file-selector/dist/es5/file.js"}],"../../node_modules/file-selector/dist/es5/index.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+Object.defineProperty(exports, "fromEvent", {
+  enumerable: true,
+  get: function () {
+    return _fileSelector.fromEvent;
+  }
+});
+
+var _fileSelector = require("./file-selector");
+},{"./file-selector":"../../node_modules/file-selector/dist/es5/file-selector.js"}],"../../node_modules/attr-accept/src/index.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = _default;
+
+/**
+ * Check if the provided file type should be accepted by the input with accept attribute.
+ * https://developer.mozilla.org/en-US/docs/Web/HTML/Element/Input#attr-accept
+ *
+ * Inspired by https://github.com/enyo/dropzone
+ *
+ * @param file {File} https://developer.mozilla.org/en-US/docs/Web/API/File
+ * @param acceptedFiles {string}
+ * @returns {boolean}
+ */
+function _default(file, acceptedFiles) {
+  if (file && acceptedFiles) {
+    const acceptedFilesArray = Array.isArray(acceptedFiles) ? acceptedFiles : acceptedFiles.split(',');
+    const fileName = file.name || '';
+    const mimeType = file.type || '';
+    const baseMimeType = mimeType.replace(/\/.*$/, '');
+    return acceptedFilesArray.some(type => {
+      const validType = type.trim();
+
+      if (validType.charAt(0) === '.') {
+        return fileName.toLowerCase().endsWith(validType.toLowerCase());
+      } else if (validType.endsWith('/*')) {
+        // This is something like a image/* mime type
+        return baseMimeType === validType.replace(/\/.*$/, '');
+      }
+
+      return mimeType === validType;
+    });
+  }
+
+  return true;
+}
+},{}],"../../node_modules/react-dropzone/dist/es/utils/index.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.fileAccepted = fileAccepted;
+exports.fileMatchSize = fileMatchSize;
+exports.allFilesAccepted = allFilesAccepted;
+exports.isPropagationStopped = isPropagationStopped;
+exports.isEvtWithFiles = isEvtWithFiles;
+exports.isKindFile = isKindFile;
+exports.onDocumentDragOver = onDocumentDragOver;
+exports.isIeOrEdge = isIeOrEdge;
+exports.composeEventHandlers = composeEventHandlers;
+exports.TOO_MANY_FILES_REJECTION = exports.getTooSmallRejectionErr = exports.getTooLargeRejectionErr = exports.getInvalidTypeRejectionErr = exports.TOO_MANY_FILES = exports.FILE_TOO_SMALL = exports.FILE_TOO_LARGE = exports.FILE_INVALID_TYPE = void 0;
+
+var _attrAccept = _interopRequireDefault(require("attr-accept"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _typeof2(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof2 = function _typeof2(obj) { return typeof obj; }; } else { _typeof2 = function _typeof2(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof2(obj); }
+
+function _typeof(obj) {
+  if (typeof Symbol === "function" && _typeof2(Symbol.iterator) === "symbol") {
+    _typeof = function _typeof(obj) {
+      return _typeof2(obj);
+    };
+  } else {
+    _typeof = function _typeof(obj) {
+      return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : _typeof2(obj);
+    };
+  }
+
+  return _typeof(obj);
+}
+
+function _slicedToArray(arr, i) {
+  return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _nonIterableRest();
+}
+
+function _nonIterableRest() {
+  throw new TypeError("Invalid attempt to destructure non-iterable instance");
+}
+
+function _iterableToArrayLimit(arr, i) {
+  if (!(Symbol.iterator in Object(arr) || Object.prototype.toString.call(arr) === "[object Arguments]")) {
+    return;
+  }
+
+  var _arr = [];
+  var _n = true;
+  var _d = false;
+  var _e = undefined;
+
+  try {
+    for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) {
+      _arr.push(_s.value);
+
+      if (i && _arr.length === i) break;
+    }
+  } catch (err) {
+    _d = true;
+    _e = err;
+  } finally {
+    try {
+      if (!_n && _i["return"] != null) _i["return"]();
+    } finally {
+      if (_d) throw _e;
+    }
+  }
+
+  return _arr;
+}
+
+function _arrayWithHoles(arr) {
+  if (Array.isArray(arr)) return arr;
+}
+
+// Error codes
+var FILE_INVALID_TYPE = 'file-invalid-type';
+exports.FILE_INVALID_TYPE = FILE_INVALID_TYPE;
+var FILE_TOO_LARGE = 'file-too-large';
+exports.FILE_TOO_LARGE = FILE_TOO_LARGE;
+var FILE_TOO_SMALL = 'file-too-small';
+exports.FILE_TOO_SMALL = FILE_TOO_SMALL;
+var TOO_MANY_FILES = 'too-many-files'; // File Errors
+
+exports.TOO_MANY_FILES = TOO_MANY_FILES;
+
+var getInvalidTypeRejectionErr = function getInvalidTypeRejectionErr(accept) {
+  accept = Array.isArray(accept) && accept.length === 1 ? accept[0] : accept;
+  var messageSuffix = Array.isArray(accept) ? "one of ".concat(accept.join(', ')) : accept;
+  return {
+    code: FILE_INVALID_TYPE,
+    message: "File type must be ".concat(messageSuffix)
+  };
+};
+
+exports.getInvalidTypeRejectionErr = getInvalidTypeRejectionErr;
+
+var getTooLargeRejectionErr = function getTooLargeRejectionErr(maxSize) {
+  return {
+    code: FILE_TOO_LARGE,
+    message: "File is larger than ".concat(maxSize, " bytes")
+  };
+};
+
+exports.getTooLargeRejectionErr = getTooLargeRejectionErr;
+
+var getTooSmallRejectionErr = function getTooSmallRejectionErr(minSize) {
+  return {
+    code: FILE_TOO_SMALL,
+    message: "File is smaller than ".concat(minSize, " bytes")
+  };
+};
+
+exports.getTooSmallRejectionErr = getTooSmallRejectionErr;
+var TOO_MANY_FILES_REJECTION = {
+  code: TOO_MANY_FILES,
+  message: 'Too many files'
+}; // Firefox versions prior to 53 return a bogus MIME type for every file drag, so dragovers with
+// that MIME type will always be accepted
+
+exports.TOO_MANY_FILES_REJECTION = TOO_MANY_FILES_REJECTION;
+
+function fileAccepted(file, accept) {
+  var isAcceptable = file.type === 'application/x-moz-file' || (0, _attrAccept.default)(file, accept);
+  return [isAcceptable, isAcceptable ? null : getInvalidTypeRejectionErr(accept)];
+}
+
+function fileMatchSize(file, minSize, maxSize) {
+  if (isDefined(file.size)) {
+    if (isDefined(minSize) && isDefined(maxSize)) {
+      if (file.size > maxSize) return [false, getTooLargeRejectionErr(maxSize)];
+      if (file.size < minSize) return [false, getTooSmallRejectionErr(minSize)];
+    } else if (isDefined(minSize) && file.size < minSize) return [false, getTooSmallRejectionErr(minSize)];else if (isDefined(maxSize) && file.size > maxSize) return [false, getTooLargeRejectionErr(maxSize)];
+  }
+
+  return [true, null];
+}
+
+function isDefined(value) {
+  return value !== undefined && value !== null;
+}
+
+function allFilesAccepted(_ref) {
+  var files = _ref.files,
+      accept = _ref.accept,
+      minSize = _ref.minSize,
+      maxSize = _ref.maxSize,
+      multiple = _ref.multiple;
+
+  if (!multiple && files.length > 1) {
+    return false;
+  }
+
+  return files.every(function (file) {
+    var _fileAccepted = fileAccepted(file, accept),
+        _fileAccepted2 = _slicedToArray(_fileAccepted, 1),
+        accepted = _fileAccepted2[0];
+
+    var _fileMatchSize = fileMatchSize(file, minSize, maxSize),
+        _fileMatchSize2 = _slicedToArray(_fileMatchSize, 1),
+        sizeMatch = _fileMatchSize2[0];
+
+    return accepted && sizeMatch;
+  });
+} // React's synthetic events has event.isPropagationStopped,
+// but to remain compatibility with other libs (Preact) fall back
+// to check event.cancelBubble
+
+
+function isPropagationStopped(event) {
+  if (typeof event.isPropagationStopped === 'function') {
+    return event.isPropagationStopped();
+  } else if (typeof event.cancelBubble !== 'undefined') {
+    return event.cancelBubble;
+  }
+
+  return false;
+}
+
+function isEvtWithFiles(event) {
+  if (!event.dataTransfer) {
+    return !!event.target && !!event.target.files;
+  } // https://developer.mozilla.org/en-US/docs/Web/API/DataTransfer/types
+  // https://developer.mozilla.org/en-US/docs/Web/API/HTML_Drag_and_Drop_API/Recommended_drag_types#file
+
+
+  return Array.prototype.some.call(event.dataTransfer.types, function (type) {
+    return type === 'Files' || type === 'application/x-moz-file';
+  });
+}
+
+function isKindFile(item) {
+  return _typeof(item) === 'object' && item !== null && item.kind === 'file';
+} // allow the entire document to be a drag target
+
+
+function onDocumentDragOver(event) {
+  event.preventDefault();
+}
+
+function isIe(userAgent) {
+  return userAgent.indexOf('MSIE') !== -1 || userAgent.indexOf('Trident/') !== -1;
+}
+
+function isEdge(userAgent) {
+  return userAgent.indexOf('Edge/') !== -1;
+}
+
+function isIeOrEdge() {
+  var userAgent = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : window.navigator.userAgent;
+  return isIe(userAgent) || isEdge(userAgent);
+}
+/**
+ * This is intended to be used to compose event handlers
+ * They are executed in order until one of them calls `event.isPropagationStopped()`.
+ * Note that the check is done on the first invoke too,
+ * meaning that if propagation was stopped before invoking the fns,
+ * no handlers will be executed.
+ *
+ * @param {Function} fns the event hanlder functions
+ * @return {Function} the event handler to add to an element
+ */
+
+
+function composeEventHandlers() {
+  for (var _len = arguments.length, fns = new Array(_len), _key = 0; _key < _len; _key++) {
+    fns[_key] = arguments[_key];
+  }
+
+  return function (event) {
+    for (var _len2 = arguments.length, args = new Array(_len2 > 1 ? _len2 - 1 : 0), _key2 = 1; _key2 < _len2; _key2++) {
+      args[_key2 - 1] = arguments[_key2];
+    }
+
+    return fns.some(function (fn) {
+      if (!isPropagationStopped(event) && fn) {
+        fn.apply(void 0, [event].concat(args));
+      }
+
+      return isPropagationStopped(event);
+    });
+  };
+}
+},{"attr-accept":"../../node_modules/attr-accept/src/index.js"}],"../../node_modules/react-dropzone/dist/es/index.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.useDropzone = useDropzone;
+exports.default = void 0;
+
+var _react = _interopRequireWildcard(require("react"));
+
+var _propTypes = _interopRequireDefault(require("prop-types"));
+
+var _fileSelector = require("file-selector");
+
+var _index = require("./utils/index");
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function () { return cache; }; return cache; }
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+
+function _toConsumableArray(arr) {
+  return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread();
+}
+
+function _nonIterableSpread() {
+  throw new TypeError("Invalid attempt to spread non-iterable instance");
+}
+
+function _iterableToArray(iter) {
+  if (Symbol.iterator in Object(iter) || Object.prototype.toString.call(iter) === "[object Arguments]") return Array.from(iter);
+}
+
+function _arrayWithoutHoles(arr) {
+  if (Array.isArray(arr)) {
+    for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) {
+      arr2[i] = arr[i];
+    }
+
+    return arr2;
+  }
+}
+
+function _slicedToArray(arr, i) {
+  return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _nonIterableRest();
+}
+
+function _nonIterableRest() {
+  throw new TypeError("Invalid attempt to destructure non-iterable instance");
+}
+
+function _iterableToArrayLimit(arr, i) {
+  if (!(Symbol.iterator in Object(arr) || Object.prototype.toString.call(arr) === "[object Arguments]")) {
+    return;
+  }
+
+  var _arr = [];
+  var _n = true;
+  var _d = false;
+  var _e = undefined;
+
+  try {
+    for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) {
+      _arr.push(_s.value);
+
+      if (i && _arr.length === i) break;
+    }
+  } catch (err) {
+    _d = true;
+    _e = err;
+  } finally {
+    try {
+      if (!_n && _i["return"] != null) _i["return"]();
+    } finally {
+      if (_d) throw _e;
+    }
+  }
+
+  return _arr;
+}
+
+function _arrayWithHoles(arr) {
+  if (Array.isArray(arr)) return arr;
+}
+
+function ownKeys(object, enumerableOnly) {
+  var keys = Object.keys(object);
+
+  if (Object.getOwnPropertySymbols) {
+    var symbols = Object.getOwnPropertySymbols(object);
+    if (enumerableOnly) symbols = symbols.filter(function (sym) {
+      return Object.getOwnPropertyDescriptor(object, sym).enumerable;
+    });
+    keys.push.apply(keys, symbols);
+  }
+
+  return keys;
+}
+
+function _objectSpread(target) {
+  for (var i = 1; i < arguments.length; i++) {
+    var source = arguments[i] != null ? arguments[i] : {};
+
+    if (i % 2) {
+      ownKeys(source, true).forEach(function (key) {
+        _defineProperty(target, key, source[key]);
+      });
+    } else if (Object.getOwnPropertyDescriptors) {
+      Object.defineProperties(target, Object.getOwnPropertyDescriptors(source));
+    } else {
+      ownKeys(source).forEach(function (key) {
+        Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key));
+      });
+    }
+  }
+
+  return target;
+}
+
+function _defineProperty(obj, key, value) {
+  if (key in obj) {
+    Object.defineProperty(obj, key, {
+      value: value,
+      enumerable: true,
+      configurable: true,
+      writable: true
+    });
+  } else {
+    obj[key] = value;
+  }
+
+  return obj;
+}
+
+function _objectWithoutProperties(source, excluded) {
+  if (source == null) return {};
+
+  var target = _objectWithoutPropertiesLoose(source, excluded);
+
+  var key, i;
+
+  if (Object.getOwnPropertySymbols) {
+    var sourceSymbolKeys = Object.getOwnPropertySymbols(source);
+
+    for (i = 0; i < sourceSymbolKeys.length; i++) {
+      key = sourceSymbolKeys[i];
+      if (excluded.indexOf(key) >= 0) continue;
+      if (!Object.prototype.propertyIsEnumerable.call(source, key)) continue;
+      target[key] = source[key];
+    }
+  }
+
+  return target;
+}
+
+function _objectWithoutPropertiesLoose(source, excluded) {
+  if (source == null) return {};
+  var target = {};
+  var sourceKeys = Object.keys(source);
+  var key, i;
+
+  for (i = 0; i < sourceKeys.length; i++) {
+    key = sourceKeys[i];
+    if (excluded.indexOf(key) >= 0) continue;
+    target[key] = source[key];
+  }
+
+  return target;
+}
+/* eslint prefer-template: 0 */
+
+
+/**
+ * Convenience wrapper component for the `useDropzone` hook
+ *
+ * ```jsx
+ * <Dropzone>
+ *   {({getRootProps, getInputProps}) => (
+ *     <div {...getRootProps()}>
+ *       <input {...getInputProps()} />
+ *       <p>Drag 'n' drop some files here, or click to select files</p>
+ *     </div>
+ *   )}
+ * </Dropzone>
+ * ```
+ */
+var Dropzone = (0, _react.forwardRef)(function (_ref, ref) {
+  var children = _ref.children,
+      params = _objectWithoutProperties(_ref, ["children"]);
+
+  var _useDropzone = useDropzone(params),
+      open = _useDropzone.open,
+      props = _objectWithoutProperties(_useDropzone, ["open"]);
+
+  (0, _react.useImperativeHandle)(ref, function () {
+    return {
+      open: open
+    };
+  }, [open]); // TODO: Figure out why react-styleguidist cannot create docs if we don't return a jsx element
+
+  return _react.default.createElement(_react.Fragment, null, children(_objectSpread({}, props, {
+    open: open
+  })));
+});
+Dropzone.displayName = 'Dropzone';
+Dropzone.propTypes = {
+  /**
+   * Render function that exposes the dropzone state and prop getter fns
+   *
+   * @param {object} params
+   * @param {Function} params.getRootProps Returns the props you should apply to the root drop container you render
+   * @param {Function} params.getInputProps Returns the props you should apply to hidden file input you render
+   * @param {Function} params.open Open the native file selection dialog
+   * @param {boolean} params.isFocused Dropzone area is in focus
+   * @param {boolean} params.isFileDialogActive File dialog is opened
+   * @param {boolean} params.isDragActive Active drag is in progress
+   * @param {boolean} params.isDragAccept Dragged files are accepted
+   * @param {boolean} params.isDragReject Some dragged files are rejected
+   * @param {File[]} params.draggedFiles Files in active drag
+   * @param {File[]} params.acceptedFiles Accepted files
+   * @param {FileRejection[]} params.fileRejections Rejected files and why they were rejected
+   */
+  children: _propTypes.default.func,
+
+  /**
+   * Set accepted file types.
+   * See https://github.com/okonet/attr-accept for more information.
+   * Keep in mind that mime type determination is not reliable across platforms. CSV files,
+   * for example, are reported as text/plain under macOS but as application/vnd.ms-excel under
+   * Windows. In some cases there might not be a mime type set at all.
+   * See: https://github.com/react-dropzone/react-dropzone/issues/276
+   */
+  accept: _propTypes.default.oneOfType([_propTypes.default.string, _propTypes.default.arrayOf(_propTypes.default.string)]),
+
+  /**
+   * Allow drag 'n' drop (or selection from the file dialog) of multiple files
+   */
+  multiple: _propTypes.default.bool,
+
+  /**
+   * If false, allow dropped items to take over the current browser window
+   */
+  preventDropOnDocument: _propTypes.default.bool,
+
+  /**
+   * If true, disables click to open the native file selection dialog
+   */
+  noClick: _propTypes.default.bool,
+
+  /**
+   * If true, disables SPACE/ENTER to open the native file selection dialog.
+   * Note that it also stops tracking the focus state.
+   */
+  noKeyboard: _propTypes.default.bool,
+
+  /**
+   * If true, disables drag 'n' drop
+   */
+  noDrag: _propTypes.default.bool,
+
+  /**
+   * If true, stops drag event propagation to parents
+   */
+  noDragEventsBubbling: _propTypes.default.bool,
+
+  /**
+   * Minimum file size (in bytes)
+   */
+  minSize: _propTypes.default.number,
+
+  /**
+   * Maximum file size (in bytes)
+   */
+  maxSize: _propTypes.default.number,
+
+  /**
+   * Enable/disable the dropzone
+   */
+  disabled: _propTypes.default.bool,
+
+  /**
+   * Use this to provide a custom file aggregator
+   *
+   * @param {(DragEvent|Event)} event A drag event or input change event (if files were selected via the file dialog)
+   */
+  getFilesFromEvent: _propTypes.default.func,
+
+  /**
+   * Cb for when closing the file dialog with no selection
+   */
+  onFileDialogCancel: _propTypes.default.func,
+
+  /**
+   * Cb for when the `dragenter` event occurs.
+   *
+   * @param {DragEvent} event
+   */
+  onDragEnter: _propTypes.default.func,
+
+  /**
+   * Cb for when the `dragleave` event occurs
+   *
+   * @param {DragEvent} event
+   */
+  onDragLeave: _propTypes.default.func,
+
+  /**
+   * Cb for when the `dragover` event occurs
+   *
+   * @param {DragEvent} event
+   */
+  onDragOver: _propTypes.default.func,
+
+  /**
+   * Cb for when the `drop` event occurs.
+   * Note that this callback is invoked after the `getFilesFromEvent` callback is done.
+   *
+   * Files are accepted or rejected based on the `accept`, `multiple`, `minSize` and `maxSize` props.
+   * `accept` must be a valid [MIME type](http://www.iana.org/assignments/media-types/media-types.xhtml) according to [input element specification](https://www.w3.org/wiki/HTML/Elements/input/file) or a valid file extension.
+   * If `multiple` is set to false and additional files are droppped,
+   * all files besides the first will be rejected.
+   * Any file which does not have a size in the [`minSize`, `maxSize`] range, will be rejected as well.
+   *
+   * Note that the `onDrop` callback will always be invoked regardless if the dropped files were accepted or rejected.
+   * If you'd like to react to a specific scenario, use the `onDropAccepted`/`onDropRejected` props.
+   *
+   * `onDrop` will provide you with an array of [File](https://developer.mozilla.org/en-US/docs/Web/API/File) objects which you can then process and send to a server.
+   * For example, with [SuperAgent](https://github.com/visionmedia/superagent) as a http/ajax library:
+   *
+   * ```js
+   * function onDrop(acceptedFiles) {
+   *   const req = request.post('/upload')
+   *   acceptedFiles.forEach(file => {
+   *     req.attach(file.name, file)
+   *   })
+   *   req.end(callback)
+   * }
+   * ```
+   *
+   * @param {File[]} acceptedFiles
+   * @param {FileRejection[]} fileRejections
+   * @param {(DragEvent|Event)} event A drag event or input change event (if files were selected via the file dialog)
+   */
+  onDrop: _propTypes.default.func,
+
+  /**
+   * Cb for when the `drop` event occurs.
+   * Note that if no files are accepted, this callback is not invoked.
+   *
+   * @param {File[]} files
+   * @param {(DragEvent|Event)} event
+   */
+  onDropAccepted: _propTypes.default.func,
+
+  /**
+   * Cb for when the `drop` event occurs.
+   * Note that if no files are rejected, this callback is not invoked.
+   *
+   * @param {FileRejection[]} fileRejections
+   * @param {(DragEvent|Event)} event
+   */
+  onDropRejected: _propTypes.default.func
+};
+var _default = Dropzone;
+/**
+ * A function that is invoked for the `dragenter`,
+ * `dragover` and `dragleave` events.
+ * It is not invoked if the items are not files (such as link, text, etc.).
+ *
+ * @callback dragCb
+ * @param {DragEvent} event
+ */
+
+/**
+ * A function that is invoked for the `drop` or input change event.
+ * It is not invoked if the items are not files (such as link, text, etc.).
+ *
+ * @callback dropCb
+ * @param {File[]} acceptedFiles List of accepted files
+ * @param {FileRejection[]} fileRejections List of rejected files and why they were rejected
+ * @param {(DragEvent|Event)} event A drag event or input change event (if files were selected via the file dialog)
+ */
+
+/**
+ * A function that is invoked for the `drop` or input change event.
+ * It is not invoked if the items are files (such as link, text, etc.).
+ *
+ * @callback dropAcceptedCb
+ * @param {File[]} files List of accepted files that meet the given criteria
+ * (`accept`, `multiple`, `minSize`, `maxSize`)
+ * @param {(DragEvent|Event)} event A drag event or input change event (if files were selected via the file dialog)
+ */
+
+/**
+ * A function that is invoked for the `drop` or input change event.
+ *
+ * @callback dropRejectedCb
+ * @param {File[]} files List of rejected files that do not meet the given criteria
+ * (`accept`, `multiple`, `minSize`, `maxSize`)
+ * @param {(DragEvent|Event)} event A drag event or input change event (if files were selected via the file dialog)
+ */
+
+/**
+ * A function that is used aggregate files,
+ * in a asynchronous fashion, from drag or input change events.
+ *
+ * @callback getFilesFromEvent
+ * @param {(DragEvent|Event)} event A drag event or input change event (if files were selected via the file dialog)
+ * @returns {(File[]|Promise<File[]>)}
+ */
+
+/**
+ * An object with the current dropzone state and some helper functions.
+ *
+ * @typedef {object} DropzoneState
+ * @property {Function} getRootProps Returns the props you should apply to the root drop container you render
+ * @property {Function} getInputProps Returns the props you should apply to hidden file input you render
+ * @property {Function} open Open the native file selection dialog
+ * @property {boolean} isFocused Dropzone area is in focus
+ * @property {boolean} isFileDialogActive File dialog is opened
+ * @property {boolean} isDragActive Active drag is in progress
+ * @property {boolean} isDragAccept Dragged files are accepted
+ * @property {boolean} isDragReject Some dragged files are rejected
+ * @property {File[]} draggedFiles Files in active drag
+ * @property {File[]} acceptedFiles Accepted files
+ * @property {FileRejection[]} fileRejections Rejected files and why they were rejected
+ */
+
+exports.default = _default;
+var initialState = {
+  isFocused: false,
+  isFileDialogActive: false,
+  isDragActive: false,
+  isDragAccept: false,
+  isDragReject: false,
+  draggedFiles: [],
+  acceptedFiles: [],
+  fileRejections: []
+};
+/**
+ * A React hook that creates a drag 'n' drop area.
+ *
+ * ```jsx
+ * function MyDropzone(props) {
+ *   const {getRootProps, getInputProps} = useDropzone({
+ *     onDrop: acceptedFiles => {
+ *       // do something with the File objects, e.g. upload to some server
+ *     }
+ *   });
+ *   return (
+ *     <div {...getRootProps()}>
+ *       <input {...getInputProps()} />
+ *       <p>Drag and drop some files here, or click to select files</p>
+ *     </div>
+ *   )
+ * }
+ * ```
+ *
+ * @function useDropzone
+ *
+ * @param {object} props
+ * @param {string|string[]} [props.accept] Set accepted file types.
+ * See https://github.com/okonet/attr-accept for more information.
+ * Keep in mind that mime type determination is not reliable across platforms. CSV files,
+ * for example, are reported as text/plain under macOS but as application/vnd.ms-excel under
+ * Windows. In some cases there might not be a mime type set at all.
+ * See: https://github.com/react-dropzone/react-dropzone/issues/276
+ * @param {boolean} [props.multiple=true] Allow drag 'n' drop (or selection from the file dialog) of multiple files
+ * @param {boolean} [props.preventDropOnDocument=true] If false, allow dropped items to take over the current browser window
+ * @param {boolean} [props.noClick=false] If true, disables click to open the native file selection dialog
+ * @param {boolean} [props.noKeyboard=false] If true, disables SPACE/ENTER to open the native file selection dialog.
+ * Note that it also stops tracking the focus state.
+ * @param {boolean} [props.noDrag=false] If true, disables drag 'n' drop
+ * @param {boolean} [props.noDragEventsBubbling=false] If true, stops drag event propagation to parents
+ * @param {number} [props.minSize=0] Minimum file size (in bytes)
+ * @param {number} [props.maxSize=Infinity] Maximum file size (in bytes)
+ * @param {boolean} [props.disabled=false] Enable/disable the dropzone
+ * @param {getFilesFromEvent} [props.getFilesFromEvent] Use this to provide a custom file aggregator
+ * @param {Function} [props.onFileDialogCancel] Cb for when closing the file dialog with no selection
+ * @param {dragCb} [props.onDragEnter] Cb for when the `dragenter` event occurs.
+ * @param {dragCb} [props.onDragLeave] Cb for when the `dragleave` event occurs
+ * @param {dragCb} [props.onDragOver] Cb for when the `dragover` event occurs
+ * @param {dropCb} [props.onDrop] Cb for when the `drop` event occurs.
+ * Note that this callback is invoked after the `getFilesFromEvent` callback is done.
+ *
+ * Files are accepted or rejected based on the `accept`, `multiple`, `minSize` and `maxSize` props.
+ * `accept` must be a valid [MIME type](http://www.iana.org/assignments/media-types/media-types.xhtml) according to [input element specification](https://www.w3.org/wiki/HTML/Elements/input/file) or a valid file extension.
+ * If `multiple` is set to false and additional files are droppped,
+ * all files besides the first will be rejected.
+ * Any file which does not have a size in the [`minSize`, `maxSize`] range, will be rejected as well.
+ *
+ * Note that the `onDrop` callback will always be invoked regardless if the dropped files were accepted or rejected.
+ * If you'd like to react to a specific scenario, use the `onDropAccepted`/`onDropRejected` props.
+ *
+ * `onDrop` will provide you with an array of [File](https://developer.mozilla.org/en-US/docs/Web/API/File) objects which you can then process and send to a server.
+ * For example, with [SuperAgent](https://github.com/visionmedia/superagent) as a http/ajax library:
+ *
+ * ```js
+ * function onDrop(acceptedFiles) {
+ *   const req = request.post('/upload')
+ *   acceptedFiles.forEach(file => {
+ *     req.attach(file.name, file)
+ *   })
+ *   req.end(callback)
+ * }
+ * ```
+ * @param {dropAcceptedCb} [props.onDropAccepted]
+ * @param {dropRejectedCb} [props.onDropRejected]
+ *
+ * @returns {DropzoneState}
+ */
+
+function useDropzone() {
+  var _ref2 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
+      accept = _ref2.accept,
+      _ref2$disabled = _ref2.disabled,
+      disabled = _ref2$disabled === void 0 ? false : _ref2$disabled,
+      _ref2$getFilesFromEve = _ref2.getFilesFromEvent,
+      getFilesFromEvent = _ref2$getFilesFromEve === void 0 ? _fileSelector.fromEvent : _ref2$getFilesFromEve,
+      _ref2$maxSize = _ref2.maxSize,
+      maxSize = _ref2$maxSize === void 0 ? Infinity : _ref2$maxSize,
+      _ref2$minSize = _ref2.minSize,
+      minSize = _ref2$minSize === void 0 ? 0 : _ref2$minSize,
+      _ref2$multiple = _ref2.multiple,
+      multiple = _ref2$multiple === void 0 ? true : _ref2$multiple,
+      onDragEnter = _ref2.onDragEnter,
+      onDragLeave = _ref2.onDragLeave,
+      onDragOver = _ref2.onDragOver,
+      onDrop = _ref2.onDrop,
+      onDropAccepted = _ref2.onDropAccepted,
+      onDropRejected = _ref2.onDropRejected,
+      onFileDialogCancel = _ref2.onFileDialogCancel,
+      _ref2$preventDropOnDo = _ref2.preventDropOnDocument,
+      preventDropOnDocument = _ref2$preventDropOnDo === void 0 ? true : _ref2$preventDropOnDo,
+      _ref2$noClick = _ref2.noClick,
+      noClick = _ref2$noClick === void 0 ? false : _ref2$noClick,
+      _ref2$noKeyboard = _ref2.noKeyboard,
+      noKeyboard = _ref2$noKeyboard === void 0 ? false : _ref2$noKeyboard,
+      _ref2$noDrag = _ref2.noDrag,
+      noDrag = _ref2$noDrag === void 0 ? false : _ref2$noDrag,
+      _ref2$noDragEventsBub = _ref2.noDragEventsBubbling,
+      noDragEventsBubbling = _ref2$noDragEventsBub === void 0 ? false : _ref2$noDragEventsBub;
+
+  var rootRef = (0, _react.useRef)(null);
+  var inputRef = (0, _react.useRef)(null);
+
+  var _useReducer = (0, _react.useReducer)(reducer, initialState),
+      _useReducer2 = _slicedToArray(_useReducer, 2),
+      state = _useReducer2[0],
+      dispatch = _useReducer2[1];
+
+  var isFocused = state.isFocused,
+      isFileDialogActive = state.isFileDialogActive,
+      draggedFiles = state.draggedFiles; // Fn for opening the file dialog programmatically
+
+  var openFileDialog = (0, _react.useCallback)(function () {
+    if (inputRef.current) {
+      dispatch({
+        type: 'openDialog'
+      });
+      inputRef.current.value = null;
+      inputRef.current.click();
+    }
+  }, [dispatch]); // Update file dialog active state when the window is focused on
+
+  var onWindowFocus = function onWindowFocus() {
+    // Execute the timeout only if the file dialog is opened in the browser
+    if (isFileDialogActive) {
+      setTimeout(function () {
+        if (inputRef.current) {
+          var files = inputRef.current.files;
+
+          if (!files.length) {
+            dispatch({
+              type: 'closeDialog'
+            });
+
+            if (typeof onFileDialogCancel === 'function') {
+              onFileDialogCancel();
+            }
+          }
+        }
+      }, 300);
+    }
+  };
+
+  (0, _react.useEffect)(function () {
+    window.addEventListener('focus', onWindowFocus, false);
+    return function () {
+      window.removeEventListener('focus', onWindowFocus, false);
+    };
+  }, [inputRef, isFileDialogActive, onFileDialogCancel]); // Cb to open the file dialog when SPACE/ENTER occurs on the dropzone
+
+  var onKeyDownCb = (0, _react.useCallback)(function (event) {
+    // Ignore keyboard events bubbling up the DOM tree
+    if (!rootRef.current || !rootRef.current.isEqualNode(event.target)) {
+      return;
+    }
+
+    if (event.keyCode === 32 || event.keyCode === 13) {
+      event.preventDefault();
+      openFileDialog();
+    }
+  }, [rootRef, inputRef]); // Update focus state for the dropzone
+
+  var onFocusCb = (0, _react.useCallback)(function () {
+    dispatch({
+      type: 'focus'
+    });
+  }, []);
+  var onBlurCb = (0, _react.useCallback)(function () {
+    dispatch({
+      type: 'blur'
+    });
+  }, []); // Cb to open the file dialog when click occurs on the dropzone
+
+  var onClickCb = (0, _react.useCallback)(function () {
+    if (noClick) {
+      return;
+    } // In IE11/Edge the file-browser dialog is blocking, therefore, use setTimeout()
+    // to ensure React can handle state changes
+    // See: https://github.com/react-dropzone/react-dropzone/issues/450
+
+
+    if ((0, _index.isIeOrEdge)()) {
+      setTimeout(openFileDialog, 0);
+    } else {
+      openFileDialog();
+    }
+  }, [inputRef, noClick]);
+  var dragTargetsRef = (0, _react.useRef)([]);
+
+  var onDocumentDrop = function onDocumentDrop(event) {
+    if (rootRef.current && rootRef.current.contains(event.target)) {
+      // If we intercepted an event for our instance, let it propagate down to the instance's onDrop handler
+      return;
+    }
+
+    event.preventDefault();
+    dragTargetsRef.current = [];
+  };
+
+  (0, _react.useEffect)(function () {
+    if (preventDropOnDocument) {
+      document.addEventListener('dragover', _index.onDocumentDragOver, false);
+      document.addEventListener('drop', onDocumentDrop, false);
+    }
+
+    return function () {
+      if (preventDropOnDocument) {
+        document.removeEventListener('dragover', _index.onDocumentDragOver);
+        document.removeEventListener('drop', onDocumentDrop);
+      }
+    };
+  }, [rootRef, preventDropOnDocument]);
+  var onDragEnterCb = (0, _react.useCallback)(function (event) {
+    event.preventDefault(); // Persist here because we need the event later after getFilesFromEvent() is done
+
+    event.persist();
+    stopPropagation(event);
+    dragTargetsRef.current = [].concat(_toConsumableArray(dragTargetsRef.current), [event.target]);
+
+    if ((0, _index.isEvtWithFiles)(event)) {
+      Promise.resolve(getFilesFromEvent(event)).then(function (draggedFiles) {
+        if ((0, _index.isPropagationStopped)(event) && !noDragEventsBubbling) {
+          return;
+        }
+
+        dispatch({
+          draggedFiles: draggedFiles,
+          isDragActive: true,
+          type: 'setDraggedFiles'
+        });
+
+        if (onDragEnter) {
+          onDragEnter(event);
+        }
+      });
+    }
+  }, [getFilesFromEvent, onDragEnter, noDragEventsBubbling]);
+  var onDragOverCb = (0, _react.useCallback)(function (event) {
+    event.preventDefault();
+    event.persist();
+    stopPropagation(event);
+
+    if (event.dataTransfer) {
+      try {
+        event.dataTransfer.dropEffect = 'copy';
+      } catch (_unused) {}
+      /* eslint-disable-line no-empty */
+
+    }
+
+    if ((0, _index.isEvtWithFiles)(event) && onDragOver) {
+      onDragOver(event);
+    }
+
+    return false;
+  }, [onDragOver, noDragEventsBubbling]);
+  var onDragLeaveCb = (0, _react.useCallback)(function (event) {
+    event.preventDefault();
+    event.persist();
+    stopPropagation(event); // Only deactivate once the dropzone and all children have been left
+
+    var targets = dragTargetsRef.current.filter(function (target) {
+      return rootRef.current && rootRef.current.contains(target);
+    }); // Make sure to remove a target present multiple times only once
+    // (Firefox may fire dragenter/dragleave multiple times on the same element)
+
+    var targetIdx = targets.indexOf(event.target);
+
+    if (targetIdx !== -1) {
+      targets.splice(targetIdx, 1);
+    }
+
+    dragTargetsRef.current = targets;
+
+    if (targets.length > 0) {
+      return;
+    }
+
+    dispatch({
+      isDragActive: false,
+      type: 'setDraggedFiles',
+      draggedFiles: []
+    });
+
+    if ((0, _index.isEvtWithFiles)(event) && onDragLeave) {
+      onDragLeave(event);
+    }
+  }, [rootRef, onDragLeave, noDragEventsBubbling]);
+  var onDropCb = (0, _react.useCallback)(function (event) {
+    event.preventDefault(); // Persist here because we need the event later after getFilesFromEvent() is done
+
+    event.persist();
+    stopPropagation(event);
+    dragTargetsRef.current = [];
+
+    if ((0, _index.isEvtWithFiles)(event)) {
+      Promise.resolve(getFilesFromEvent(event)).then(function (files) {
+        if ((0, _index.isPropagationStopped)(event) && !noDragEventsBubbling) {
+          return;
+        }
+
+        var acceptedFiles = [];
+        var fileRejections = [];
+        files.forEach(function (file) {
+          var _fileAccepted = (0, _index.fileAccepted)(file, accept),
+              _fileAccepted2 = _slicedToArray(_fileAccepted, 2),
+              accepted = _fileAccepted2[0],
+              acceptError = _fileAccepted2[1];
+
+          var _fileMatchSize = (0, _index.fileMatchSize)(file, minSize, maxSize),
+              _fileMatchSize2 = _slicedToArray(_fileMatchSize, 2),
+              sizeMatch = _fileMatchSize2[0],
+              sizeError = _fileMatchSize2[1];
+
+          if (accepted && sizeMatch) {
+            acceptedFiles.push(file);
+          } else {
+            var errors = [acceptError, sizeError].filter(function (e) {
+              return e;
+            });
+            fileRejections.push({
+              file: file,
+              errors: errors
+            });
+          }
+        });
+
+        if (!multiple && acceptedFiles.length > 1) {
+          // Reject everything and empty accepted files
+          acceptedFiles.forEach(function (file) {
+            fileRejections.push({
+              file: file,
+              errors: [_index.TOO_MANY_FILES_REJECTION]
+            });
+          });
+          acceptedFiles.splice(0);
+        }
+
+        dispatch({
+          acceptedFiles: acceptedFiles,
+          fileRejections: fileRejections,
+          type: 'setFiles'
+        });
+
+        if (onDrop) {
+          onDrop(acceptedFiles, fileRejections, event);
+        }
+
+        if (fileRejections.length > 0 && onDropRejected) {
+          onDropRejected(fileRejections, event);
+        }
+
+        if (acceptedFiles.length > 0 && onDropAccepted) {
+          onDropAccepted(acceptedFiles, event);
+        }
+      });
+    }
+
+    dispatch({
+      type: 'reset'
+    });
+  }, [multiple, accept, minSize, maxSize, getFilesFromEvent, onDrop, onDropAccepted, onDropRejected, noDragEventsBubbling]);
+
+  var composeHandler = function composeHandler(fn) {
+    return disabled ? null : fn;
+  };
+
+  var composeKeyboardHandler = function composeKeyboardHandler(fn) {
+    return noKeyboard ? null : composeHandler(fn);
+  };
+
+  var composeDragHandler = function composeDragHandler(fn) {
+    return noDrag ? null : composeHandler(fn);
+  };
+
+  var stopPropagation = function stopPropagation(event) {
+    if (noDragEventsBubbling) {
+      event.stopPropagation();
+    }
+  };
+
+  var getRootProps = (0, _react.useMemo)(function () {
+    return function () {
+      var _ref3 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
+          _ref3$refKey = _ref3.refKey,
+          refKey = _ref3$refKey === void 0 ? 'ref' : _ref3$refKey,
+          onKeyDown = _ref3.onKeyDown,
+          onFocus = _ref3.onFocus,
+          onBlur = _ref3.onBlur,
+          onClick = _ref3.onClick,
+          onDragEnter = _ref3.onDragEnter,
+          onDragOver = _ref3.onDragOver,
+          onDragLeave = _ref3.onDragLeave,
+          onDrop = _ref3.onDrop,
+          rest = _objectWithoutProperties(_ref3, ["refKey", "onKeyDown", "onFocus", "onBlur", "onClick", "onDragEnter", "onDragOver", "onDragLeave", "onDrop"]);
+
+      return _objectSpread(_defineProperty({
+        onKeyDown: composeKeyboardHandler((0, _index.composeEventHandlers)(onKeyDown, onKeyDownCb)),
+        onFocus: composeKeyboardHandler((0, _index.composeEventHandlers)(onFocus, onFocusCb)),
+        onBlur: composeKeyboardHandler((0, _index.composeEventHandlers)(onBlur, onBlurCb)),
+        onClick: composeHandler((0, _index.composeEventHandlers)(onClick, onClickCb)),
+        onDragEnter: composeDragHandler((0, _index.composeEventHandlers)(onDragEnter, onDragEnterCb)),
+        onDragOver: composeDragHandler((0, _index.composeEventHandlers)(onDragOver, onDragOverCb)),
+        onDragLeave: composeDragHandler((0, _index.composeEventHandlers)(onDragLeave, onDragLeaveCb)),
+        onDrop: composeDragHandler((0, _index.composeEventHandlers)(onDrop, onDropCb))
+      }, refKey, rootRef), !disabled && !noKeyboard ? {
+        tabIndex: 0
+      } : {}, {}, rest);
+    };
+  }, [rootRef, onKeyDownCb, onFocusCb, onBlurCb, onClickCb, onDragEnterCb, onDragOverCb, onDragLeaveCb, onDropCb, noKeyboard, noDrag, disabled]);
+  var onInputElementClick = (0, _react.useCallback)(function (event) {
+    event.stopPropagation();
+  }, []);
+  var getInputProps = (0, _react.useMemo)(function () {
+    return function () {
+      var _ref4 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
+          _ref4$refKey = _ref4.refKey,
+          refKey = _ref4$refKey === void 0 ? 'ref' : _ref4$refKey,
+          onChange = _ref4.onChange,
+          onClick = _ref4.onClick,
+          rest = _objectWithoutProperties(_ref4, ["refKey", "onChange", "onClick"]);
+
+      var inputProps = _defineProperty({
+        accept: accept,
+        multiple: multiple,
+        type: 'file',
+        style: {
+          display: 'none'
+        },
+        onChange: composeHandler((0, _index.composeEventHandlers)(onChange, onDropCb)),
+        onClick: composeHandler((0, _index.composeEventHandlers)(onClick, onInputElementClick)),
+        autoComplete: 'off',
+        tabIndex: -1
+      }, refKey, inputRef);
+
+      return _objectSpread({}, inputProps, {}, rest);
+    };
+  }, [inputRef, accept, multiple, onDropCb, disabled]);
+  var fileCount = draggedFiles.length;
+  var isDragAccept = fileCount > 0 && (0, _index.allFilesAccepted)({
+    files: draggedFiles,
+    accept: accept,
+    minSize: minSize,
+    maxSize: maxSize,
+    multiple: multiple
+  });
+  var isDragReject = fileCount > 0 && !isDragAccept;
+  return _objectSpread({}, state, {
+    isDragAccept: isDragAccept,
+    isDragReject: isDragReject,
+    isFocused: isFocused && !disabled,
+    getRootProps: getRootProps,
+    getInputProps: getInputProps,
+    rootRef: rootRef,
+    inputRef: inputRef,
+    open: composeHandler(openFileDialog)
+  });
+}
+
+function reducer(state, action) {
+  /* istanbul ignore next */
+  switch (action.type) {
+    case 'focus':
+      return _objectSpread({}, state, {
+        isFocused: true
+      });
+
+    case 'blur':
+      return _objectSpread({}, state, {
+        isFocused: false
+      });
+
+    case 'openDialog':
+      return _objectSpread({}, state, {
+        isFileDialogActive: true
+      });
+
+    case 'closeDialog':
+      return _objectSpread({}, state, {
+        isFileDialogActive: false
+      });
+
+    case 'setDraggedFiles':
+      /* eslint no-case-declarations: 0 */
+      var isDragActive = action.isDragActive,
+          draggedFiles = action.draggedFiles;
+      return _objectSpread({}, state, {
+        draggedFiles: draggedFiles,
+        isDragActive: isDragActive
+      });
+
+    case 'setFiles':
+      return _objectSpread({}, state, {
+        acceptedFiles: action.acceptedFiles,
+        fileRejections: action.fileRejections
+      });
+
+    case 'reset':
+      return _objectSpread({}, state, {
+        isFileDialogActive: false,
+        isDragActive: false,
+        draggedFiles: [],
+        acceptedFiles: [],
+        fileRejections: []
+      });
+
+    default:
+      return state;
+  }
+}
+},{"react":"../../node_modules/react/index.js","prop-types":"../../node_modules/prop-types/index.js","file-selector":"../../node_modules/file-selector/dist/es5/index.js","./utils/index":"../../node_modules/react-dropzone/dist/es/utils/index.js"}],"../../node_modules/sweetalert/dist/sweetalert.min.js":[function(require,module,exports) {
+var define;
+!function(t,e){"object"==typeof exports&&"object"==typeof module?module.exports=e():"function"==typeof define&&define.amd?define([],e):"object"==typeof exports?exports.swal=e():t.swal=e()}(this,function(){return function(t){function e(o){if(n[o])return n[o].exports;var r=n[o]={i:o,l:!1,exports:{}};return t[o].call(r.exports,r,r.exports,e),r.l=!0,r.exports}var n={};return e.m=t,e.c=n,e.d=function(t,n,o){e.o(t,n)||Object.defineProperty(t,n,{configurable:!1,enumerable:!0,get:o})},e.n=function(t){var n=t&&t.__esModule?function(){return t.default}:function(){return t};return e.d(n,"a",n),n},e.o=function(t,e){return Object.prototype.hasOwnProperty.call(t,e)},e.p="",e(e.s=8)}([function(t,e,n){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var o="swal-button";e.CLASS_NAMES={MODAL:"swal-modal",OVERLAY:"swal-overlay",SHOW_MODAL:"swal-overlay--show-modal",MODAL_TITLE:"swal-title",MODAL_TEXT:"swal-text",ICON:"swal-icon",ICON_CUSTOM:"swal-icon--custom",CONTENT:"swal-content",FOOTER:"swal-footer",BUTTON_CONTAINER:"swal-button-container",BUTTON:o,CONFIRM_BUTTON:o+"--confirm",CANCEL_BUTTON:o+"--cancel",DANGER_BUTTON:o+"--danger",BUTTON_LOADING:o+"--loading",BUTTON_LOADER:o+"__loader"},e.default=e.CLASS_NAMES},function(t,e,n){"use strict";Object.defineProperty(e,"__esModule",{value:!0}),e.getNode=function(t){var e="."+t;return document.querySelector(e)},e.stringToNode=function(t){var e=document.createElement("div");return e.innerHTML=t.trim(),e.firstChild},e.insertAfter=function(t,e){var n=e.nextSibling;e.parentNode.insertBefore(t,n)},e.removeNode=function(t){t.parentElement.removeChild(t)},e.throwErr=function(t){throw t=t.replace(/ +(?= )/g,""),"SweetAlert: "+(t=t.trim())},e.isPlainObject=function(t){if("[object Object]"!==Object.prototype.toString.call(t))return!1;var e=Object.getPrototypeOf(t);return null===e||e===Object.prototype},e.ordinalSuffixOf=function(t){var e=t%10,n=t%100;return 1===e&&11!==n?t+"st":2===e&&12!==n?t+"nd":3===e&&13!==n?t+"rd":t+"th"}},function(t,e,n){"use strict";function o(t){for(var n in t)e.hasOwnProperty(n)||(e[n]=t[n])}Object.defineProperty(e,"__esModule",{value:!0}),o(n(25));var r=n(26);e.overlayMarkup=r.default,o(n(27)),o(n(28)),o(n(29));var i=n(0),a=i.default.MODAL_TITLE,s=i.default.MODAL_TEXT,c=i.default.ICON,l=i.default.FOOTER;e.iconMarkup='\n  <div class="'+c+'"></div>',e.titleMarkup='\n  <div class="'+a+'"></div>\n',e.textMarkup='\n  <div class="'+s+'"></div>',e.footerMarkup='\n  <div class="'+l+'"></div>\n'},function(t,e,n){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var o=n(1);e.CONFIRM_KEY="confirm",e.CANCEL_KEY="cancel";var r={visible:!0,text:null,value:null,className:"",closeModal:!0},i=Object.assign({},r,{visible:!1,text:"Cancel",value:null}),a=Object.assign({},r,{text:"OK",value:!0});e.defaultButtonList={cancel:i,confirm:a};var s=function(t){switch(t){case e.CONFIRM_KEY:return a;case e.CANCEL_KEY:return i;default:var n=t.charAt(0).toUpperCase()+t.slice(1);return Object.assign({},r,{text:n,value:t})}},c=function(t,e){var n=s(t);return!0===e?Object.assign({},n,{visible:!0}):"string"==typeof e?Object.assign({},n,{visible:!0,text:e}):o.isPlainObject(e)?Object.assign({visible:!0},n,e):Object.assign({},n,{visible:!1})},l=function(t){for(var e={},n=0,o=Object.keys(t);n<o.length;n++){var r=o[n],a=t[r],s=c(r,a);e[r]=s}return e.cancel||(e.cancel=i),e},u=function(t){var n={};switch(t.length){case 1:n[e.CANCEL_KEY]=Object.assign({},i,{visible:!1});break;case 2:n[e.CANCEL_KEY]=c(e.CANCEL_KEY,t[0]),n[e.CONFIRM_KEY]=c(e.CONFIRM_KEY,t[1]);break;default:o.throwErr("Invalid number of 'buttons' in array ("+t.length+").\n      If you want more than 2 buttons, you need to use an object!")}return n};e.getButtonListOpts=function(t){var n=e.defaultButtonList;return"string"==typeof t?n[e.CONFIRM_KEY]=c(e.CONFIRM_KEY,t):Array.isArray(t)?n=u(t):o.isPlainObject(t)?n=l(t):!0===t?n=u([!0,!0]):!1===t?n=u([!1,!1]):void 0===t&&(n=e.defaultButtonList),n}},function(t,e,n){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var o=n(1),r=n(2),i=n(0),a=i.default.MODAL,s=i.default.OVERLAY,c=n(30),l=n(31),u=n(32),f=n(33);e.injectElIntoModal=function(t){var e=o.getNode(a),n=o.stringToNode(t);return e.appendChild(n),n};var d=function(t){t.className=a,t.textContent=""},p=function(t,e){d(t);var n=e.className;n&&t.classList.add(n)};e.initModalContent=function(t){var e=o.getNode(a);p(e,t),c.default(t.icon),l.initTitle(t.title),l.initText(t.text),f.default(t.content),u.default(t.buttons,t.dangerMode)};var m=function(){var t=o.getNode(s),e=o.stringToNode(r.modalMarkup);t.appendChild(e)};e.default=m},function(t,e,n){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var o=n(3),r={isOpen:!1,promise:null,actions:{},timer:null},i=Object.assign({},r);e.resetState=function(){i=Object.assign({},r)},e.setActionValue=function(t){if("string"==typeof t)return a(o.CONFIRM_KEY,t);for(var e in t)a(e,t[e])};var a=function(t,e){i.actions[t]||(i.actions[t]={}),Object.assign(i.actions[t],{value:e})};e.setActionOptionsFor=function(t,e){var n=(void 0===e?{}:e).closeModal,o=void 0===n||n;Object.assign(i.actions[t],{closeModal:o})},e.default=i},function(t,e,n){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var o=n(1),r=n(3),i=n(0),a=i.default.OVERLAY,s=i.default.SHOW_MODAL,c=i.default.BUTTON,l=i.default.BUTTON_LOADING,u=n(5);e.openModal=function(){o.getNode(a).classList.add(s),u.default.isOpen=!0};var f=function(){o.getNode(a).classList.remove(s),u.default.isOpen=!1};e.onAction=function(t){void 0===t&&(t=r.CANCEL_KEY);var e=u.default.actions[t],n=e.value;if(!1===e.closeModal){var i=c+"--"+t;o.getNode(i).classList.add(l)}else f();u.default.promise.resolve(n)},e.getState=function(){var t=Object.assign({},u.default);return delete t.promise,delete t.timer,t},e.stopLoading=function(){for(var t=document.querySelectorAll("."+c),e=0;e<t.length;e++){t[e].classList.remove(l)}}},function(t,e){var n;n=function(){return this}();try{n=n||Function("return this")()||(0,eval)("this")}catch(t){"object"==typeof window&&(n=window)}t.exports=n},function(t,e,n){(function(e){t.exports=e.sweetAlert=n(9)}).call(e,n(7))},function(t,e,n){(function(e){t.exports=e.swal=n(10)}).call(e,n(7))},function(t,e,n){"undefined"!=typeof window&&n(11),n(16);var o=n(23).default;t.exports=o},function(t,e,n){var o=n(12);"string"==typeof o&&(o=[[t.i,o,""]]);var r={insertAt:"top"};r.transform=void 0;n(14)(o,r);o.locals&&(t.exports=o.locals)},function(t,e,n){e=t.exports=n(13)(void 0),e.push([t.i,'.swal-icon--error{border-color:#f27474;-webkit-animation:animateErrorIcon .5s;animation:animateErrorIcon .5s}.swal-icon--error__x-mark{position:relative;display:block;-webkit-animation:animateXMark .5s;animation:animateXMark .5s}.swal-icon--error__line{position:absolute;height:5px;width:47px;background-color:#f27474;display:block;top:37px;border-radius:2px}.swal-icon--error__line--left{-webkit-transform:rotate(45deg);transform:rotate(45deg);left:17px}.swal-icon--error__line--right{-webkit-transform:rotate(-45deg);transform:rotate(-45deg);right:16px}@-webkit-keyframes animateErrorIcon{0%{-webkit-transform:rotateX(100deg);transform:rotateX(100deg);opacity:0}to{-webkit-transform:rotateX(0deg);transform:rotateX(0deg);opacity:1}}@keyframes animateErrorIcon{0%{-webkit-transform:rotateX(100deg);transform:rotateX(100deg);opacity:0}to{-webkit-transform:rotateX(0deg);transform:rotateX(0deg);opacity:1}}@-webkit-keyframes animateXMark{0%{-webkit-transform:scale(.4);transform:scale(.4);margin-top:26px;opacity:0}50%{-webkit-transform:scale(.4);transform:scale(.4);margin-top:26px;opacity:0}80%{-webkit-transform:scale(1.15);transform:scale(1.15);margin-top:-6px}to{-webkit-transform:scale(1);transform:scale(1);margin-top:0;opacity:1}}@keyframes animateXMark{0%{-webkit-transform:scale(.4);transform:scale(.4);margin-top:26px;opacity:0}50%{-webkit-transform:scale(.4);transform:scale(.4);margin-top:26px;opacity:0}80%{-webkit-transform:scale(1.15);transform:scale(1.15);margin-top:-6px}to{-webkit-transform:scale(1);transform:scale(1);margin-top:0;opacity:1}}.swal-icon--warning{border-color:#f8bb86;-webkit-animation:pulseWarning .75s infinite alternate;animation:pulseWarning .75s infinite alternate}.swal-icon--warning__body{width:5px;height:47px;top:10px;border-radius:2px;margin-left:-2px}.swal-icon--warning__body,.swal-icon--warning__dot{position:absolute;left:50%;background-color:#f8bb86}.swal-icon--warning__dot{width:7px;height:7px;border-radius:50%;margin-left:-4px;bottom:-11px}@-webkit-keyframes pulseWarning{0%{border-color:#f8d486}to{border-color:#f8bb86}}@keyframes pulseWarning{0%{border-color:#f8d486}to{border-color:#f8bb86}}.swal-icon--success{border-color:#a5dc86}.swal-icon--success:after,.swal-icon--success:before{content:"";border-radius:50%;position:absolute;width:60px;height:120px;background:#fff;-webkit-transform:rotate(45deg);transform:rotate(45deg)}.swal-icon--success:before{border-radius:120px 0 0 120px;top:-7px;left:-33px;-webkit-transform:rotate(-45deg);transform:rotate(-45deg);-webkit-transform-origin:60px 60px;transform-origin:60px 60px}.swal-icon--success:after{border-radius:0 120px 120px 0;top:-11px;left:30px;-webkit-transform:rotate(-45deg);transform:rotate(-45deg);-webkit-transform-origin:0 60px;transform-origin:0 60px;-webkit-animation:rotatePlaceholder 4.25s ease-in;animation:rotatePlaceholder 4.25s ease-in}.swal-icon--success__ring{width:80px;height:80px;border:4px solid hsla(98,55%,69%,.2);border-radius:50%;box-sizing:content-box;position:absolute;left:-4px;top:-4px;z-index:2}.swal-icon--success__hide-corners{width:5px;height:90px;background-color:#fff;padding:1px;position:absolute;left:28px;top:8px;z-index:1;-webkit-transform:rotate(-45deg);transform:rotate(-45deg)}.swal-icon--success__line{height:5px;background-color:#a5dc86;display:block;border-radius:2px;position:absolute;z-index:2}.swal-icon--success__line--tip{width:25px;left:14px;top:46px;-webkit-transform:rotate(45deg);transform:rotate(45deg);-webkit-animation:animateSuccessTip .75s;animation:animateSuccessTip .75s}.swal-icon--success__line--long{width:47px;right:8px;top:38px;-webkit-transform:rotate(-45deg);transform:rotate(-45deg);-webkit-animation:animateSuccessLong .75s;animation:animateSuccessLong .75s}@-webkit-keyframes rotatePlaceholder{0%{-webkit-transform:rotate(-45deg);transform:rotate(-45deg)}5%{-webkit-transform:rotate(-45deg);transform:rotate(-45deg)}12%{-webkit-transform:rotate(-405deg);transform:rotate(-405deg)}to{-webkit-transform:rotate(-405deg);transform:rotate(-405deg)}}@keyframes rotatePlaceholder{0%{-webkit-transform:rotate(-45deg);transform:rotate(-45deg)}5%{-webkit-transform:rotate(-45deg);transform:rotate(-45deg)}12%{-webkit-transform:rotate(-405deg);transform:rotate(-405deg)}to{-webkit-transform:rotate(-405deg);transform:rotate(-405deg)}}@-webkit-keyframes animateSuccessTip{0%{width:0;left:1px;top:19px}54%{width:0;left:1px;top:19px}70%{width:50px;left:-8px;top:37px}84%{width:17px;left:21px;top:48px}to{width:25px;left:14px;top:45px}}@keyframes animateSuccessTip{0%{width:0;left:1px;top:19px}54%{width:0;left:1px;top:19px}70%{width:50px;left:-8px;top:37px}84%{width:17px;left:21px;top:48px}to{width:25px;left:14px;top:45px}}@-webkit-keyframes animateSuccessLong{0%{width:0;right:46px;top:54px}65%{width:0;right:46px;top:54px}84%{width:55px;right:0;top:35px}to{width:47px;right:8px;top:38px}}@keyframes animateSuccessLong{0%{width:0;right:46px;top:54px}65%{width:0;right:46px;top:54px}84%{width:55px;right:0;top:35px}to{width:47px;right:8px;top:38px}}.swal-icon--info{border-color:#c9dae1}.swal-icon--info:before{width:5px;height:29px;bottom:17px;border-radius:2px;margin-left:-2px}.swal-icon--info:after,.swal-icon--info:before{content:"";position:absolute;left:50%;background-color:#c9dae1}.swal-icon--info:after{width:7px;height:7px;border-radius:50%;margin-left:-3px;top:19px}.swal-icon{width:80px;height:80px;border-width:4px;border-style:solid;border-radius:50%;padding:0;position:relative;box-sizing:content-box;margin:20px auto}.swal-icon:first-child{margin-top:32px}.swal-icon--custom{width:auto;height:auto;max-width:100%;border:none;border-radius:0}.swal-icon img{max-width:100%;max-height:100%}.swal-title{color:rgba(0,0,0,.65);font-weight:600;text-transform:none;position:relative;display:block;padding:13px 16px;font-size:27px;line-height:normal;text-align:center;margin-bottom:0}.swal-title:first-child{margin-top:26px}.swal-title:not(:first-child){padding-bottom:0}.swal-title:not(:last-child){margin-bottom:13px}.swal-text{font-size:16px;position:relative;float:none;line-height:normal;vertical-align:top;text-align:left;display:inline-block;margin:0;padding:0 10px;font-weight:400;color:rgba(0,0,0,.64);max-width:calc(100% - 20px);overflow-wrap:break-word;box-sizing:border-box}.swal-text:first-child{margin-top:45px}.swal-text:last-child{margin-bottom:45px}.swal-footer{text-align:right;padding-top:13px;margin-top:13px;padding:13px 16px;border-radius:inherit;border-top-left-radius:0;border-top-right-radius:0}.swal-button-container{margin:5px;display:inline-block;position:relative}.swal-button{background-color:#7cd1f9;color:#fff;border:none;box-shadow:none;border-radius:5px;font-weight:600;font-size:14px;padding:10px 24px;margin:0;cursor:pointer}.swal-button:not([disabled]):hover{background-color:#78cbf2}.swal-button:active{background-color:#70bce0}.swal-button:focus{outline:none;box-shadow:0 0 0 1px #fff,0 0 0 3px rgba(43,114,165,.29)}.swal-button[disabled]{opacity:.5;cursor:default}.swal-button::-moz-focus-inner{border:0}.swal-button--cancel{color:#555;background-color:#efefef}.swal-button--cancel:not([disabled]):hover{background-color:#e8e8e8}.swal-button--cancel:active{background-color:#d7d7d7}.swal-button--cancel:focus{box-shadow:0 0 0 1px #fff,0 0 0 3px rgba(116,136,150,.29)}.swal-button--danger{background-color:#e64942}.swal-button--danger:not([disabled]):hover{background-color:#df4740}.swal-button--danger:active{background-color:#cf423b}.swal-button--danger:focus{box-shadow:0 0 0 1px #fff,0 0 0 3px rgba(165,43,43,.29)}.swal-content{padding:0 20px;margin-top:20px;font-size:medium}.swal-content:last-child{margin-bottom:20px}.swal-content__input,.swal-content__textarea{-webkit-appearance:none;background-color:#fff;border:none;font-size:14px;display:block;box-sizing:border-box;width:100%;border:1px solid rgba(0,0,0,.14);padding:10px 13px;border-radius:2px;transition:border-color .2s}.swal-content__input:focus,.swal-content__textarea:focus{outline:none;border-color:#6db8ff}.swal-content__textarea{resize:vertical}.swal-button--loading{color:transparent}.swal-button--loading~.swal-button__loader{opacity:1}.swal-button__loader{position:absolute;height:auto;width:43px;z-index:2;left:50%;top:50%;-webkit-transform:translateX(-50%) translateY(-50%);transform:translateX(-50%) translateY(-50%);text-align:center;pointer-events:none;opacity:0}.swal-button__loader div{display:inline-block;float:none;vertical-align:baseline;width:9px;height:9px;padding:0;border:none;margin:2px;opacity:.4;border-radius:7px;background-color:hsla(0,0%,100%,.9);transition:background .2s;-webkit-animation:swal-loading-anim 1s infinite;animation:swal-loading-anim 1s infinite}.swal-button__loader div:nth-child(3n+2){-webkit-animation-delay:.15s;animation-delay:.15s}.swal-button__loader div:nth-child(3n+3){-webkit-animation-delay:.3s;animation-delay:.3s}@-webkit-keyframes swal-loading-anim{0%{opacity:.4}20%{opacity:.4}50%{opacity:1}to{opacity:.4}}@keyframes swal-loading-anim{0%{opacity:.4}20%{opacity:.4}50%{opacity:1}to{opacity:.4}}.swal-overlay{position:fixed;top:0;bottom:0;left:0;right:0;text-align:center;font-size:0;overflow-y:auto;background-color:rgba(0,0,0,.4);z-index:10000;pointer-events:none;opacity:0;transition:opacity .3s}.swal-overlay:before{content:" ";display:inline-block;vertical-align:middle;height:100%}.swal-overlay--show-modal{opacity:1;pointer-events:auto}.swal-overlay--show-modal .swal-modal{opacity:1;pointer-events:auto;box-sizing:border-box;-webkit-animation:showSweetAlert .3s;animation:showSweetAlert .3s;will-change:transform}.swal-modal{width:478px;opacity:0;pointer-events:none;background-color:#fff;text-align:center;border-radius:5px;position:static;margin:20px auto;display:inline-block;vertical-align:middle;-webkit-transform:scale(1);transform:scale(1);-webkit-transform-origin:50% 50%;transform-origin:50% 50%;z-index:10001;transition:opacity .2s,-webkit-transform .3s;transition:transform .3s,opacity .2s;transition:transform .3s,opacity .2s,-webkit-transform .3s}@media (max-width:500px){.swal-modal{width:calc(100% - 20px)}}@-webkit-keyframes showSweetAlert{0%{-webkit-transform:scale(1);transform:scale(1)}1%{-webkit-transform:scale(.5);transform:scale(.5)}45%{-webkit-transform:scale(1.05);transform:scale(1.05)}80%{-webkit-transform:scale(.95);transform:scale(.95)}to{-webkit-transform:scale(1);transform:scale(1)}}@keyframes showSweetAlert{0%{-webkit-transform:scale(1);transform:scale(1)}1%{-webkit-transform:scale(.5);transform:scale(.5)}45%{-webkit-transform:scale(1.05);transform:scale(1.05)}80%{-webkit-transform:scale(.95);transform:scale(.95)}to{-webkit-transform:scale(1);transform:scale(1)}}',""])},function(t,e){function n(t,e){var n=t[1]||"",r=t[3];if(!r)return n;if(e&&"function"==typeof btoa){var i=o(r);return[n].concat(r.sources.map(function(t){return"/*# sourceURL="+r.sourceRoot+t+" */"})).concat([i]).join("\n")}return[n].join("\n")}function o(t){return""}t.exports=function(t){var e=[];return e.toString=function(){return this.map(function(e){var o=n(e,t);return e[2]?"@media "+e[2]+"{"+o+"}":o}).join("")},e.i=function(t,n){"string"==typeof t&&(t=[[null,t,""]]);for(var o={},r=0;r<this.length;r++){var i=this[r][0];"number"==typeof i&&(o[i]=!0)}for(r=0;r<t.length;r++){var a=t[r];"number"==typeof a[0]&&o[a[0]]||(n&&!a[2]?a[2]=n:n&&(a[2]="("+a[2]+") and ("+n+")"),e.push(a))}},e}},function(t,e,n){function o(t,e){for(var n=0;n<t.length;n++){var o=t[n],r=m[o.id];if(r){r.refs++;for(var i=0;i<r.parts.length;i++)r.parts[i](o.parts[i]);for(;i<o.parts.length;i++)r.parts.push(u(o.parts[i],e))}else{for(var a=[],i=0;i<o.parts.length;i++)a.push(u(o.parts[i],e));m[o.id]={id:o.id,refs:1,parts:a}}}}function r(t,e){for(var n=[],o={},r=0;r<t.length;r++){var i=t[r],a=e.base?i[0]+e.base:i[0],s=i[1],c=i[2],l=i[3],u={css:s,media:c,sourceMap:l};o[a]?o[a].parts.push(u):n.push(o[a]={id:a,parts:[u]})}return n}function i(t,e){var n=v(t.insertInto);if(!n)throw new Error("Couldn't find a style target. This probably means that the value for the 'insertInto' parameter is invalid.");var o=w[w.length-1];if("top"===t.insertAt)o?o.nextSibling?n.insertBefore(e,o.nextSibling):n.appendChild(e):n.insertBefore(e,n.firstChild),w.push(e);else{if("bottom"!==t.insertAt)throw new Error("Invalid value for parameter 'insertAt'. Must be 'top' or 'bottom'.");n.appendChild(e)}}function a(t){if(null===t.parentNode)return!1;t.parentNode.removeChild(t);var e=w.indexOf(t);e>=0&&w.splice(e,1)}function s(t){var e=document.createElement("style");return t.attrs.type="text/css",l(e,t.attrs),i(t,e),e}function c(t){var e=document.createElement("link");return t.attrs.type="text/css",t.attrs.rel="stylesheet",l(e,t.attrs),i(t,e),e}function l(t,e){Object.keys(e).forEach(function(n){t.setAttribute(n,e[n])})}function u(t,e){var n,o,r,i;if(e.transform&&t.css){if(!(i=e.transform(t.css)))return function(){};t.css=i}if(e.singleton){var l=h++;n=g||(g=s(e)),o=f.bind(null,n,l,!1),r=f.bind(null,n,l,!0)}else t.sourceMap&&"function"==typeof URL&&"function"==typeof URL.createObjectURL&&"function"==typeof URL.revokeObjectURL&&"function"==typeof Blob&&"function"==typeof btoa?(n=c(e),o=p.bind(null,n,e),r=function(){a(n),n.href&&URL.revokeObjectURL(n.href)}):(n=s(e),o=d.bind(null,n),r=function(){a(n)});return o(t),function(e){if(e){if(e.css===t.css&&e.media===t.media&&e.sourceMap===t.sourceMap)return;o(t=e)}else r()}}function f(t,e,n,o){var r=n?"":o.css;if(t.styleSheet)t.styleSheet.cssText=x(e,r);else{var i=document.createTextNode(r),a=t.childNodes;a[e]&&t.removeChild(a[e]),a.length?t.insertBefore(i,a[e]):t.appendChild(i)}}function d(t,e){var n=e.css,o=e.media;if(o&&t.setAttribute("media",o),t.styleSheet)t.styleSheet.cssText=n;else{for(;t.firstChild;)t.removeChild(t.firstChild);t.appendChild(document.createTextNode(n))}}function p(t,e,n){var o=n.css,r=n.sourceMap,i=void 0===e.convertToAbsoluteUrls&&r;(e.convertToAbsoluteUrls||i)&&(o=y(o)),r&&(o+="\n/*# sourceMappingURL=data:application/json;base64,"+btoa(unescape(encodeURIComponent(JSON.stringify(r))))+" */");var a=new Blob([o],{type:"text/css"}),s=t.href;t.href=URL.createObjectURL(a),s&&URL.revokeObjectURL(s)}var m={},b=function(t){var e;return function(){return void 0===e&&(e=t.apply(this,arguments)),e}}(function(){return window&&document&&document.all&&!window.atob}),v=function(t){var e={};return function(n){return void 0===e[n]&&(e[n]=t.call(this,n)),e[n]}}(function(t){return document.querySelector(t)}),g=null,h=0,w=[],y=n(15);t.exports=function(t,e){if("undefined"!=typeof DEBUG&&DEBUG&&"object"!=typeof document)throw new Error("The style-loader cannot be used in a non-browser environment");e=e||{},e.attrs="object"==typeof e.attrs?e.attrs:{},e.singleton||(e.singleton=b()),e.insertInto||(e.insertInto="head"),e.insertAt||(e.insertAt="bottom");var n=r(t,e);return o(n,e),function(t){for(var i=[],a=0;a<n.length;a++){var s=n[a],c=m[s.id];c.refs--,i.push(c)}if(t){o(r(t,e),e)}for(var a=0;a<i.length;a++){var c=i[a];if(0===c.refs){for(var l=0;l<c.parts.length;l++)c.parts[l]();delete m[c.id]}}}};var x=function(){var t=[];return function(e,n){return t[e]=n,t.filter(Boolean).join("\n")}}()},function(t,e){t.exports=function(t){var e="undefined"!=typeof window&&window.location;if(!e)throw new Error("fixUrls requires window.location");if(!t||"string"!=typeof t)return t;var n=e.protocol+"//"+e.host,o=n+e.pathname.replace(/\/[^\/]*$/,"/");return t.replace(/url\s*\(((?:[^)(]|\((?:[^)(]+|\([^)(]*\))*\))*)\)/gi,function(t,e){var r=e.trim().replace(/^"(.*)"$/,function(t,e){return e}).replace(/^'(.*)'$/,function(t,e){return e});if(/^(#|data:|http:\/\/|https:\/\/|file:\/\/\/)/i.test(r))return t;var i;return i=0===r.indexOf("//")?r:0===r.indexOf("/")?n+r:o+r.replace(/^\.\//,""),"url("+JSON.stringify(i)+")"})}},function(t,e,n){var o=n(17);"undefined"==typeof window||window.Promise||(window.Promise=o),n(21),String.prototype.includes||(String.prototype.includes=function(t,e){"use strict";return"number"!=typeof e&&(e=0),!(e+t.length>this.length)&&-1!==this.indexOf(t,e)}),Array.prototype.includes||Object.defineProperty(Array.prototype,"includes",{value:function(t,e){if(null==this)throw new TypeError('"this" is null or not defined');var n=Object(this),o=n.length>>>0;if(0===o)return!1;for(var r=0|e,i=Math.max(r>=0?r:o-Math.abs(r),0);i<o;){if(function(t,e){return t===e||"number"==typeof t&&"number"==typeof e&&isNaN(t)&&isNaN(e)}(n[i],t))return!0;i++}return!1}}),"undefined"!=typeof window&&function(t){t.forEach(function(t){t.hasOwnProperty("remove")||Object.defineProperty(t,"remove",{configurable:!0,enumerable:!0,writable:!0,value:function(){this.parentNode.removeChild(this)}})})}([Element.prototype,CharacterData.prototype,DocumentType.prototype])},function(t,e,n){(function(e){!function(n){function o(){}function r(t,e){return function(){t.apply(e,arguments)}}function i(t){if("object"!=typeof this)throw new TypeError("Promises must be constructed via new");if("function"!=typeof t)throw new TypeError("not a function");this._state=0,this._handled=!1,this._value=void 0,this._deferreds=[],f(t,this)}function a(t,e){for(;3===t._state;)t=t._value;if(0===t._state)return void t._deferreds.push(e);t._handled=!0,i._immediateFn(function(){var n=1===t._state?e.onFulfilled:e.onRejected;if(null===n)return void(1===t._state?s:c)(e.promise,t._value);var o;try{o=n(t._value)}catch(t){return void c(e.promise,t)}s(e.promise,o)})}function s(t,e){try{if(e===t)throw new TypeError("A promise cannot be resolved with itself.");if(e&&("object"==typeof e||"function"==typeof e)){var n=e.then;if(e instanceof i)return t._state=3,t._value=e,void l(t);if("function"==typeof n)return void f(r(n,e),t)}t._state=1,t._value=e,l(t)}catch(e){c(t,e)}}function c(t,e){t._state=2,t._value=e,l(t)}function l(t){2===t._state&&0===t._deferreds.length&&i._immediateFn(function(){t._handled||i._unhandledRejectionFn(t._value)});for(var e=0,n=t._deferreds.length;e<n;e++)a(t,t._deferreds[e]);t._deferreds=null}function u(t,e,n){this.onFulfilled="function"==typeof t?t:null,this.onRejected="function"==typeof e?e:null,this.promise=n}function f(t,e){var n=!1;try{t(function(t){n||(n=!0,s(e,t))},function(t){n||(n=!0,c(e,t))})}catch(t){if(n)return;n=!0,c(e,t)}}var d=setTimeout;i.prototype.catch=function(t){return this.then(null,t)},i.prototype.then=function(t,e){var n=new this.constructor(o);return a(this,new u(t,e,n)),n},i.all=function(t){var e=Array.prototype.slice.call(t);return new i(function(t,n){function o(i,a){try{if(a&&("object"==typeof a||"function"==typeof a)){var s=a.then;if("function"==typeof s)return void s.call(a,function(t){o(i,t)},n)}e[i]=a,0==--r&&t(e)}catch(t){n(t)}}if(0===e.length)return t([]);for(var r=e.length,i=0;i<e.length;i++)o(i,e[i])})},i.resolve=function(t){return t&&"object"==typeof t&&t.constructor===i?t:new i(function(e){e(t)})},i.reject=function(t){return new i(function(e,n){n(t)})},i.race=function(t){return new i(function(e,n){for(var o=0,r=t.length;o<r;o++)t[o].then(e,n)})},i._immediateFn="function"==typeof e&&function(t){e(t)}||function(t){d(t,0)},i._unhandledRejectionFn=function(t){"undefined"!=typeof console&&console&&console.warn("Possible Unhandled Promise Rejection:",t)},i._setImmediateFn=function(t){i._immediateFn=t},i._setUnhandledRejectionFn=function(t){i._unhandledRejectionFn=t},void 0!==t&&t.exports?t.exports=i:n.Promise||(n.Promise=i)}(this)}).call(e,n(18).setImmediate)},function(t,e,n){function o(t,e){this._id=t,this._clearFn=e}var r=Function.prototype.apply;e.setTimeout=function(){return new o(r.call(setTimeout,window,arguments),clearTimeout)},e.setInterval=function(){return new o(r.call(setInterval,window,arguments),clearInterval)},e.clearTimeout=e.clearInterval=function(t){t&&t.close()},o.prototype.unref=o.prototype.ref=function(){},o.prototype.close=function(){this._clearFn.call(window,this._id)},e.enroll=function(t,e){clearTimeout(t._idleTimeoutId),t._idleTimeout=e},e.unenroll=function(t){clearTimeout(t._idleTimeoutId),t._idleTimeout=-1},e._unrefActive=e.active=function(t){clearTimeout(t._idleTimeoutId);var e=t._idleTimeout;e>=0&&(t._idleTimeoutId=setTimeout(function(){t._onTimeout&&t._onTimeout()},e))},n(19),e.setImmediate=setImmediate,e.clearImmediate=clearImmediate},function(t,e,n){(function(t,e){!function(t,n){"use strict";function o(t){"function"!=typeof t&&(t=new Function(""+t));for(var e=new Array(arguments.length-1),n=0;n<e.length;n++)e[n]=arguments[n+1];var o={callback:t,args:e};return l[c]=o,s(c),c++}function r(t){delete l[t]}function i(t){var e=t.callback,o=t.args;switch(o.length){case 0:e();break;case 1:e(o[0]);break;case 2:e(o[0],o[1]);break;case 3:e(o[0],o[1],o[2]);break;default:e.apply(n,o)}}function a(t){if(u)setTimeout(a,0,t);else{var e=l[t];if(e){u=!0;try{i(e)}finally{r(t),u=!1}}}}if(!t.setImmediate){var s,c=1,l={},u=!1,f=t.document,d=Object.getPrototypeOf&&Object.getPrototypeOf(t);d=d&&d.setTimeout?d:t,"[object process]"==={}.toString.call(t.process)?function(){s=function(t){e.nextTick(function(){a(t)})}}():function(){if(t.postMessage&&!t.importScripts){var e=!0,n=t.onmessage;return t.onmessage=function(){e=!1},t.postMessage("","*"),t.onmessage=n,e}}()?function(){var e="setImmediate$"+Math.random()+"$",n=function(n){n.source===t&&"string"==typeof n.data&&0===n.data.indexOf(e)&&a(+n.data.slice(e.length))};t.addEventListener?t.addEventListener("message",n,!1):t.attachEvent("onmessage",n),s=function(n){t.postMessage(e+n,"*")}}():t.MessageChannel?function(){var t=new MessageChannel;t.port1.onmessage=function(t){a(t.data)},s=function(e){t.port2.postMessage(e)}}():f&&"onreadystatechange"in f.createElement("script")?function(){var t=f.documentElement;s=function(e){var n=f.createElement("script");n.onreadystatechange=function(){a(e),n.onreadystatechange=null,t.removeChild(n),n=null},t.appendChild(n)}}():function(){s=function(t){setTimeout(a,0,t)}}(),d.setImmediate=o,d.clearImmediate=r}}("undefined"==typeof self?void 0===t?this:t:self)}).call(e,n(7),n(20))},function(t,e){function n(){throw new Error("setTimeout has not been defined")}function o(){throw new Error("clearTimeout has not been defined")}function r(t){if(u===setTimeout)return setTimeout(t,0);if((u===n||!u)&&setTimeout)return u=setTimeout,setTimeout(t,0);try{return u(t,0)}catch(e){try{return u.call(null,t,0)}catch(e){return u.call(this,t,0)}}}function i(t){if(f===clearTimeout)return clearTimeout(t);if((f===o||!f)&&clearTimeout)return f=clearTimeout,clearTimeout(t);try{return f(t)}catch(e){try{return f.call(null,t)}catch(e){return f.call(this,t)}}}function a(){b&&p&&(b=!1,p.length?m=p.concat(m):v=-1,m.length&&s())}function s(){if(!b){var t=r(a);b=!0;for(var e=m.length;e;){for(p=m,m=[];++v<e;)p&&p[v].run();v=-1,e=m.length}p=null,b=!1,i(t)}}function c(t,e){this.fun=t,this.array=e}function l(){}var u,f,d=t.exports={};!function(){try{u="function"==typeof setTimeout?setTimeout:n}catch(t){u=n}try{f="function"==typeof clearTimeout?clearTimeout:o}catch(t){f=o}}();var p,m=[],b=!1,v=-1;d.nextTick=function(t){var e=new Array(arguments.length-1);if(arguments.length>1)for(var n=1;n<arguments.length;n++)e[n-1]=arguments[n];m.push(new c(t,e)),1!==m.length||b||r(s)},c.prototype.run=function(){this.fun.apply(null,this.array)},d.title="browser",d.browser=!0,d.env={},d.argv=[],d.version="",d.versions={},d.on=l,d.addListener=l,d.once=l,d.off=l,d.removeListener=l,d.removeAllListeners=l,d.emit=l,d.prependListener=l,d.prependOnceListener=l,d.listeners=function(t){return[]},d.binding=function(t){throw new Error("process.binding is not supported")},d.cwd=function(){return"/"},d.chdir=function(t){throw new Error("process.chdir is not supported")},d.umask=function(){return 0}},function(t,e,n){"use strict";n(22).polyfill()},function(t,e,n){"use strict";function o(t,e){if(void 0===t||null===t)throw new TypeError("Cannot convert first argument to object");for(var n=Object(t),o=1;o<arguments.length;o++){var r=arguments[o];if(void 0!==r&&null!==r)for(var i=Object.keys(Object(r)),a=0,s=i.length;a<s;a++){var c=i[a],l=Object.getOwnPropertyDescriptor(r,c);void 0!==l&&l.enumerable&&(n[c]=r[c])}}return n}function r(){Object.assign||Object.defineProperty(Object,"assign",{enumerable:!1,configurable:!0,writable:!0,value:o})}t.exports={assign:o,polyfill:r}},function(t,e,n){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var o=n(24),r=n(6),i=n(5),a=n(36),s=function(){for(var t=[],e=0;e<arguments.length;e++)t[e]=arguments[e];if("undefined"!=typeof window){var n=a.getOpts.apply(void 0,t);return new Promise(function(t,e){i.default.promise={resolve:t,reject:e},o.default(n),setTimeout(function(){r.openModal()})})}};s.close=r.onAction,s.getState=r.getState,s.setActionValue=i.setActionValue,s.stopLoading=r.stopLoading,s.setDefaults=a.setDefaults,e.default=s},function(t,e,n){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var o=n(1),r=n(0),i=r.default.MODAL,a=n(4),s=n(34),c=n(35),l=n(1);e.init=function(t){o.getNode(i)||(document.body||l.throwErr("You can only use SweetAlert AFTER the DOM has loaded!"),s.default(),a.default()),a.initModalContent(t),c.default(t)},e.default=e.init},function(t,e,n){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var o=n(0),r=o.default.MODAL;e.modalMarkup='\n  <div class="'+r+'" role="dialog" aria-modal="true"></div>',e.default=e.modalMarkup},function(t,e,n){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var o=n(0),r=o.default.OVERLAY,i='<div \n    class="'+r+'"\n    tabIndex="-1">\n  </div>';e.default=i},function(t,e,n){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var o=n(0),r=o.default.ICON;e.errorIconMarkup=function(){var t=r+"--error",e=t+"__line";return'\n    <div class="'+t+'__x-mark">\n      <span class="'+e+" "+e+'--left"></span>\n      <span class="'+e+" "+e+'--right"></span>\n    </div>\n  '},e.warningIconMarkup=function(){var t=r+"--warning";return'\n    <span class="'+t+'__body">\n      <span class="'+t+'__dot"></span>\n    </span>\n  '},e.successIconMarkup=function(){var t=r+"--success";return'\n    <span class="'+t+"__line "+t+'__line--long"></span>\n    <span class="'+t+"__line "+t+'__line--tip"></span>\n\n    <div class="'+t+'__ring"></div>\n    <div class="'+t+'__hide-corners"></div>\n  '}},function(t,e,n){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var o=n(0),r=o.default.CONTENT;e.contentMarkup='\n  <div class="'+r+'">\n\n  </div>\n'},function(t,e,n){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var o=n(0),r=o.default.BUTTON_CONTAINER,i=o.default.BUTTON,a=o.default.BUTTON_LOADER;e.buttonMarkup='\n  <div class="'+r+'">\n\n    <button\n      class="'+i+'"\n    ></button>\n\n    <div class="'+a+'">\n      <div></div>\n      <div></div>\n      <div></div>\n    </div>\n\n  </div>\n'},function(t,e,n){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var o=n(4),r=n(2),i=n(0),a=i.default.ICON,s=i.default.ICON_CUSTOM,c=["error","warning","success","info"],l={error:r.errorIconMarkup(),warning:r.warningIconMarkup(),success:r.successIconMarkup()},u=function(t,e){var n=a+"--"+t;e.classList.add(n);var o=l[t];o&&(e.innerHTML=o)},f=function(t,e){e.classList.add(s);var n=document.createElement("img");n.src=t,e.appendChild(n)},d=function(t){if(t){var e=o.injectElIntoModal(r.iconMarkup);c.includes(t)?u(t,e):f(t,e)}};e.default=d},function(t,e,n){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var o=n(2),r=n(4),i=function(t){navigator.userAgent.includes("AppleWebKit")&&(t.style.display="none",t.offsetHeight,t.style.display="")};e.initTitle=function(t){if(t){var e=r.injectElIntoModal(o.titleMarkup);e.textContent=t,i(e)}},e.initText=function(t){if(t){var e=document.createDocumentFragment();t.split("\n").forEach(function(t,n,o){e.appendChild(document.createTextNode(t)),n<o.length-1&&e.appendChild(document.createElement("br"))});var n=r.injectElIntoModal(o.textMarkup);n.appendChild(e),i(n)}}},function(t,e,n){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var o=n(1),r=n(4),i=n(0),a=i.default.BUTTON,s=i.default.DANGER_BUTTON,c=n(3),l=n(2),u=n(6),f=n(5),d=function(t,e,n){var r=e.text,i=e.value,d=e.className,p=e.closeModal,m=o.stringToNode(l.buttonMarkup),b=m.querySelector("."+a),v=a+"--"+t;if(b.classList.add(v),d){(Array.isArray(d)?d:d.split(" ")).filter(function(t){return t.length>0}).forEach(function(t){b.classList.add(t)})}n&&t===c.CONFIRM_KEY&&b.classList.add(s),b.textContent=r;var g={};return g[t]=i,f.setActionValue(g),f.setActionOptionsFor(t,{closeModal:p}),b.addEventListener("click",function(){return u.onAction(t)}),m},p=function(t,e){var n=r.injectElIntoModal(l.footerMarkup);for(var o in t){var i=t[o],a=d(o,i,e);i.visible&&n.appendChild(a)}0===n.children.length&&n.remove()};e.default=p},function(t,e,n){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var o=n(3),r=n(4),i=n(2),a=n(5),s=n(6),c=n(0),l=c.default.CONTENT,u=function(t){t.addEventListener("input",function(t){var e=t.target,n=e.value;a.setActionValue(n)}),t.addEventListener("keyup",function(t){if("Enter"===t.key)return s.onAction(o.CONFIRM_KEY)}),setTimeout(function(){t.focus(),a.setActionValue("")},0)},f=function(t,e,n){var o=document.createElement(e),r=l+"__"+e;o.classList.add(r);for(var i in n){var a=n[i];o[i]=a}"input"===e&&u(o),t.appendChild(o)},d=function(t){if(t){var e=r.injectElIntoModal(i.contentMarkup),n=t.element,o=t.attributes;"string"==typeof n?f(e,n,o):e.appendChild(n)}};e.default=d},function(t,e,n){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var o=n(1),r=n(2),i=function(){var t=o.stringToNode(r.overlayMarkup);document.body.appendChild(t)};e.default=i},function(t,e,n){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var o=n(5),r=n(6),i=n(1),a=n(3),s=n(0),c=s.default.MODAL,l=s.default.BUTTON,u=s.default.OVERLAY,f=function(t){t.preventDefault(),v()},d=function(t){t.preventDefault(),g()},p=function(t){if(o.default.isOpen)switch(t.key){case"Escape":return r.onAction(a.CANCEL_KEY)}},m=function(t){if(o.default.isOpen)switch(t.key){case"Tab":return f(t)}},b=function(t){if(o.default.isOpen)return"Tab"===t.key&&t.shiftKey?d(t):void 0},v=function(){var t=i.getNode(l);t&&(t.tabIndex=0,t.focus())},g=function(){var t=i.getNode(c),e=t.querySelectorAll("."+l),n=e.length-1,o=e[n];o&&o.focus()},h=function(t){t[t.length-1].addEventListener("keydown",m)},w=function(t){t[0].addEventListener("keydown",b)},y=function(){var t=i.getNode(c),e=t.querySelectorAll("."+l);e.length&&(h(e),w(e))},x=function(t){if(i.getNode(u)===t.target)return r.onAction(a.CANCEL_KEY)},_=function(t){var e=i.getNode(u);e.removeEventListener("click",x),t&&e.addEventListener("click",x)},k=function(t){o.default.timer&&clearTimeout(o.default.timer),t&&(o.default.timer=window.setTimeout(function(){return r.onAction(a.CANCEL_KEY)},t))},O=function(t){t.closeOnEsc?document.addEventListener("keyup",p):document.removeEventListener("keyup",p),t.dangerMode?v():g(),y(),_(t.closeOnClickOutside),k(t.timer)};e.default=O},function(t,e,n){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var o=n(1),r=n(3),i=n(37),a=n(38),s={title:null,text:null,icon:null,buttons:r.defaultButtonList,content:null,className:null,closeOnClickOutside:!0,closeOnEsc:!0,dangerMode:!1,timer:null},c=Object.assign({},s);e.setDefaults=function(t){c=Object.assign({},s,t)};var l=function(t){var e=t&&t.button,n=t&&t.buttons;return void 0!==e&&void 0!==n&&o.throwErr("Cannot set both 'button' and 'buttons' options!"),void 0!==e?{confirm:e}:n},u=function(t){return o.ordinalSuffixOf(t+1)},f=function(t,e){o.throwErr(u(e)+" argument ('"+t+"') is invalid")},d=function(t,e){var n=t+1,r=e[n];o.isPlainObject(r)||void 0===r||o.throwErr("Expected "+u(n)+" argument ('"+r+"') to be a plain object")},p=function(t,e){var n=t+1,r=e[n];void 0!==r&&o.throwErr("Unexpected "+u(n)+" argument ("+r+")")},m=function(t,e,n,r){var i=typeof e,a="string"===i,s=e instanceof Element;if(a){if(0===n)return{text:e};if(1===n)return{text:e,title:r[0]};if(2===n)return d(n,r),{icon:e};f(e,n)}else{if(s&&0===n)return d(n,r),{content:e};if(o.isPlainObject(e))return p(n,r),e;f(e,n)}};e.getOpts=function(){for(var t=[],e=0;e<arguments.length;e++)t[e]=arguments[e];var n={};t.forEach(function(e,o){var r=m(0,e,o,t);Object.assign(n,r)});var o=l(n);n.buttons=r.getButtonListOpts(o),delete n.button,n.content=i.getContentOpts(n.content);var u=Object.assign({},s,c,n);return Object.keys(u).forEach(function(t){a.DEPRECATED_OPTS[t]&&a.logDeprecation(t)}),u}},function(t,e,n){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var o=n(1),r={element:"input",attributes:{placeholder:""}};e.getContentOpts=function(t){var e={};return o.isPlainObject(t)?Object.assign(e,t):t instanceof Element?{element:t}:"input"===t?r:null}},function(t,e,n){"use strict";Object.defineProperty(e,"__esModule",{value:!0}),e.logDeprecation=function(t){var n=e.DEPRECATED_OPTS[t],o=n.onlyRename,r=n.replacement,i=n.subOption,a=n.link,s=o?"renamed":"deprecated",c='SweetAlert warning: "'+t+'" option has been '+s+".";if(r){c+=" Please use"+(i?' "'+i+'" in ':" ")+'"'+r+'" instead.'}var l="https://sweetalert.js.org";c+=a?" More details: "+l+a:" More details: "+l+"/guides/#upgrading-from-1x",console.warn(c)},e.DEPRECATED_OPTS={type:{replacement:"icon",link:"/docs/#icon"},imageUrl:{replacement:"icon",link:"/docs/#icon"},customClass:{replacement:"className",onlyRename:!0,link:"/docs/#classname"},imageSize:{},showCancelButton:{replacement:"buttons",link:"/docs/#buttons"},showConfirmButton:{replacement:"button",link:"/docs/#button"},confirmButtonText:{replacement:"button",link:"/docs/#button"},confirmButtonColor:{},cancelButtonText:{replacement:"buttons",link:"/docs/#buttons"},closeOnConfirm:{replacement:"button",subOption:"closeModal",link:"/docs/#button"},closeOnCancel:{replacement:"buttons",subOption:"closeModal",link:"/docs/#buttons"},showLoaderOnConfirm:{replacement:"buttons"},animation:{},inputType:{replacement:"content",link:"/docs/#content"},inputValue:{replacement:"content",link:"/docs/#content"},inputPlaceholder:{replacement:"content",link:"/docs/#content"},html:{replacement:"content",link:"/docs/#content"},allowEscapeKey:{replacement:"closeOnEsc",onlyRename:!0,link:"/docs/#closeonesc"},allowClickOutside:{replacement:"closeOnClickOutside",onlyRename:!0,link:"/docs/#closeonclickoutside"}}}])});
+},{}],"pages/municipal/add-municipal.jsx":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _react = _interopRequireWildcard(require("react"));
+
+var _Form = _interopRequireDefault(require("react-bootstrap/Form"));
+
+var _Button = _interopRequireDefault(require("react-bootstrap/Button"));
+
+var _Row = _interopRequireDefault(require("react-bootstrap/Row"));
+
+var _Col = _interopRequireDefault(require("react-bootstrap/Col"));
+
+var _useForm2 = _interopRequireDefault(require("../../hooks/use-form"));
+
+var _client = require("@apollo/client");
+
+var _municipalQuery = require("../../queries/municipal-query");
+
+var _reactDropzone = require("react-dropzone");
+
+var _sweetalert = _interopRequireDefault(require("sweetalert"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function () { return cache; }; return cache; }
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+
+function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
+
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
+function _iterableToArrayLimit(arr, i) { if (typeof Symbol === "undefined" || !(Symbol.iterator in Object(arr))) return; var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
+
+function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+
+var initialState = {
+  name: '',
+  headquarter: '',
+  area: '',
+  total: '',
+  male: '',
+  female: '',
+  hindu: '',
+  muslim: '',
+  buddhist: '',
+  other: '',
+  file: ''
+};
+
 var AddMunicipal = function AddMunicipal() {
-  return /*#__PURE__*/_react.default.createElement("div", null, "New Municipal");
+  var _useMutation = (0, _client.useMutation)(_municipalQuery.ADDMUNICIPAL_QUERY),
+      _useMutation2 = _slicedToArray(_useMutation, 2),
+      addMunicipal = _useMutation2[0],
+      _useMutation2$ = _useMutation2[1],
+      data = _useMutation2$.data,
+      error = _useMutation2$.error;
+
+  var _useForm = (0, _useForm2.default)(addmuncipalCallback, initialState),
+      onChange = _useForm.onChange,
+      onSubmit = _useForm.onSubmit,
+      values = _useForm.values;
+
+  var _useDropzone = (0, _reactDropzone.useDropzone)(),
+      acceptedFiles = _useDropzone.acceptedFiles,
+      getRootProps = _useDropzone.getRootProps,
+      getInputProps = _useDropzone.getInputProps;
+
+  var files = acceptedFiles.map(function (file) {
+    return /*#__PURE__*/_react.default.createElement("li", {
+      key: file.path
+    }, file.path, " - ", file.size, " bytes");
+  });
+
+  function addmuncipalCallback() {
+    addMunicipal({
+      variables: values
+    }).then(function () {
+      (0, _sweetalert.default)("New Municipal!", "Create successfully!", "success");
+    }).catch(function (e) {
+      alert(e);
+    });
+  }
+
+  if (acceptedFiles.length !== 0) {
+    values.file = acceptedFiles;
+  }
+
+  return /*#__PURE__*/_react.default.createElement("div", null, /*#__PURE__*/_react.default.createElement(_Form.default, {
+    onSubmit: onSubmit
+  }, /*#__PURE__*/_react.default.createElement(_Row.default, null, /*#__PURE__*/_react.default.createElement(_Col.default, {
+    sm: 12,
+    md: 6
+  }, /*#__PURE__*/_react.default.createElement(_Form.default.Group, {
+    controlId: "municipalName"
+  }, /*#__PURE__*/_react.default.createElement(_Form.default.Label, null, " Municipal Name"), /*#__PURE__*/_react.default.createElement(_Form.default.Control, {
+    type: "text",
+    name: "name",
+    onChange: onChange,
+    value: values.name,
+    placeholder: "Enter Municipal Name"
+  }))), /*#__PURE__*/_react.default.createElement(_Col.default, {
+    sm: 12,
+    md: 6
+  }, /*#__PURE__*/_react.default.createElement(_Form.default.Group, {
+    controlId: "municipalHeadquarter"
+  }, /*#__PURE__*/_react.default.createElement(_Form.default.Label, null, " Municipal Headquarter"), /*#__PURE__*/_react.default.createElement(_Form.default.Control, {
+    type: "text",
+    name: "headquarter",
+    onChange: onChange,
+    value: values.headquarter,
+    placeholder: "Enter Municipal Headquarter"
+  }))), /*#__PURE__*/_react.default.createElement(_Col.default, {
+    sm: 12,
+    md: 3
+  }, /*#__PURE__*/_react.default.createElement(_Form.default.Group, {
+    controlId: "municipalArea"
+  }, /*#__PURE__*/_react.default.createElement(_Form.default.Label, null, " Municipal Area"), /*#__PURE__*/_react.default.createElement(_Form.default.Control, {
+    type: "number",
+    name: "area",
+    onChange: onChange,
+    value: values.area,
+    placeholder: "Enter Municipal Area"
+  }))), /*#__PURE__*/_react.default.createElement(_Col.default, {
+    sm: 12,
+    md: 3
+  }, /*#__PURE__*/_react.default.createElement(_Form.default.Group, {
+    controlId: "municipalTotal"
+  }, /*#__PURE__*/_react.default.createElement(_Form.default.Label, null, " Municipal Total Population"), /*#__PURE__*/_react.default.createElement(_Form.default.Control, {
+    type: "number",
+    name: "total",
+    onChange: onChange,
+    value: values.total,
+    placeholder: "Enter Municipal Total Population"
+  }))), /*#__PURE__*/_react.default.createElement(_Col.default, {
+    sm: 12,
+    md: 3
+  }, /*#__PURE__*/_react.default.createElement(_Form.default.Group, {
+    controlId: "municipalMale"
+  }, /*#__PURE__*/_react.default.createElement(_Form.default.Label, null, " Municipal Total Male"), /*#__PURE__*/_react.default.createElement(_Form.default.Control, {
+    type: "number",
+    name: "male",
+    onChange: onChange,
+    value: values.male,
+    placeholder: "Enter Municipal Total Male"
+  }))), /*#__PURE__*/_react.default.createElement(_Col.default, {
+    sm: 12,
+    md: 3
+  }, /*#__PURE__*/_react.default.createElement(_Form.default.Group, {
+    controlId: "municipalFemale"
+  }, /*#__PURE__*/_react.default.createElement(_Form.default.Label, null, " Municipal Total Female"), /*#__PURE__*/_react.default.createElement(_Form.default.Control, {
+    type: "number",
+    name: "female",
+    onChange: onChange,
+    value: values.female,
+    placeholder: "Enter Municipal Total Female"
+  }))), /*#__PURE__*/_react.default.createElement(_Col.default, {
+    sm: 12,
+    md: 3
+  }, /*#__PURE__*/_react.default.createElement(_Form.default.Group, {
+    controlId: "municipalHindu"
+  }, /*#__PURE__*/_react.default.createElement(_Form.default.Label, null, " Municipal Total Hindu"), /*#__PURE__*/_react.default.createElement(_Form.default.Control, {
+    type: "number",
+    name: "hindu",
+    onChange: onChange,
+    value: values.hindu,
+    placeholder: "Enter Municipal Total Hindu"
+  }))), /*#__PURE__*/_react.default.createElement(_Col.default, {
+    sm: 12,
+    md: 3
+  }, /*#__PURE__*/_react.default.createElement(_Form.default.Group, {
+    controlId: "municipalMuslim"
+  }, /*#__PURE__*/_react.default.createElement(_Form.default.Label, null, " Municipal Total Muslim"), /*#__PURE__*/_react.default.createElement(_Form.default.Control, {
+    type: "number",
+    name: "muslim",
+    onChange: onChange,
+    value: values.muslim,
+    placeholder: "Enter Municipal Total Muslim"
+  }))), /*#__PURE__*/_react.default.createElement(_Col.default, {
+    sm: 12,
+    md: 3
+  }, /*#__PURE__*/_react.default.createElement(_Form.default.Group, {
+    controlId: "municipalMuslim"
+  }, /*#__PURE__*/_react.default.createElement(_Form.default.Label, null, " Municipal Total Buddhist"), /*#__PURE__*/_react.default.createElement(_Form.default.Control, {
+    type: "number",
+    name: "buddhist",
+    onChange: onChange,
+    value: values.buddhist,
+    placeholder: "Enter Municipal Total Buddhist"
+  }))), /*#__PURE__*/_react.default.createElement(_Col.default, {
+    sm: 12,
+    md: 3
+  }, /*#__PURE__*/_react.default.createElement(_Form.default.Group, {
+    controlId: "municipalOther"
+  }, /*#__PURE__*/_react.default.createElement(_Form.default.Label, null, " Municipal Total Other"), /*#__PURE__*/_react.default.createElement(_Form.default.Control, {
+    type: "number",
+    name: "other",
+    onChange: onChange,
+    value: values.other,
+    placeholder: "Enter Municipal Total Other"
+  })))), /*#__PURE__*/_react.default.createElement("section", {
+    className: "container"
+  }, /*#__PURE__*/_react.default.createElement("div", getRootProps({
+    className: 'dropzone'
+  }), /*#__PURE__*/_react.default.createElement("input", getInputProps()), /*#__PURE__*/_react.default.createElement("p", null, "Drag 'n' drop some files here, or click to select files")), /*#__PURE__*/_react.default.createElement("aside", null, /*#__PURE__*/_react.default.createElement("h4", null, "Files"), /*#__PURE__*/_react.default.createElement("ul", null, files))), /*#__PURE__*/_react.default.createElement(_Button.default, {
+    variant: "primary",
+    type: "submit"
+  }, "Submit")));
 };
 
 var _default = AddMunicipal;
 exports.default = _default;
-},{"react":"../../node_modules/react/index.js"}],"pages/municipal/list-municipal.jsx":[function(require,module,exports) {
+},{"react":"../../node_modules/react/index.js","react-bootstrap/Form":"../../node_modules/react-bootstrap/esm/Form.js","react-bootstrap/Button":"../../node_modules/react-bootstrap/esm/Button.js","react-bootstrap/Row":"../../node_modules/react-bootstrap/esm/Row.js","react-bootstrap/Col":"../../node_modules/react-bootstrap/esm/Col.js","../../hooks/use-form":"hooks/use-form.js","@apollo/client":"../../node_modules/@apollo/client/index.js","../../queries/municipal-query":"queries/municipal-query.js","react-dropzone":"../../node_modules/react-dropzone/dist/es/index.js","sweetalert":"../../node_modules/sweetalert/dist/sweetalert.min.js"}],"pages/municipal/list-municipal.jsx":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -49043,6 +52673,8 @@ var _reactDom = _interopRequireDefault(require("react-dom"));
 
 var _client = require("@apollo/client");
 
+var _apolloUploadClient = require("apollo-upload-client");
+
 var _reactRouterDom = require("react-router-dom");
 
 var _App = _interopRequireDefault(require("./App"));
@@ -49053,13 +52685,25 @@ function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return 
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
 
+// import { onError } from "@apollo/client/link/error";
+// const link = onError(({ graphQLErrors, networkError }) => {
+//   if (graphQLErrors)
+//     graphQLErrors.map(({ message, locations, path }) =>
+//       console.log(
+//         `[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}`,
+//       ),
+//     );
+//   if (networkError) console.log(`[Network error]: ${networkError}`);
+// });
 var client = new _client.ApolloClient({
-  uri: "http://api.localhost:8000/",
+  link: (0, _apolloUploadClient.createUploadLink)({
+    uri: "http://api.localhost:8000/"
+  }),
   cache: new _client.InMemoryCache()
 });
 
 _reactDom.default.render( /*#__PURE__*/_react.default.createElement(_react.StrictMode, null, /*#__PURE__*/_react.default.createElement(_client.ApolloProvider, {
   client: client
 }, /*#__PURE__*/_react.default.createElement(_reactRouterDom.BrowserRouter, null, /*#__PURE__*/_react.default.createElement(_App.default, null)))), document.getElementById('app'));
-},{"react":"../../node_modules/react/index.js","react-dom":"../../node_modules/react-dom/index.js","@apollo/client":"../../node_modules/@apollo/client/index.js","react-router-dom":"../../node_modules/react-router-dom/esm/react-router-dom.js","./App":"App.jsx"}]},{},["index.js"], null)
+},{"react":"../../node_modules/react/index.js","react-dom":"../../node_modules/react-dom/index.js","@apollo/client":"../../node_modules/@apollo/client/index.js","apollo-upload-client":"../../node_modules/apollo-upload-client/public/index.js","react-router-dom":"../../node_modules/react-router-dom/esm/react-router-dom.js","./App":"App.jsx"}]},{},["index.js"], null)
 //# sourceMappingURL=static/myadmin/index.js.map
