@@ -6,6 +6,7 @@ import Col from 'react-bootstrap/Col'
 import useForm from '../../hooks/use-form'
 import { useMutation } from '@apollo/client';
 import { ADDWARD_QUERY } from '../../queries/municipal-query'
+import { WARDS_TABLE_QUERY } from '../../queries/ward-query'
 import { useDropzone } from 'react-dropzone';
 import swal from 'sweetalert';
 
@@ -25,7 +26,9 @@ const initialState = {
 };
 
 
-const AddWard = () => {
+const mid = 'iaEL7GVAzOtRL';
+
+const AddWard = (props) => {
     const [addWard, { data, error }] = useMutation(ADDWARD_QUERY);
     const { onChange, onSubmit, values } = useForm(addwardCallback, initialState);
 
@@ -39,9 +42,16 @@ const AddWard = () => {
 
 
     function addwardCallback() {
-        addWard({ variables: values })
-            .then(() => {
+        addWard({ variables: values,
+        	refetchQueries: () => [
+			  { query: WARDS_TABLE_QUERY,
+			  	variables:{mid}
+			  }
+			],
+         })
+        .then(() => {
                 swal("New Ward!", "Create successfully!", "success");
+    			props.history.push(`/wards`);
 
             })
             .catch(e => {

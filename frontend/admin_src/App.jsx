@@ -7,6 +7,8 @@ import Home from './pages/home'
 import AddMunicipal from './pages/municipal/add-municipal';
 import ListMunicipal from './pages/municipal/list-municipal'
 import AddWard from './pages/ward/add-ward';
+import ListWard from './pages/ward/list-ward';
+import EditWard from './pages/ward/edit-ward';
 
 
 const App = () => {
@@ -23,6 +25,8 @@ const App = () => {
                             <Route path="/municipals" exact component={ListMunicipal} />
                             <Route path="/add-municipal" exact component={AddMunicipal} />
                             <Route path="/add-ward" exact component={AddWard} />
+                            <Route path="/wards" exact component={ListWard} />
+                            <Route path="/wards/edit/:wid" exact component={EditWard} />
                         </Switch>
                     </div>
                 </div>

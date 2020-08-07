@@ -117,6 +117,72 @@ class AddWard(graphene.Mutation):
         return AddWard(ward=ward)
 
 
+class ChangeWard(graphene.Mutation):
+    ward = graphene.Field(WardType)
+
+    class Arguments:
+        wid = graphene.String()
+        name = graphene.String()
+        headquarter = graphene.String()
+        area = graphene.Int()
+        total = graphene.Int()
+        male = graphene.Int()
+        female = graphene.Int()
+        hindu = graphene.Int()
+        muslim = graphene.Int()
+        buddhist = graphene.Int()
+        other = graphene.Int()
+        file = Upload()
+
+    def mutate(self, info, wid, *args, **kwargs):
+        ward = get_object_or_404(Ward, pk=wid)
+        if 'file' in kwargs:
+            folder_name = aphnum_random3()
+            file_name = ''
+            for _file in kwargs['file']:
+                get_uploaded_file(_file, folder_name)
+                if _file.name.split('.')[-1] == 'shp':
+                    file_name = _file.name
+            folder_location = settings.SHAPE_DATA_ROOT + '/' + folder_name
+            file_location = folder_location + '/' + file_name
+        try:
+            if 'file' in kwargs:
+                df = DataSource(file_location)
+                layer = df[0]
+                geom = GEOSGeometry(str(layer[0].geom), srid=4326).transform(
+                    3857, clone=True).ewkt
+                shutil.rmtree(folder_location, ignore_errors=True)
+            else:
+                geom = ward.geom
+            ward.name = kwargs['name']
+            ward.headquarter = kwargs['headquarter']
+            ward.area = kwargs['area']
+            ward.total = kwargs['total']
+            ward.male = kwargs['male']
+            ward.female = kwargs['female']
+            ward.hindu = kwargs['hindu']
+            ward.muslim = kwargs['muslim']
+            ward.buddhist = kwargs['buddhist']
+            ward.other = kwargs['other']
+            ward.geom = geom
+            ward.save()
+        except Exception as e:
+            raise e
+        return ChangeWard(ward=ward)
+
+
+class DeleteWard(graphene.Mutation):
+    w_id = graphene.String()
+
+    class Arguments:
+        id = graphene.String()
+
+    def mutate(self, info, id, *args, **kwargs):
+        ward = get_object_or_404(Ward, pk=id)
+        ward.delete()
+        return DeleteWard(w_id=id)
+
+
 class AddTelecom(graphene.Mutation):
     telecom = graphene.Field(TelecomType)
 

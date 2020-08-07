@@ -16,6 +16,8 @@ class Mutation(graphene.ObjectType):
     add_building = addBuilding.Field()
     add_municipal = mun_mutation.AddMunicipal.Field()
     add_ward = mun_mutation.AddWard.Field()
+    change_ward = mun_mutation.ChangeWard.Field()
+    delete_ward = mun_mutation.DeleteWard.Field()
     add_telecom = mun_mutation.AddTelecom.Field()
     change_telecom = mun_mutation.ChangeTelecom.Field()
     delete_telecom = mun_mutation.DeleteTelecom.Field()

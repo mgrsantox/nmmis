@@ -7,7 +7,7 @@ import { EditControl } from 'react-leaflet-draw';
 const ListMunicipal = () => {
 	const handleEdited = (e)=>{
 		e.layers.eachLayer(a=>{
-			console.log(a.toGeoJSON())
+			console.log(a.toGeoJSON()['geometry'])
 		})
 	}
 	const polygon = [
